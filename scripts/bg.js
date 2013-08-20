@@ -1,3 +1,17 @@
+/**
+ * IndexedDB preps.
+ */
+
+Backbone.LocalStorage.prepare = function(db) {
+	db.createObjectStore('settings-backbone', { keyPath: 'id' });
+	db.createObjectStore('items-backbone',    { keyPath: 'id' });
+	db.createObjectStore('sources-backbone',  { keyPath: 'id' });
+}
+Backbone.LocalStorage.version = 2;
+
+/**
+ * matchesselector might be important because of ContextMenu views .. not sure tho.
+ */
 if (!Element.prototype.hasOwnProperty('matchesSelector')) {
 	Element.prototype.matchesSelector = Element.prototype.webkitMatchesSelector;
 }
