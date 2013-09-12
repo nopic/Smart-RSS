@@ -757,7 +757,7 @@ fetchAll().always(function() {
 });
 
 function openRSS(closeIfActive) {
-	var url = chrome.extension.getURL('rss.html');
+	var url = chrome.extension.getURL('rss_all.html');
 	chrome.tabs.query({
 		url: url
 	}, function(tabs) {
