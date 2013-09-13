@@ -21,7 +21,7 @@ define(['backbone'], function(BB) {
 		handleClick: function(e) {
 			var action = this.model.get('action');
 			if (action && typeof action == 'function') {
-				action(e);
+				action(e, app.feeds.currentView.feedList.currentView);
 				this.contextMenu.hide();
 			}
 		}

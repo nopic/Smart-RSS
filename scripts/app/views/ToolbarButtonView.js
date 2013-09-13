@@ -7,6 +7,7 @@ define(['marionette', 'domReady!'], function (Marionette) {
 			this.el.view = this;
 			var action = app.actions.get(this.model.get('actionName'));
 			this.$el.css('background', 'url("/images/' + action.get('icon') + '") no-repeat center center');
+			this.el.title = action.get('title');
 		},
 		onRender: function() {
 			

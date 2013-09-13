@@ -2,6 +2,7 @@ define(['marionette', 'views/TopView', 'instances/contextMenus'], function(Mario
 	var FolderView = TopView.extend({
 		className: 'list-item folder',
 		template: _.template($('#template-folder').html()),
+		list: null,
 		events: {
 			'dblclick': 'handleDoubleClick',
 			'mouseup': 'handleMouseUp',
@@ -16,7 +17,8 @@ define(['marionette', 'views/TopView', 'instances/contextMenus'], function(Mario
 			contextMenus.get('folder').currentSource = this.model;
 			contextMenus.get('folder').show(e.clientX, e.clientY);
 		},
-		initialize: function() {
+		initialize: function(opt, list) {
+			this.list = list;
 			this.el.view = this;
 
 			this.model.on('destroy', this.handleModelDestroy, this);
@@ -31,7 +33,7 @@ define(['marionette', 'views/TopView', 'instances/contextMenus'], function(Mario
 			bg.sources.off('clear-events', this.handleClearEvents, this);
 		},
 		handleModelDestroy: function(e) {
-			list.destroySource(this);
+			this.list.destroySource(this);
 		},
 		handleClickArrow: function(e) {
 			this.model.save('opened', !this.model.get('opened'));

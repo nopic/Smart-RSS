@@ -1,5 +1,5 @@
 define({
-	feeds: ['feeds:updateAll'],
+	feeds: ['feeds:addSource', 'feeds:addFolder', 'feeds:updateAll'],
 	articles:[],
 	article: []
 });

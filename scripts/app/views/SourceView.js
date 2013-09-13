@@ -5,7 +5,9 @@ define(['marionette', 'views/TopView'], function(Marionette, TopView) {
 			'click': 'handleMouseDown',
 		},
 		className: 'list-item source',
-		initialize: function() {
+		list: null,
+		initialize: function(opt, list) {
+			this.list = list;
 			this.el.setAttribute('draggable', 'true');
 			this.model.on('change', this.render, this);
 			this.model.on('destroy', this.handleModelDestroy, this);
@@ -26,10 +28,10 @@ define(['marionette', 'views/TopView'], function(Marionette, TopView) {
 			bg.sources.off('clear-events', this.handleClearEvents, this);
 		},
 		handleChangeTitle: function() {
-			list.placeSource(this);
+			this.list.placeSource(this);
 		},
 		handleModelDestroy: function(e) {
-			list.destroySource(this);
+			this.list.destroySource(this);
 		},
 		renderInterval: 'first-time',
 		render: function() {

@@ -39,6 +39,8 @@ define(['backbone', 'views/ContextMenu'], function(BB, ContextMenu) {
 			title: bg.lang.c.PROPERTIES,
 			icon: 'properties.png',
 			action: function() {
+				/****REPLACE JQUERY****/
+				var properties = app.feeds.currentView.properties.currentView;
 				properties.show(sourcesContextMenu.currentSource);
 				properties.currentSource = sourcesContextMenu.currentSource;
 			}
@@ -110,7 +112,7 @@ define(['backbone', 'views/ContextMenu'], function(BB, ContextMenu) {
 		{
 			title: bg.lang.c.UPDATE,
 			icon: 'reload.png',
-			action: function() {
+			action: function(e, list) {
 				var folder = list.selectedItems[0].model;
 				if (!folder || !(folder instanceof bg.Folder)) return;
 
@@ -125,7 +127,7 @@ define(['backbone', 'views/ContextMenu'], function(BB, ContextMenu) {
 		{ 
 			title: bg.lang.c.MARK_ALL_AS_READ,
 			icon: 'read.png',
-			action: function() { 
+			action: function(e, list) { 
 				var folder = list.selectedItems[0].model;
 				if (!folder || !(folder instanceof bg.Folder)) return;
 
@@ -148,7 +150,7 @@ define(['backbone', 'views/ContextMenu'], function(BB, ContextMenu) {
 		{ 
 			title: bg.lang.c.DELETE,
 			icon: 'delete.png',
-			action: function() { 
+			action: function(e, list) { 
 				if (!confirm(bg.lang.c.REALLY_DELETE)) return;
 
 				var folder = list.selectedItems[0].model;
@@ -160,7 +162,7 @@ define(['backbone', 'views/ContextMenu'], function(BB, ContextMenu) {
 		},
 		{ 
 			title: bg.lang.c.RENAME,
-			action: function() { 
+			action: function(e, list) { 
 				var newTitle = prompt(bg.lang.c.FOLDER_NAME + ': ', list.selectedItems[0].model.get('title'));
 				if (!newTitle) return;
 

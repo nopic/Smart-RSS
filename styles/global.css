@@ -188,8 +188,8 @@ input[type=search]:not(:focus):not(:valid) {
 }
 
 .region {
-	-webkit-flex: 0 0 400px;
-	flex: 1 1 400pxpx;
+	-webkit-flex: 0 0 350px;
+	flex: 0 0 350px;
 	-webkit-align-items: stretch;
 	align-items: stretch;
 	min-width: 100px;

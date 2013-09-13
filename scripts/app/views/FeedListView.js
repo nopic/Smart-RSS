@@ -166,7 +166,7 @@ function (Marionette, SourceView, FolderView, SpecialView, Special, contextMenus
 			
 		},
 		addFolder: function(folder) {
-			var view = new FolderView({ model: folder });
+			var view = new FolderView({ model: folder }, this);
 			var folderViews = $('.folder').toArray();
 			if (folderViews.length) {
 				this.insertBefore(view.render(), folderViews);
@@ -187,7 +187,7 @@ function (Marionette, SourceView, FolderView, SpecialView, Special, contextMenus
 			}, this);
 		},
 		addSource: function(source, noManualSort) {
-			var view = new SourceView({ model: source });
+			var view = new SourceView({ model: source }, this);
 			this.placeSource(view, noManualSort === true ? true : false);
 		},
 		placeSource: function(view, noManualSort) {
@@ -271,9 +271,9 @@ function (Marionette, SourceView, FolderView, SpecialView, Special, contextMenus
 			view.$el.removeData().unbind(); 
 			view.off();
 			view.remove();
-			var io = list.selectedItems.indexOf(view);
+			var io = this.selectedItems.indexOf(view);
 			if (io >= 0) {
-				list.selectedItems.splice(io, 1);
+				this.selectedItems.splice(io, 1);
 			}
 		}
 	});

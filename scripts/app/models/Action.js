@@ -4,7 +4,8 @@ define(['backbone'], function (BB) {
 		defaults: {
 			name: 'global:default',
 			fn: function() { return function() {} },
-			icon: 'unknown.png'
+			icon: 'unknown.png',
+			title: ''
 		}
 	});
 

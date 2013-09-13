@@ -22,16 +22,44 @@
 	</div>
 
 	<!-- MAIN TEMPLATES -->
-	<script id="template-region" type="text/template">
+	<script id="template-feeds" type="text/template">
 		<div class="toolbar"></div>
+		<div id="properties"></div>
 		<div class="content"></div>
+		<div id="indicator">
+			0/10
+		</div>
 	</script>
 
 	<script id="template-empty" type="text/template">
 	</script>
 
+	<script id="template-properties" type="text/template">
+		<label>{{NAME}}: <input type="text" id="prop-title" placeholder="{{FETCH_TITLE_TIP}}" title="{{FETCH_TITLE_TIP}}" /></label>
+		<label>{{ADDRESS}}: <input type="url" id="prop-url" /></label>
+		<label>{{UPDATE}}: <select id="prop-update-every">
+			<option value="0">{{NEVER}}</option>
+			<option value="5">{{EVERY_5_MINUTES}}</option>
+			<option value="15">{{EVERY_15_MINUTES}}</option>
+			<option value="30">{{EVERY_30_MINUTES}}</option>
+			<option value="60">{{EVERY_HOUR}}</option>
+			<option value="120">{{EVERY_2_HOURS}}</option>
+			<option value="180">{{EVERY_3_HOURS}}</option>
+			<option value="300">{{EVERY_5_HOURS}}</option>
+			<option value="600">{{EVERY_10_HOURS}}</option>
+			<option value="1440">{{EVERY_24_HOURS}}</option>
+			<option value="10080">{{EVERY_WEEK}}</option>
+		</select></label>
+		<div id="advanced-switch">{{MORE}}</div>
+		<div id="properties-advanced">
+			<label>{{USERNAME}}: <input type="text" id="prop-username" /></label>
+			<label>{{PASSWORD}}: <input type="password" id="prop-password" /></label>
+		</div>
+		<button id="prop-ok">{{OK}}</button><button id="prop-cancel">{{CANCEL}}</button>
+	</script>
+
 	<!-- FEEDS TEMPLATES -->
-	<script id="template-source" type="template">
+	<script id="template-source" type="text/template">
 		<img src="http://www.google.com/s2/favicons?domain=<%= encodeURIComponent(url) %>" class="source-icon" /> 
 		<div class="source-title"><%- title %></div>
 		<% if (count > 0) { %>
@@ -39,12 +67,12 @@
 		<% } %>
 	</script>
 
-	<script id="template-special" type="template">
+	<script id="template-special" type="text/template">
 		<img src="/images/<%- icon %>" class="source-icon" />
 		<div class="source-title"><%- title %></div>
 	</script>
 
-	<script id="template-folder" type="template">
+	<script id="template-folder" type="text/template">
 		<div class="folder-arrow"></div>
 		<img src="/images/folder<%= opened ? '_opened' : '' %>.png" class="source-icon" />
 		<div class="source-title"><%- title %></div>
@@ -52,5 +80,7 @@
 			<div class="source-counter"><%- count %></div>
 		<% } %>
 	</script>
+
+
 </body>
 </html>

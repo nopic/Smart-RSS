@@ -1,13 +1,13 @@
 define([
 	'marionette', 'views/ToolbarView', 'models/Toolbar', 'collections/ToolbarButtons', 'views/FeedListView', 
-	'instances/contextMenus', 'domReady!'
+	'instances/contextMenus', 'views/Properties', 'domReady!'
 ], 
-	function (Marionette, ToolbarView, Toolbar, ToolbarButtons, FeedListView, contextMenus) {
+	function (Marionette, ToolbarView, Toolbar, ToolbarButtons, FeedListView, contextMenus, Properties) {
 		var toolbar = new Toolbar({ id: 'feeds' });
 		var buttons = new ToolbarButtons();
 
 		var feeds = new (Marionette.Layout.extend({
-			template: '#template-region',
+			template: '#template-feeds',
 			tagName: 'section',
 			className: 'region',
 			events: {
@@ -17,6 +17,7 @@ define([
 			},
 			regions: {
 				toolbar: '.toolbar',
+				properties: '#properties',
 				feedList: '.content'
 			},
 			initialize: function() {
@@ -173,6 +174,7 @@ define([
 		feeds.on('show', function() {
 			//this.toolbar.$el = $(this.toolbar.el);
 			this.toolbar.show( new ToolbarView({ model: toolbar, collection: buttons }) );
+			this.properties.show( new Properties() );;
 			this.feedList.show( new FeedListView() );
 		});
 

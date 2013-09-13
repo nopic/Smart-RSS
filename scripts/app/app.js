@@ -3,8 +3,20 @@ define(['marionette', 'domReady!', 'collections/Actions', 'layouts/feeds', 'prep
 	//$('body').html( bg.translate($('body').html()) );
 	document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';
 
+	var templates = $('script[type="text/template"]');
+	templates.each(function(i, el) {
+		el.innerHTML = bg.translate(el.innerHTML);
+	});
 
-	var app = window.app = new Marionette.Application();
+
+	var app = window.app = new Marionette.Application({
+		fixURL: function(url) {
+			if (url.search(/[a-z]+:\/\//) == -1) {
+				url = 'http://' + url;
+			}
+			return url;
+		}
+	});
 
 	app.actions = new Actions();
 
