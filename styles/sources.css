@@ -1,9 +1,9 @@
-body {
+/*body {
 	display: -webkit-flex;
 	display: flex;
 	-webkit-flex-flow: row;
 	flex-flow: row;
-}
+}*/
 
 #panel-toggle {
 	display: none;

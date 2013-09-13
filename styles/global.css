@@ -188,10 +188,15 @@ input[type=search]:not(:focus):not(:valid) {
 }
 
 .region {
-	-webkit-flex: 1 1 auto;
-	flex: 1 1 auto;
+	-webkit-flex: 0 0 400px;
+	flex: 1 1 400pxpx;
 	-webkit-align-items: stretch;
 	align-items: stretch;
 	min-width: 100px;
 	border-right: 1px solid #a6a6a6;
+}
+
+.region:last-child {
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
 }

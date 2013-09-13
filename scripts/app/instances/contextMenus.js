@@ -189,6 +189,11 @@ define(['backbone', 'views/ContextMenu'], function(BB, ContextMenu) {
 			Object.keys(this.list).forEach(function(item) {
 				this.list[item].hide();
 			}, this);
+		},
+		areActive: function() {
+			return Object.keys(this.list).some(function(item) {
+				return !!this.list[item].el.parentNode;
+			}, this);
 		}
 	}));
 

@@ -1,4 +1,4 @@
-define(['marionette', 'views/TopView'], function(Marionette, TopView) {
+define(['marionette', 'views/TopView', 'instances/contextMenus'], function(Marionette, TopView, contextMenus) {
 	var FolderView = TopView.extend({
 		className: 'list-item folder',
 		template: _.template($('#template-folder').html()),
@@ -13,8 +13,8 @@ define(['marionette', 'views/TopView'], function(Marionette, TopView) {
 		},
 		showContextMenu: function(e) {
 			this.select(e);
-			folderContextMenu.currentSource = this.model;
-			folderContextMenu.show(e.clientX, e.clientY);
+			contextMenus.get('folder').currentSource = this.model;
+			contextMenus.get('folder').show(e.clientX, e.clientY);
 		},
 		initialize: function() {
 			this.el.view = this;

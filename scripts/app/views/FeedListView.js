@@ -31,18 +31,19 @@ function (Marionette, SourceView, FolderView, SpecialView, Special, contextMenus
 	var FeedListView = Marionette.CollectionView.extend({
 		//el: '#list',
 		tagName: 'div',
-		id: '#feed-list',
+		id: 'feed-list',
 		selectedItems: [],
 		events: {
-			'dragstart .source': 'handleDragStart',
-			'drop': 'handleDrop',
+			'dragstart .source':     'handleDragStart',
+			'drop':                  'handleDrop',
 			'drop [data-in-folder]': 'handleDrop',
-			'drop .folder': 'handleDrop',
-			'dragover': 'handleDragOver',
-			'dragover .folder,[data-in-folder]': 'handleDragOver',
+			'drop .folder':          'handleDrop',
+			'dragover':              'handleDragOver',
+			'dragover .folder,[data-in-folder]':  'handleDragOver',
 			'dragleave .folder,[data-in-folder]': 'handleDragLeave'
 		},
 		initialize: function() {
+
 			this.el.view = this;
 
 			app.on('start', this.insertFeeds, this);

@@ -24,12 +24,13 @@ define(['backbone', 'collections/MenuCollection', 'views/MenuItemView'], functio
 			}
 		},
 		initialize: function(mc) {
+			this.el.view = this;
 			this.menuCollection = new MenuCollection(mc);
 			this.addItems(this.menuCollection);
 			$('body').append(this.render().$el);
 
-			window.addEventListener('blur', this.hide.bind(this));
-			window.addEventListener('resize', this.hide.bind(this));
+			/*window.addEventListener('blur', this.hide.bind(this));
+			window.addEventListener('resize', this.hide.bind(this));*/
 		},
 		show: function(x, y) {
 			if (x + this.$el.width() + 4 > document.body.offsetWidth) {
