@@ -23,9 +23,6 @@ define([
 			initialize: function() {
 
 				this.el.view = this;
-				document.addEventListener('contextmenu', function(e) {
-					e.preventDefault();
-				});	
 				window.addEventListener('focus', function() {
 					document.documentElement.classList.add('focused');
 				});

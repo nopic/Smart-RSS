@@ -171,6 +171,94 @@ define(['backbone', 'views/ContextMenu'], function(BB, ContextMenu) {
 		}
 	]);
 
+	var itemsContextMenu = new ContextMenu([
+		{
+			title: bg.lang.c.NEXT_UNREAD + ' (H)',
+			icon: 'forward.png',
+			action: function() {
+				app.selectNext({ selectUnread: true });
+			}
+		},
+		{
+			title: bg.lang.c.PREV_UNREAD + ' (Y)',
+			icon: 'back.png',
+			action: function() {
+				app.selectPrev({ selectUnread: true });
+			}
+		},
+		{
+			title: bg.lang.c.MARK_AS_READ + ' (K)',
+			icon: 'read.png',
+			action: function() {
+				list.changeUnreadState();
+			}
+		},
+		{
+			title: bg.lang.c.MARK_AND_NEXT_UNREAD + ' (G)',
+			icon: 'find_next.png',
+			action: function() {
+				list.changeUnreadState({ onlyToRead: true });
+				app.selectNext({ selectUnread: true });
+			}
+		},
+		{
+			title: bg.lang.c.MARK_AND_PREV_UNREAD + ' (T)',
+			icon: 'find_previous.png',
+			action: function() {
+				list.changeUnreadState({ onlyToRead: true });
+				this.selectPrev({ selectUnread: true });
+			}
+		},
+		{
+			title: bg.lang.c.FULL_ARTICLE,
+			icon: 'full_article.png',
+			action: function(e) {
+				if (!list.selectedItems || !list.selectedItems.length) return;
+				if (list.selectedItems.length > 10 && bg.settings.get('askOnOpening')) {
+					if (!confirm('Do you really want to open ' + list.selectedItems.length + ' articles?')) {
+						return;
+					}
+				}
+				list.selectedItems.forEach(function(item) {
+					chrome.tabs.create({ url: escapeHtml(item.model.get('url')), active: !e.shiftKey });
+				});
+			}
+		},
+		{
+			title: bg.lang.c.PIN + ' (P)',
+			icon: 'pinsource_context.png',
+			action: function() {
+				if (!list.selectedItems || !list.selectedItems.length) return;
+				var val = !list.selectedItems[0].model.get('pinned');
+				list.selectedItems.forEach(function(item) {
+					item.model.save({ pinned: val });
+				});
+			}
+		},
+		{
+			title: bg.lang.c.DELETE + ' (D)',
+			icon: 'delete.png',
+			action: function(e) {
+				e = e || {};
+				if (list.specialName == 'trash' || e.shiftKey) {
+					list.destroyBatch(list.selectedItems, list.removeItemCompletely);
+				} else {
+					list.destroyBatch(list.selectedItems, list.removeItem);
+				}
+			}
+		},
+		{
+			title: bg.lang.c.UNDELETE + ' (U)',
+			id: 'context-undelete',
+			icon: 'delete_selected.png',
+			action: function(e) {
+				if (list.specialName == 'trash') {
+					list.destroyBatch(list.selectedItems, list.undeleteItem);
+				}
+			}
+		}
+	]);
+
 	var contextMenus = new (BB.View.extend({
 		list: {},
 		initialize: function() {
@@ -178,7 +266,8 @@ define(['backbone', 'views/ContextMenu'], function(BB, ContextMenu) {
 				sources:  sourcesContextMenu, 
 				trash:    trashContextMenu, 
 				folder:   folderContextMenu, 
-				allFeeds: allFeedsContextMenu
+				allFeeds: allFeedsContextMenu,
+				items:    itemsContextMenu
 			};
 		},
 		get: function(name) {

@@ -1,4 +1,4 @@
-define(['marionette', 'domReady!', 'collections/Actions', 'layouts/feeds', 'preps/all'], function (Marionette, doc, Actions, feeds) {
+define(['marionette', 'domReady!', 'collections/Actions', 'layouts/feeds', 'layouts/articles', 'preps/all'], function (Marionette, doc, Actions, feeds) {
 
 	//$('body').html( bg.translate($('body').html()) );
 	document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';
@@ -8,6 +8,9 @@ define(['marionette', 'domReady!', 'collections/Actions', 'layouts/feeds', 'prep
 		el.innerHTML = bg.translate(el.innerHTML);
 	});
 
+	document.addEventListener('contextmenu', function(e) {
+		e.preventDefault();
+	});	
 
 	var app = window.app = new Marionette.Application({
 		fixURL: function(url) {
@@ -27,6 +30,7 @@ define(['marionette', 'domReady!', 'collections/Actions', 'layouts/feeds', 'prep
 	});
 
 	app.feeds.show(feeds);
+	app.articles.show(articles);
 
 	app.on('start', function() {
 		console.log('app started');
