@@ -1,4 +1,4 @@
-define(['backbone', 'models/Action', 'app', 'staticdb/actions'], function (BB, Action, app, db) {
+define(['backbone', 'models/Action', 'staticdb/actions'], function (BB, Action, db) {
 	var Actions = BB.Collection.extend({
 		model: Action,
 
@@ -18,9 +18,9 @@ define(['backbone', 'models/Action', 'app', 'staticdb/actions'], function (BB, A
 		 * @action string | models/Action
 		 */
 		execute: function(action) {
-			if (typeof action == 'string') action = this.findWhere({ name: action });
+			if (typeof action == 'string') action = this.get(action);
 			if (!action) return false;
-			action.fn.apply(app, arguments);
+			action.get('fn').apply(app, arguments);
 			return true;
 		}
 	});

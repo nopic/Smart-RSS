@@ -193,6 +193,5 @@ input[type=search]:not(:focus):not(:valid) {
 	-webkit-align-items: stretch;
 	align-items: stretch;
 	min-width: 100px;
-	background: #ddd;
 	border-right: 1px solid #a6a6a6;
 }

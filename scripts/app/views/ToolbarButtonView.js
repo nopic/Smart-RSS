@@ -5,6 +5,8 @@ define(['marionette', 'domReady!'], function (Marionette) {
 		template: '#template-empty',
 		initialize: function() {
 			this.el.view = this;
+			var action = app.actions.get(this.model.get('actionName'));
+			this.$el.css('background', 'url("/images/' + action.get('icon') + '") no-repeat center center');
 		},
 		onRender: function() {
 			

@@ -4,6 +4,7 @@
 	<meta charset="utf-8">
 	<title>Smart RSS</title>
 	<link rel="stylesheet" type="text/css" href="styles/global.css" />
+	<link rel="stylesheet" type="text/css" href="styles/sources.css" />
 	<link rel="stylesheet" type="text/css" href="styles/rss.css" />
 	<link rel="shortcut icon" href="images/icon16_v2.png" />
 	<!--<script src="libs/jquery.min.js"></script>
@@ -20,13 +21,36 @@
 		<section class="region" id="region-article"  name="item"></section>
 	</div>
 
+	<!-- MAIN TEMPLATES -->
 	<script id="template-region" type="text/template">
 		<div class="toolbar"></div>
 		<div class="content"></div>
 	</script>
 
 	<script id="template-empty" type="text/template">
-	Button
-		</script>
+	</script>
+
+	<!-- FEEDS TEMPLATES -->
+	<script id="template-source" type="template">
+		<img src="http://www.google.com/s2/favicons?domain=<%= encodeURIComponent(url) %>" class="source-icon" /> 
+		<div class="source-title"><%- title %></div>
+		<% if (count > 0) { %>
+			<div class="source-counter"><%- count %></div>
+		<% } %>
+	</script>
+
+	<script id="template-special" type="template">
+		<img src="/images/<%- icon %>" class="source-icon" />
+		<div class="source-title"><%- title %></div>
+	</script>
+
+	<script id="template-folder" type="template">
+		<div class="folder-arrow"></div>
+		<img src="/images/folder<%= opened ? '_opened' : '' %>.png" class="source-icon" />
+		<div class="source-title"><%- title %></div>
+		<% if (count > 0) { %>
+			<div class="source-counter"><%- count %></div>
+		<% } %>
+	</script>
 </body>
 </html>

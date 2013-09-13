@@ -6,7 +6,7 @@ define({
 	},
 	feeds: {
 		updateAll: {
-			icon: 'update.png',
+			icon: 'reload.png',
 			fn: function() {
 				alert('udpate all');
 			}

@@ -29,7 +29,7 @@ body {
 	flex: 0 0 auto;
 }
 
-#list {
+#feed-list {
 	-webkit-flex: 1 1;
 	flex: 1 1;
 	/*padding-top: 3px;*/

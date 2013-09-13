@@ -30,7 +30,19 @@ require.config({
 	}
 });
 
+var tabID = -1;
 
-requirejs(['app'], function(app) {
-	app.start();
+chrome.runtime.getBackgroundPage(function(bg) {
+	window.bg = bg;
+
+	chrome.extension.sendMessage({ action: 'get-tab-id'}, function(response) {
+		if (response.action == 'response-tab-id') {
+			tabID = response.value;	
+		}
+	});
+	chrome.runtime.connect();
+	
+	requirejs(['app'], function(app) {		
+		app.start();
+	});
 });
