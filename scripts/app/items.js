@@ -27,23 +27,6 @@ $(function() {
 		initialize: function() {
 			
 		},
-		handleButtonRead: function() {
-			list.changeUnreadState();
-		},
-		refreshItems: function() {
-			if (list.currentSource) {
-				bg.downloadOne(list.currentSource);	
-			} else if (list.currentFolder) {
-				bg.sources.forEach(function(source) {
-					if (source.get('folderID') == list.currentFolder.id) {
-						bg.downloadOne(source);	
-					}
-				});
-			} else {
-				bg.downloadAll(true); // true = force
-			}
-			
-		},
 		handleSearch: function(e) {
 			var str = e.currentTarget.value || '';
 
@@ -73,11 +56,7 @@ $(function() {
 			list.restartSelection();
 		},
 		handleButtonDelete: function(e) {
-			if (list.specialName == 'trash' || e.shiftKey) {
-				list.destroyBatch(list.selectedItems, list.removeItemCompletely);
-			} else {
-				list.destroyBatch(list.selectedItems, list.removeItem);
-			}
+			
 		},
 		handleButtonUndelete: function() {
 			if (list.specialName == 'trash') {

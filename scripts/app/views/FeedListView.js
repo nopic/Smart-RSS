@@ -45,6 +45,7 @@ function (Marionette, SourceView, FolderView, SpecialView, Special, contextMenus
 		initialize: function() {
 
 			this.el.view = this;
+			app.feedList = this;
 
 			app.on('start', this.insertFeeds, this);
 

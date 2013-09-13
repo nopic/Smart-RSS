@@ -52,7 +52,53 @@ define({
 		}
 	},
 	articles: {
-
+		mark: {
+			icon: 'read.png',
+			title: bg.lang.c.MARK_AS_READ,
+			fn: function() {
+				app.articleList.changeUnreadState();
+			}
+		},
+		update: {
+			icon: 'reload.png',
+			title: bg.lang.c.UPDATE,
+			fn: function() {
+				var list = app.articleList;
+				if (list.currentSource) {
+					bg.downloadOne(list.currentSource);	
+				} else if (list.currentFolder) {
+					bg.sources.forEach(function(source) {
+						if (source.get('folderID') == list.currentFolder.id) {
+							bg.downloadOne(source);	
+						}
+					});
+				} else {
+					bg.downloadAll(true); // true = force
+				}
+			}
+		},
+		delete: {
+			icon: 'delete.png',
+			title: bg.lang.c.DELETE,
+			fn: function() {
+				var list = app.articleList;
+				if (list.specialName == 'trash' || e.shiftKey) {
+					list.destroyBatch(list.selectedItems, list.removeItemCompletely);
+				} else {
+					list.destroyBatch(list.selectedItems, list.removeItem);
+				}
+			}
+		},
+		undelete: {
+			icon: 'undelete.png',
+			title: bg.lang.c.UNDELETE,
+			fn: function() {
+				var list = app.articleList;
+				if (list.specialName == 'trash') {
+					list.destroyBatch(list.selectedItems, list.undeleteItem);
+				}
+			}
+		}
 	},
 	article: {
 

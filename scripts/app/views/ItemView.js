@@ -1,5 +1,5 @@
-define(['backbone'], function(BB) {
-	var ItemView = Backbone.View.extend({
+define(['backbone', 'helpers/formatDate'], function(BB, formatDate) {
+	var ItemView = BB.View.extend({
 		tagName: 'div',
 		className: 'item',
 		template: _.template($('#template-item').html()),
@@ -28,7 +28,7 @@ define(['backbone'], function(BB) {
 		prerendered: false,
 		prerender: function() {
 			prerendered = true;
-			list.viewsToRender.push(this);
+			app.articleList.viewsToRender.push(this);
 			this.el.className = this.model.get('unread') ? 'item unread' : 'item';
 		},
 		unplugModel: function() {
@@ -95,9 +95,9 @@ define(['backbone'], function(BB) {
 		handleMouseUp: function(e) {
 			if (e.which == 3) {
 				this.showContextMenu(e);
-			} else if (list.selectedItems.length > 1 && list.selectFlag) {
+			} else if (app.articleList.selectedItems.length > 1 && app.articleList.selectFlag) {
 				this.select({ shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });	
-				list.selectFlag = false;
+				app.articleList.selectFlag = false;
 			}
 		},
 		showContextMenu: function(e) {
@@ -109,20 +109,20 @@ define(['backbone'], function(BB) {
 		},
 		select: function(e) {
 			e = e || {};
-			if ( (e.shiftKey != true && e.ctrlKey != true) || (e.shiftKey && !list.selectPivot) ) {
-				list.selectedItems = [];
-				list.selectPivot = this;
+			if ( (e.shiftKey != true && e.ctrlKey != true) || (e.shiftKey && !app.articleList.selectPivot) ) {
+				app.articleList.selectedItems = [];
+				app.articleList.selectPivot = this;
 				$('.selected').removeClass('selected');
 
 				if (!e.preventLoading) {
 					//bg.items.trigger('new-selected', this.model);
-					if (!topWindow || !topWindow.frames) {
+					if (!window || !window.frames) {
 						bg.logs.add({ message: 'Event duplication bug! Clearing events now...' });
 						bg.console.log('Event duplication bug! Clearing events now...');
 						bg.sources.trigger('clear-events', -1);
 						return;
 					}
-					topWindow.frames[2].postMessage({ action: 'new-select', value: this.model.id }, '*');
+					/****topWindow.frames[2].postMessage({ action: 'new-select', value: this.model.id }, '*');****/
 				}
 
 				
@@ -135,21 +135,21 @@ define(['backbone'], function(BB) {
 					this.model.save('visited', true);
 				}
 				
-			} else if (e.shiftKey && list.selectPivot) {
+			} else if (e.shiftKey && app.articleList.selectPivot) {
 				$('.selected').removeClass('selected');
-				list.selectedItems = [list.selectPivot];
-				list.selectedItems[0].$el.addClass('selected');
+				app.articleList.selectedItems = [app.articleList.selectPivot];
+				app.articleList.selectedItems[0].$el.addClass('selected');
 
-				if (list.selectedItems[0] != this) {
-					if (list.selectedItems[0].$el.index() < this.$el.index() ) {
-						list.selectedItems[0].$el.nextUntil(this.$el).not('.invisible,.date-group').each(function(i, el) {
+				if (app.articleList.selectedItems[0] != this) {
+					if (app.articleList.selectedItems[0].$el.index() < this.$el.index() ) {
+						app.articleList.selectedItems[0].$el.nextUntil(this.$el).not('.invisible,.date-group').each(function(i, el) {
 							$(el).addClass('selected');
-							list.selectedItems.push(el.view);
+							app.articleList.selectedItems.push(el.view);
 						});
 					} else {
-						this.$el.nextUntil(list.selectedItems[0].$el).not('.invisible,.date-group').each(function(i, el) {
+						this.$el.nextUntil(app.articleList.selectedItems[0].$el).not('.invisible,.date-group').each(function(i, el) {
 							$(el).addClass('selected');
-							list.selectedItems.push(el.view);
+							app.articleList.selectedItems.push(el.view);
 						});
 					}
 
@@ -157,38 +157,38 @@ define(['backbone'], function(BB) {
 			} else if (e.ctrlKey && this.$el.hasClass('selected')) {
 				this.$el.removeClass('selected');
 				this.$el.removeClass('last-selected');
-				list.selectPivot = null;
-				list.selectedItems.splice(list.selectedItems.indexOf(this), 1);
+				app.articleList.selectPivot = null;
+				app.articleList.selectedItems.splice(app.articleList.selectedItems.indexOf(this), 1);
 				return;
 			} else if (e.ctrlKey) {
-				list.selectPivot = this;
+				app.articleList.selectPivot = this;
 			}
 
 			$('.last-selected').removeClass('last-selected');
-			if (list.selectedItems[0] != this) {
-				list.selectedItems.push(this);
+			if (app.articleList.selectedItems[0] != this) {
+				app.articleList.selectedItems.push(this);
 				this.$el.addClass('selected');
 			}
 			this.$el.addClass('last-selected');
 
 		},
 		handleMouseDown: function(e) {
-			if (list.selectedItems.length > 1 && this.$el.hasClass('selected') && !e.ctrlKey && !e.shiftKey) {
-				list.selectFlag = true;
+			if (app.articleList.selectedItems.length > 1 && this.$el.hasClass('selected') && !e.ctrlKey && !e.shiftKey) {
+				app.articleList.selectFlag = true;
 				return;
 			}
 			this.select({ shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });	
 		},
 		handleModelChange: function() {
-			if (this.model.get('deleted') || (list.specialName != 'trash' && this.model.get('trashed')) ) {
-				list.destroyItem(this);
+			if (this.model.get('deleted') || (app.articleList.specialName != 'trash' && this.model.get('trashed')) ) {
+				app.articleList.destroyItem(this);
 			} else {
 				this.render();
 			}
 		},
 		handleModelDestroy: function(mod, col, opt) {
-			if (opt.noFocus && list.currentSource) return;
-			list.destroyItem(this);
+			if (opt.noFocus && app.articleList.currentSource) return;
+			app.articleList.destroyItem(this);
 		},
 		handleClickPin: function(e) {
 			e.stopPropagation();
@@ -196,5 +196,5 @@ define(['backbone'], function(BB) {
 		}
 	});
 
-	return Item View;
+	return ItemView;
 });
