@@ -1,8 +1,8 @@
 define([
-	'marionette', 'views/ToolbarView', 'models/Toolbar', 'collections/ToolbarButtons', 'views/ArticleListView', 
+	'marionette', 'views/ToolbarView', 'models/Toolbar', 'collections/ToolbarButtons', 'views/articleList', 
 	'instances/contextMenus', 'domReady!'
 ], 
-	function (Marionette, ToolbarView, Toolbar, ToolbarButtons, ArticleListView, contextMenus) {
+	function (Marionette, ToolbarView, Toolbar, ToolbarButtons, articleList, contextMenus) {
 		var toolbar = new Toolbar({ id: 'articles' });
 		var buttons = new ToolbarButtons();
 
@@ -37,10 +37,8 @@ define([
 		articles.on('show', function() {
 			//this.toolbar.$el = $(this.toolbar.el);
 			this.toolbar.show( new ToolbarView({ model: toolbar, collection: buttons }) );
-			this.articleList.show( new ArticleListView() );
+			this.articleList.show( articleList.attach() );
 		});
-
-		window.articles = articles;
 		
 
 		return articles;

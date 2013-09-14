@@ -1,4 +1,5 @@
-define(['marionette', 'domReady!', 'collections/Actions', 'layouts/feeds', 'layouts/articles', 'preps/all'], function (Marionette, doc, Actions, feeds) {
+define(['marionette', 'domReady!', 'collections/Actions', 'layouts/feeds', 'layouts/articles', 'preps/all'], 
+function (Marionette, doc, Actions, feeds, articles) {
 
 	//$('body').html( bg.translate($('body').html()) );
 	document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';

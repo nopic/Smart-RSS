@@ -1,4 +1,5 @@
-define(['backbone', 'views/ContextMenu'], function(BB, ContextMenu) {
+define(['backbone', 'views/ContextMenu', 'views/articleList', 'views/feedList', 'views/properties'], 
+function(BB, ContextMenu, articleList, feedList, properties) {
 	var sourcesContextMenu = new ContextMenu([
 		{
 			title: bg.lang.c.UPDATE,
@@ -39,8 +40,6 @@ define(['backbone', 'views/ContextMenu'], function(BB, ContextMenu) {
 			title: bg.lang.c.PROPERTIES,
 			icon: 'properties.png',
 			action: function() {
-				/****REPLACE JQUERY****/
-				var properties = app.feeds.currentView.properties.currentView;
 				properties.show(sourcesContextMenu.currentSource);
 				properties.currentSource = sourcesContextMenu.currentSource;
 			}
@@ -112,8 +111,8 @@ define(['backbone', 'views/ContextMenu'], function(BB, ContextMenu) {
 		{
 			title: bg.lang.c.UPDATE,
 			icon: 'reload.png',
-			action: function(e, list) {
-				var folder = list.selectedItems[0].model;
+			action: function() {
+				var folder = feedList.selectedItems[0].model;
 				if (!folder || !(folder instanceof bg.Folder)) return;
 
 				bg.sources.forEach(function(source) {
@@ -127,8 +126,8 @@ define(['backbone', 'views/ContextMenu'], function(BB, ContextMenu) {
 		{ 
 			title: bg.lang.c.MARK_ALL_AS_READ,
 			icon: 'read.png',
-			action: function(e, list) { 
-				var folder = list.selectedItems[0].model;
+			action: function() { 
+				var folder = feedList.selectedItems[0].model;
 				if (!folder || !(folder instanceof bg.Folder)) return;
 
 				var sources = bg.sources.where({ folderID: folder.get('id') });
@@ -150,10 +149,10 @@ define(['backbone', 'views/ContextMenu'], function(BB, ContextMenu) {
 		{ 
 			title: bg.lang.c.DELETE,
 			icon: 'delete.png',
-			action: function(e, list) { 
+			action: function() { 
 				if (!confirm(bg.lang.c.REALLY_DELETE)) return;
 
-				var folder = list.selectedItems[0].model;
+				var folder = feedList.selectedItems[0].model;
 				bg.sources.where({ folderID: folder.get('id') }).forEach(function(item) {
 					item.destroy();
 				});
@@ -162,11 +161,11 @@ define(['backbone', 'views/ContextMenu'], function(BB, ContextMenu) {
 		},
 		{ 
 			title: bg.lang.c.RENAME,
-			action: function(e, list) { 
-				var newTitle = prompt(bg.lang.c.FOLDER_NAME + ': ', list.selectedItems[0].model.get('title'));
+			action: function() { 
+				var newTitle = prompt(bg.lang.c.FOLDER_NAME + ': ', feedList.selectedItems[0].model.get('title'));
 				if (!newTitle) return;
 
-				list.selectedItems[0].model.save({ title: newTitle });
+				feedList.selectedItems[0].model.save({ title: newTitle });
 			}
 		}
 	]);
@@ -190,14 +189,14 @@ define(['backbone', 'views/ContextMenu'], function(BB, ContextMenu) {
 			title: bg.lang.c.MARK_AS_READ + ' (K)',
 			icon: 'read.png',
 			action: function() {
-				list.changeUnreadState();
+				articleList.changeUnreadState();
 			}
 		},
 		{
 			title: bg.lang.c.MARK_AND_NEXT_UNREAD + ' (G)',
 			icon: 'find_next.png',
 			action: function() {
-				list.changeUnreadState({ onlyToRead: true });
+				articleList.changeUnreadState({ onlyToRead: true });
 				app.selectNext({ selectUnread: true });
 			}
 		},
@@ -205,7 +204,7 @@ define(['backbone', 'views/ContextMenu'], function(BB, ContextMenu) {
 			title: bg.lang.c.MARK_AND_PREV_UNREAD + ' (T)',
 			icon: 'find_previous.png',
 			action: function() {
-				list.changeUnreadState({ onlyToRead: true });
+				articleList.changeUnreadState({ onlyToRead: true });
 				this.selectPrev({ selectUnread: true });
 			}
 		},
@@ -213,13 +212,13 @@ define(['backbone', 'views/ContextMenu'], function(BB, ContextMenu) {
 			title: bg.lang.c.FULL_ARTICLE,
 			icon: 'full_article.png',
 			action: function(e) {
-				if (!list.selectedItems || !list.selectedItems.length) return;
-				if (list.selectedItems.length > 10 && bg.settings.get('askOnOpening')) {
-					if (!confirm('Do you really want to open ' + list.selectedItems.length + ' articles?')) {
+				if (!articleList.selectedItems || !articleList.selectedItems.length) return;
+				if (articleList.selectedItems.length > 10 && bg.settings.get('askOnOpening')) {
+					if (!confirm('Do you really want to open ' + articleList.selectedItems.length + ' articles?')) {
 						return;
 					}
 				}
-				list.selectedItems.forEach(function(item) {
+				articleList.selectedItems.forEach(function(item) {
 					chrome.tabs.create({ url: escapeHtml(item.model.get('url')), active: !e.shiftKey });
 				});
 			}
@@ -228,9 +227,9 @@ define(['backbone', 'views/ContextMenu'], function(BB, ContextMenu) {
 			title: bg.lang.c.PIN + ' (P)',
 			icon: 'pinsource_context.png',
 			action: function() {
-				if (!list.selectedItems || !list.selectedItems.length) return;
-				var val = !list.selectedItems[0].model.get('pinned');
-				list.selectedItems.forEach(function(item) {
+				if (!articleList.selectedItems || !articleList.selectedItems.length) return;
+				var val = !articleList.selectedItems[0].model.get('pinned');
+				articleList.selectedItems.forEach(function(item) {
 					item.model.save({ pinned: val });
 				});
 			}
@@ -240,10 +239,10 @@ define(['backbone', 'views/ContextMenu'], function(BB, ContextMenu) {
 			icon: 'delete.png',
 			action: function(e) {
 				e = e || {};
-				if (list.specialName == 'trash' || e.shiftKey) {
-					list.destroyBatch(list.selectedItems, list.removeItemCompletely);
+				if (articleList.specialName == 'trash' || e.shiftKey) {
+					articleList.destroyBatch(articleList.selectedItems, articleList.removeItemCompletely);
 				} else {
-					list.destroyBatch(list.selectedItems, list.removeItem);
+					articleList.destroyBatch(articleList.selectedItems, articleList.removeItem);
 				}
 			}
 		},
@@ -252,8 +251,8 @@ define(['backbone', 'views/ContextMenu'], function(BB, ContextMenu) {
 			id: 'context-undelete',
 			icon: 'delete_selected.png',
 			action: function(e) {
-				if (list.specialName == 'trash') {
-					list.destroyBatch(list.selectedItems, list.undeleteItem);
+				if (articleList.specialName == 'trash') {
+					articleList.destroyBatch(articleList.selectedItems, articleList.undeleteItem);
 				}
 			}
 		}

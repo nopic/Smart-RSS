@@ -1,8 +1,8 @@
 define([
-	'marionette', 'views/ToolbarView', 'models/Toolbar', 'collections/ToolbarButtons', 'views/FeedListView', 
-	'instances/contextMenus', 'views/Properties', 'domReady!'
+	'marionette', 'views/ToolbarView', 'models/Toolbar', 'collections/ToolbarButtons', 'views/feedList', 
+	'instances/contextMenus', 'views/properties', 'domReady!'
 ], 
-	function (Marionette, ToolbarView, Toolbar, ToolbarButtons, FeedListView, contextMenus, Properties) {
+	function (Marionette, ToolbarView, Toolbar, ToolbarButtons, feedList, contextMenus, properties) {
 		var toolbar = new Toolbar({ id: 'feeds' });
 		var buttons = new ToolbarButtons();
 
@@ -171,11 +171,9 @@ define([
 		feeds.on('show', function() {
 			//this.toolbar.$el = $(this.toolbar.el);
 			this.toolbar.show( new ToolbarView({ model: toolbar, collection: buttons }) );
-			this.properties.show( new Properties() );;
-			this.feedList.show( new FeedListView() );
+			this.properties.show( properties );
+			this.feedList.show( feedList.attach() );
 		});
-
-		window.feeds = feeds;
 		
 
 		return feeds;

@@ -15,7 +15,7 @@ body {
 	flex: 0 0 auto;
 }
 
-#list {
+#article-list {
 	-webkit-flex: 1 1;
 	flex: 1 1;
 	-webkit-user-select: none;

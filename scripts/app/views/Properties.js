@@ -62,5 +62,5 @@ define(['marionette'], function(Marionette) {
 		}
 	});
 
-	return Properties;
+	return new Properties();
 });
