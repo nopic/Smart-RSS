@@ -56,14 +56,14 @@ define({
 			icon: 'read.png',
 			title: bg.lang.c.MARK_AS_READ,
 			fn: function() {
-				app.articleList.changeUnreadState();
+				require('views/articleList').changeUnreadState();
 			}
 		},
 		update: {
 			icon: 'reload.png',
 			title: bg.lang.c.UPDATE,
 			fn: function() {
-				var list = app.articleList;
+				var list = require('views/articleList')
 				if (list.currentSource) {
 					bg.downloadOne(list.currentSource);	
 				} else if (list.currentFolder) {
@@ -81,7 +81,7 @@ define({
 			icon: 'delete.png',
 			title: bg.lang.c.DELETE,
 			fn: function() {
-				var list = app.articleList;
+				var list = require('views/articleList')
 				if (list.specialName == 'trash' || e.shiftKey) {
 					list.destroyBatch(list.selectedItems, list.removeItemCompletely);
 				} else {
@@ -93,10 +93,20 @@ define({
 			icon: 'undelete.png',
 			title: bg.lang.c.UNDELETE,
 			fn: function() {
-				var list = app.articleList;
+				var list = require('views/articleList')
 				if (list.specialName == 'trash') {
 					list.destroyBatch(list.selectedItems, list.undeleteItem);
 				}
+			}
+		},
+		selectNext: {
+			fn: function(e) {
+				require('views/articleList').selectNext(e);
+			}
+		},
+		selectPrevious: {
+			fn: function(e) {
+				require('views/articleList').selectPrev(e);
 			}
 		}
 	},

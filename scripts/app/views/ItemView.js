@@ -98,88 +98,23 @@ define(['backbone', 'helpers/formatDate'], function(BB, formatDate) {
 			if (e.which == 3) {
 				this.showContextMenu(e);
 			} else if (this.list.selectedItems.length > 1 && this.list.selectFlag) {
-				this.select({ shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });	
+				this.list.select(this, { shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });	
 				this.list.selectFlag = false;
 			}
 		},
 		showContextMenu: function(e) {
 			if (!this.$el.hasClass('selected')) {
-				this.select(e);	
+				this.list.select(this, e);
 			}
 			itemsContextMenu.currentSource = this.model;
 			itemsContextMenu.show(e.clientX, e.clientY);
-		},
-		select: function(e) {
-			e = e || {};
-			if ( (e.shiftKey != true && e.ctrlKey != true) || (e.shiftKey && !this.list.selectPivot) ) {
-				this.list.selectedItems = [];
-				this.list.selectPivot = this;
-				$('.selected').removeClass('selected');
-
-				if (!e.preventLoading) {
-					//bg.items.trigger('new-selected', this.model);
-					if (!window || !window.frames) {
-						bg.logs.add({ message: 'Event duplication bug! Clearing events now...' });
-						bg.console.log('Event duplication bug! Clearing events now...');
-						bg.sources.trigger('clear-events', -1);
-						return;
-					}
-					/****topWindow.frames[2].postMessage({ action: 'new-select', value: this.model.id }, '*');****/
-				}
-
-				
-				if (this.model.get('unread') && bg.settings.get('readOnVisit')) {
-					this.model.save({
-						visited: true,
-						unread: false
-					});
-				} else if (!this.model.get('visited')) {
-					this.model.save('visited', true);
-				}
-				
-			} else if (e.shiftKey && this.list.selectPivot) {
-				$('.selected').removeClass('selected');
-				this.list.selectedItems = [this.list.selectPivot];
-				this.list.selectedItems[0].$el.addClass('selected');
-
-				if (this.list.selectedItems[0] != this) {
-					if (this.list.selectedItems[0].$el.index() < this.$el.index() ) {
-						this.list.selectedItems[0].$el.nextUntil(this.$el).not('.invisible,.date-group').each(function(i, el) {
-							$(el).addClass('selected');
-							this.list.selectedItems.push(el.view);
-						});
-					} else {
-						this.$el.nextUntil(this.list.selectedItems[0].$el).not('.invisible,.date-group').each(function(i, el) {
-							$(el).addClass('selected');
-							this.list.selectedItems.push(el.view);
-						});
-					}
-
-				}
-			} else if (e.ctrlKey && this.$el.hasClass('selected')) {
-				this.$el.removeClass('selected');
-				this.$el.removeClass('last-selected');
-				this.list.selectPivot = null;
-				this.list.selectedItems.splice(this.list.selectedItems.indexOf(this), 1);
-				return;
-			} else if (e.ctrlKey) {
-				this.list.selectPivot = this;
-			}
-
-			$('.last-selected').removeClass('last-selected');
-			if (this.list.selectedItems[0] != this) {
-				this.list.selectedItems.push(this);
-				this.$el.addClass('selected');
-			}
-			this.$el.addClass('last-selected');
-
 		},
 		handleMouseDown: function(e) {
 			if (this.list.selectedItems.length > 1 && this.$el.hasClass('selected') && !e.ctrlKey && !e.shiftKey) {
 				this.list.selectFlag = true;
 				return;
 			}
-			this.select({ shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });	
+			this.list.select(this, { shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });	
 		},
 		handleModelChange: function() {
 			if (this.model.get('deleted') || (this.list.specialName != 'trash' && this.model.get('trashed')) ) {

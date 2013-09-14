@@ -12,8 +12,7 @@ define([
 			className: 'region',
 			events: {
 				'keydown': 'handleKeyDown',
-				'mousedown': 'handleMouseDown',
-				'click #panel-toggle': 'handleClickToggle'
+				'mousedown': 'handleMouseDown'
 			},
 			regions: {
 				toolbar: '.toolbar',
@@ -23,13 +22,30 @@ define([
 				this.el.view = this;
 
 
-				/****window.addEventListener('focus', function() {
+				/****
+				window.addEventListener('resize', this.handleResize.bind(this));
+				window.addEventListener('focus', function() {
 					document.documentElement.classList.add('focused');
 				});
 
 				window.addEventListener('blur', function() {
 					document.documentElement.classList.remove('focused');
 				});****/
+			},
+			handleResize: function() {
+				if (bg.settings.get('layout') == 'horizontal') {
+					var wid = $(window).width();
+					bg.settings.save({ posB: wid + ',*' });
+				} else {
+					var hei = $(window).height();
+					bg.settings.save({ posC: hei + ',*' });
+				}
+			},
+			handleMouseDown: function(e) {
+				if (contextMenus.get('items').el.parentNode && !e.target.matchesSelector('.context-menu, .context-menu *')) {
+					// make sure the action gets executed
+					contextMenus.get('items').hide();
+				}
 			}
 			
 		}));

@@ -22,7 +22,9 @@ define(['backbone', 'models/Action', 'staticdb/actions'], function (BB, Action, 
 		execute: function(action) {
 			if (typeof action == 'string') action = this.get(action);
 			if (!action) return false;
-			action.get('fn').apply(app, arguments);
+			var args = [].slice.call(arguments);
+			args.shift();
+			action.get('fn').apply(app, args);
 			return true;
 		}
 	});
