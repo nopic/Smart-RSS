@@ -73,6 +73,12 @@ function (Marionette, contextMenus, Groups, Group, GroupView, ItemView, selectab
 
 			groups.on('add', this.addGroup, this);
 
+			/****window.addEventListener('load', function() {
+				window.focus();
+			});****/
+
+
+
 			window.addEventListener('message', function(e) {
 				if (e.data.action == 'new-select' || e.data.action == 'new-folder-select') {
 					if (!e.data.noFocus) window.focus();

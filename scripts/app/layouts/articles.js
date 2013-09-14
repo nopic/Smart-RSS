@@ -54,6 +54,7 @@ define([
 			//this.toolbar.$el = $(this.toolbar.el);
 			this.toolbar.show( new ToolbarView({ model: toolbar, collection: buttons }) );
 			this.articleList.show( articleList.attach() );
+			/****$('#input-search').attr('placeholder', bg.lang.c.SEARCH);****/
 		});
 		
 

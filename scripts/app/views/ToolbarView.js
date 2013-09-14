@@ -4,9 +4,11 @@ define(['marionette', 'views/ToolbarButtonView'],
 			itemView: ToolbarButtonView,
 			tagName: 'div',
 			className: 'toolbar',
+			buttonPosition: 'left',
 			//buttons: new ToolbarButtons(),
 			events: {
-				'click .button': 'handleButtonClick'
+				'click .button': 'handleButtonClick',
+				'input input[type=search]': 'handleButtonClick'
 			},
 			initialize: function() {
 				//this.collection = this.buttons;
@@ -14,12 +16,16 @@ define(['marionette', 'views/ToolbarButtonView'],
 
 				this.model.get('actions').forEach(this.addButton, this);
 			},
-			addButton: function(action) {				
-				this.collection.add({ actionName: action });
+			addButton: function(action) {	
+				if (action == '!right')	{
+					this.buttonPosition = 'right';
+					return null;
+				}
+				this.collection.add({ actionName: action, position: this.buttonPosition });
 			},
 			handleButtonClick: function(e) {
 				var button = e.currentTarget.view.model;
-				app.actions.execute(button.get('actionName'));
+				app.actions.execute(button.get('actionName'), e);
 			}
 		});
 

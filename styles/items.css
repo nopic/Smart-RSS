@@ -116,7 +116,6 @@ html:not(.focused) .last-selected {
 	flex: 0 0 0.4rem;
 }
 .pinned {
-	//-webkit-transform: scale(1, 1);
 	background: #BB2222;
 	border-color: #222;
 }

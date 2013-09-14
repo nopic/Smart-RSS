@@ -108,9 +108,98 @@ define({
 			fn: function(e) {
 				require('views/articleList').selectPrev(e);
 			}
+		},
+		search: {
+			title: bg.lang.c.SEARCH_TIP,
+			fn: function(e) {
+				e = e || {};
+				var str = e.currentTarget.value || '';
+				var list = require('views/articleList');
+
+				if (str == '') {
+					$('.date-group').css('display', 'block');
+				} else {
+					$('.date-group').css('display', 'none');
+				}
+
+				var searchInContent = false;
+				if (str[0] && str[0] == ':') {
+					str = str.replace(/^:/, '', str);
+					searchInContent = true;
+				}
+				var rg = new RegExp(RegExp.escape(str), 'i');
+				list.views.some(function(view) {
+					if (!view.model) return true;
+					if (rg.test(view.model.get('title')) || rg.test(view.model.get('author')) || (searchInContent && rg.test(view.model.get('content')) )) {
+						view.$el.removeClass('invisible');
+					} else {
+						view.$el.addClass('invisible');
+					}
+				});
+
+				list.handleScroll();
+
+				list.restartSelection();
+			}
 		}
 	},
 	article: {
-
+		download: {
+			title: bg.lang.c.DOWNLOAD,
+			icon: 'save.png',
+			fn: function() {
+				if (!itemView.model) return;
+				var tpl = _.template($('#template-download').html());
+				var attrs = Object.create(itemView.model.attributes);
+				attrs.date = itemView.getFormatedDate(attrs.date);
+				var blob = new Blob([ tpl(attrs) ], { type: 'text\/html' });
+				var url = URL.createObjectURL(blob);
+				window.open(url);
+				setTimeout(function() {
+					URL.revokeObjectURL(url);	
+				}, 30000);
+			}
+		},
+		print: {
+			title: bg.lang.c.PRINT,
+			icon: 'print.png',
+			fn: function() {
+				if (!itemView.model) return;
+				window.print();
+			}
+		},
+		mark: {
+			title: bg.lang.c.MARK_AS_READ,
+			icon: 'read.png',
+			fn: function() {
+				if (!itemView.model) return;
+				itemView.model.save({
+					unread: !itemView.model.get('unread'),
+					visited: true
+				});
+			}
+		},
+		delete: {
+			title: bg.lang.c.DELETE,
+			icon: 'delete.png',
+			fn: function(e) {
+				if (!itemView.model) return;
+				if (e.shiftKey) {
+					itemView.model.markAsDeleted();
+				} else {
+					itemView.model.save({
+						trashed: true,
+						visited: true
+					});
+				}
+			}
+		},
+		showConfig: {
+			title: bg.lang.c.SETTINGS,
+			icon: 'config.png',
+			fn: function() {
+				overlay.show();
+			}
+		}
 	}
 });

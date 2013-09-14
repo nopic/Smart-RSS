@@ -1,5 +1,5 @@
-define(['marionette', 'domReady!', 'collections/Actions', 'layouts/feeds', 'layouts/articles', 'preps/all'], 
-function (Marionette, doc, Actions, feeds, articles) {
+define(['marionette', 'domReady!', 'collections/Actions', 'layouts/feeds', 'layouts/articles', 'layouts/article', 'preps/all'], 
+function (Marionette, doc, Actions, feeds, articles, article) {
 
 	//$('body').html( bg.translate($('body').html()) );
 	document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';
@@ -151,6 +151,7 @@ function (Marionette, doc, Actions, feeds, articles) {
 
 	app.feeds.show(feeds);
 	app.articles.show(articles);
+	app.article.show(article);
 
 	app.on('start', function() {
 		console.log('app started');

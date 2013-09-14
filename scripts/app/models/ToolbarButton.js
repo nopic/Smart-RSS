@@ -1,7 +1,8 @@
 define(['backbone'], function (BB) {
 	var ToolbarButton = BB.Model.extend({
 		defaults: {
-			actionName: 'global:default'
+			actionName: 'global:default',
+			position: 'left'
 		}
 	});
 
