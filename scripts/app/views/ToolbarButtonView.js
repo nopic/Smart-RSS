@@ -12,9 +12,11 @@ define(['backbone', 'jquery', 'domReady!'], function (BB, $) {
 				var newEl = $('<input type="search" required class="input-search" />');
 				this.$el.replaceWith(newEl);
 				this.$el = newEl;
+				this.$el.attr('placeholder', bg.lang.c.SEARCH);
 				this.el = this.$el.get(0);
 			}
 
+			this.el.dataset.action = this.model.get('actionName');
 			this.el.title = action.get('title');
 
 			if (this.model.get('position') == 'right') {

@@ -124,11 +124,7 @@ function (Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ArticleLayout) {
 			});
 			e.preventDefault();
 		} else if (e.keyCode == 27) { // ESC
-			if (contextMenus.get('items').el.parentNode) {
-				// make sure the action gets executed
-				contextMenus.get('items').hide();
-				e.preventDefault();
-			}
+			app.actions.execute('global:hideContextMenus');
 		} else if (e.keyCode == 78) { // N = Undelete item
 			if (!articleList.selectedItems || !articleList.selectedItems.length || articleList.specialName != 'trash') return;
 			articleList.destroyBatch(articleList.selectedItems, articleList.undeleteItem);				

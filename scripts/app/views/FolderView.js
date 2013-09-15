@@ -13,7 +13,7 @@ define(['backbone', 'views/TopView', 'instances/contextMenus'], function(BB, Top
 			this.handleClickArrow(e);
 		},
 		showContextMenu: function(e) {
-			this.select(e);
+			this.list.select(this, e);
 			contextMenus.get('folder').currentSource = this.model;
 			contextMenus.get('folder').show(e.clientX, e.clientY);
 		},
@@ -68,7 +68,7 @@ define(['backbone', 'views/TopView', 'instances/contextMenus'], function(BB, Top
 		},
 		showSourceItems: function(e) {
 			e = e || {};
-			if (!e.noSelect) this.select(e);
+			if (!e.noSelect) this.list.select(this, e);
 			
 			
 			window.top.frames[1].postMessage({

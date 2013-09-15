@@ -7,11 +7,6 @@ define(['backbone', 'helpers/formatDate', 'helpers/escapeHtml'], function(BB, fo
 			'click .pin-button': 'handlePinClick',
 			'keydown': 'handleKeyDown'
 		},
-		handleMouseDown: function(e) {
-			if (overlay.isVisible() && !e.target.matchesSelector('.overlay, .overlay *')) {
-				overlay.hide();
-			}
-		},
 		handlePinClick: function(e) {
 			$(e.currentTarget).toggleClass('pinned');
 			this.model.save({

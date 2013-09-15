@@ -6,7 +6,6 @@ define([
 		var toolbar = new Toolbar({ id: 'articles' });
 
 		var ArticlesLayout = Layout.extend({
-			template: _.template($('#template-articles').html()),
 			el: '#region-articles',
 			events: {
 				'keydown': 'handleKeyDown',
@@ -16,7 +15,6 @@ define([
 				this.el.view = this;
 
 				this.on('attached', function() {
-					/****$('#input-search').attr('placeholder', bg.lang.c.SEARCH);****/
 					this.attach('toolbar', new ToolbarView({ model: toolbar }) );
 					this.attach('articleList', articleList );
 				});

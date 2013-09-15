@@ -91,6 +91,10 @@
 	overflow: hidden;
 }
 
+.selected .source-counter {
+	color: black !important;
+}
+
 .folder {
 	padding-left: 1px !important;
 }

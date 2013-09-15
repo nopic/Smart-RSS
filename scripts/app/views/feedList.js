@@ -1,5 +1,5 @@
-define(['backbone', 'views/SourceView', 'views/FolderView', 'views/SpecialView', 'models/Special', 'instances/contextMenus'], 	
-function (BB, SourceView, FolderView, SpecialView, Special, contextMenus) {
+define(['backbone', 'views/SourceView', 'views/FolderView', 'views/SpecialView', 'models/Special', 'instances/contextMenus', 'mixins/selectable'],
+function (BB, SourceView, FolderView, SpecialView, Special, contextMenus, selectable) {
 
 
 	var trash = new Special({
@@ -32,7 +32,6 @@ function (BB, SourceView, FolderView, SpecialView, Special, contextMenus) {
 		//el: '#list',
 		tagName: 'div',
 		id: 'feed-list',
-		selectedItems: [],
 		events: {
 			'dragstart .source':     'handleDragStart',
 			'drop':                  'handleDrop',
@@ -93,7 +92,7 @@ function (BB, SourceView, FolderView, SpecialView, Special, contextMenus) {
 			} else if (e.data.action == 'select-all-feeds') {
 				var allFeeds = $('.special:first').get(0);
 				if (!allFeeds) return;
-				allFeeds.view.select();
+				this.select(allFeeds.view);
 			}
 		},
 		handleDragOver: function(e) {
@@ -277,6 +276,8 @@ function (BB, SourceView, FolderView, SpecialView, Special, contextMenus) {
 			}
 		}
 	});
+
+	FeedListView = FeedListView.extend(selectable);
 
 	return new FeedListView();
 });

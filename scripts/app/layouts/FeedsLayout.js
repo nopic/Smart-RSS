@@ -77,10 +77,7 @@ define([
 					return;
 				}
 
-				if (e.keyCode == 68) {
-					//there shouldn't be the same shortcut for deleting item and source
-					//list.selectedItems.forEach(list.removeSource, list);
-				} else if (e.keyCode == 50 && e.shiftKey) {
+				if (e.keyCode == 50 && e.shiftKey) {
 					window.top.frames[1].focus();
 					e.preventDefault();
 				} else if (e.keyCode == 51 && e.shiftKey) {
@@ -140,12 +137,6 @@ define([
 						cs.get(0).view.showSourceItems({ noSelect: true, shiftKey: e.shiftKey });
 					}
 					e.preventDefault();
-				} else if (e.keyCode == 27) {
-					if (sourcesContextMenu.el.parentNode) {
-						// make sure the action gets executed
-						contextMenus.hideAll();
-						//sourcesContextMenu.hide();
-					}
 				}
 			},
 			handleLoadingChange: function(e) {

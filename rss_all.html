@@ -15,12 +15,7 @@
 	<div class="regions" data-cols="250,*"> <!--  cols="350,*" -->
 		<section class="region" id="region-feeds"    name="sources"></section>
 		<section class="region" id="region-articles" name="items"></section>
-		<section class="region" id="region-article"  name="item">
-			<!--<iframe src="rss_content.html" frameborder="0" sandbox="allow-popups allow-same-origin" tabindex="-1"></iframe>
-			<footer>
-				<input type="button" value="Hide log" id="button-hide-log" />
-			</footer>-->
-		</section>
+		<section class="region" id="region-article"  name="item"></section>
 	</div>
 
 	<!-- MAIN TEMPLATES -->
@@ -29,13 +24,6 @@
 		<div id="indicator">
 			0/10
 		</div>
-	</script>
-
-	<script id="template-articles" type="text/template">
-		
-	</script>
-
-	<script id="template-empty" type="text/template">
 	</script>
 
 	<!-- PROPERTIES -->
@@ -103,5 +91,31 @@
 		</div>
 	</script>
 
+	<!-- CONFIG OVERLAY -->
+	<script id="template-overlay" type="text/template">
+		<label>{{LAYOUT}}: </label>
+		<div id="config-layout">
+			<input type="image" src="images/layout_horizontal.png" value="horizontal" />
+			<input type="image" src="images/layout_vertical.png" value="vertical" />
+		</div>
+		<label for="config-lines">{{LINES}}:</label>
+		<select id="config-lines" data-name="lines">
+			<option value="auto">{{AUTO}}</option>
+			<option value="one-line">{{ONE_LINE}}</option>
+			<option value="two-lines">{{TWO_LINES}}</option>
+		</select>
+		<label for="config-sort-order">{{SORT_ORDER}}:</label>
+		<select id="config-sort-order" data-name="sortOrder">
+			<option value="desc">{{DESCENDING}}</option>
+			<option value="asc">{{ASCENDING}}</option>
+		</select>
+	
+		<a href="/options.html" target="_blank">{{OPTIONS}}</option>
+	</script>
+
+	<!-- LOG -->
+	<script id="template-log" type="text/template">
+		<input type="button" value="Hide log" id="button-hide-log" />
+	</script>
 </body>
 </html>

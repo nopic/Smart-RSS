@@ -1,7 +1,16 @@
 define({
 	global: {
-		default: function() {
-			alert('no action');
+		default: {
+			title: 'Unknown',
+			fn: function() {
+				alert('no action');
+			}
+		},
+		hideContextMenus: {
+			title: 'Hide Context Menus',
+			fn: function() {
+				require('instances/contextMenus').hideAll();
+			}
 		}
 	},
 	feeds: {
@@ -198,7 +207,7 @@ define({
 			title: bg.lang.c.SETTINGS,
 			icon: 'config.png',
 			fn: function() {
-				overlay.show();
+				app.article.overlay.show();
 			}
 		}
 	}

@@ -1,5 +1,5 @@
-define(['backbone', 'views/ContextMenu', 'views/articleList', 'views/feedList', 'views/properties'], 
-function(BB, ContextMenu, articleList, feedList, properties) {
+define(['backbone', 'views/ContextMenu', 'views/feedList', 'views/properties'], 
+function(BB, ContextMenu, properties) {
 	var sourcesContextMenu = new ContextMenu([
 		{
 			title: bg.lang.c.UPDATE,
@@ -112,7 +112,7 @@ function(BB, ContextMenu, articleList, feedList, properties) {
 			title: bg.lang.c.UPDATE,
 			icon: 'reload.png',
 			action: function() {
-				var folder = feedList.selectedItems[0].model;
+				var folder = require('views/feedList').selectedItems[0].model;
 				if (!folder || !(folder instanceof bg.Folder)) return;
 
 				bg.sources.forEach(function(source) {
@@ -127,7 +127,7 @@ function(BB, ContextMenu, articleList, feedList, properties) {
 			title: bg.lang.c.MARK_ALL_AS_READ,
 			icon: 'read.png',
 			action: function() { 
-				var folder = feedList.selectedItems[0].model;
+				var folder = require('views/feedList').selectedItems[0].model;
 				if (!folder || !(folder instanceof bg.Folder)) return;
 
 				var sources = bg.sources.where({ folderID: folder.get('id') });
@@ -152,7 +152,7 @@ function(BB, ContextMenu, articleList, feedList, properties) {
 			action: function() { 
 				if (!confirm(bg.lang.c.REALLY_DELETE)) return;
 
-				var folder = feedList.selectedItems[0].model;
+				var folder = require('views/feedList').selectedItems[0].model;
 				bg.sources.where({ folderID: folder.get('id') }).forEach(function(item) {
 					item.destroy();
 				});
@@ -162,6 +162,7 @@ function(BB, ContextMenu, articleList, feedList, properties) {
 		{ 
 			title: bg.lang.c.RENAME,
 			action: function() { 
+				var feedList = require('views/feedList');
 				var newTitle = prompt(bg.lang.c.FOLDER_NAME + ': ', feedList.selectedItems[0].model.get('title'));
 				if (!newTitle) return;
 
@@ -189,14 +190,14 @@ function(BB, ContextMenu, articleList, feedList, properties) {
 			title: bg.lang.c.MARK_AS_READ + ' (K)',
 			icon: 'read.png',
 			action: function() {
-				articleList.changeUnreadState();
+				app.articles.articleList.changeUnreadState();
 			}
 		},
 		{
 			title: bg.lang.c.MARK_AND_NEXT_UNREAD + ' (G)',
 			icon: 'find_next.png',
 			action: function() {
-				articleList.changeUnreadState({ onlyToRead: true });
+				app.articles.articleList.changeUnreadState({ onlyToRead: true });
 				app.selectNext({ selectUnread: true });
 			}
 		},
@@ -204,7 +205,7 @@ function(BB, ContextMenu, articleList, feedList, properties) {
 			title: bg.lang.c.MARK_AND_PREV_UNREAD + ' (T)',
 			icon: 'find_previous.png',
 			action: function() {
-				articleList.changeUnreadState({ onlyToRead: true });
+				app.articles.articleList.changeUnreadState({ onlyToRead: true });
 				this.selectPrev({ selectUnread: true });
 			}
 		},
@@ -212,6 +213,7 @@ function(BB, ContextMenu, articleList, feedList, properties) {
 			title: bg.lang.c.FULL_ARTICLE,
 			icon: 'full_article.png',
 			action: function(e) {
+				var articleList = app.articles.articleList;
 				if (!articleList.selectedItems || !articleList.selectedItems.length) return;
 				if (articleList.selectedItems.length > 10 && bg.settings.get('askOnOpening')) {
 					if (!confirm('Do you really want to open ' + articleList.selectedItems.length + ' articles?')) {
@@ -227,6 +229,7 @@ function(BB, ContextMenu, articleList, feedList, properties) {
 			title: bg.lang.c.PIN + ' (P)',
 			icon: 'pinsource_context.png',
 			action: function() {
+				var articleList = app.articles.articleList;
 				if (!articleList.selectedItems || !articleList.selectedItems.length) return;
 				var val = !articleList.selectedItems[0].model.get('pinned');
 				articleList.selectedItems.forEach(function(item) {
@@ -239,6 +242,7 @@ function(BB, ContextMenu, articleList, feedList, properties) {
 			icon: 'delete.png',
 			action: function(e) {
 				e = e || {};
+				var articleList = app.articles.articleList;
 				if (articleList.specialName == 'trash' || e.shiftKey) {
 					articleList.destroyBatch(articleList.selectedItems, articleList.removeItemCompletely);
 				} else {
@@ -249,8 +253,9 @@ function(BB, ContextMenu, articleList, feedList, properties) {
 		{
 			title: bg.lang.c.UNDELETE + ' (U)',
 			id: 'context-undelete',
-			icon: 'delete_selected.png',
+			icon: 'undelete.png',
 			action: function(e) {
+				var articleList = app.articles.articleList;
 				if (articleList.specialName == 'trash') {
 					articleList.destroyBatch(articleList.selectedItems, articleList.undeleteItem);
 				}

@@ -28,6 +28,9 @@ require.config({
 var tabID = -1;
 
 chrome.runtime.getBackgroundPage(function(bg) {
+	/**
+	 * Stup work, that has to be done before any dependencies get executed
+	 */
 	window.bg = bg;
 
 	chrome.extension.sendMessage({ action: 'get-tab-id'}, function(response) {

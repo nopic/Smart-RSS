@@ -1,4 +1,4 @@
-define(['backbone', 'helpers/formatDate'], function(BB, formatDate) {
+define(['backbone', 'helpers/formatDate', 'instances/contextMenus'], function(BB, formatDate, contextMenus) {
 	var ItemView = BB.View.extend({
 		tagName: 'div',
 		className: 'item',
@@ -106,8 +106,8 @@ define(['backbone', 'helpers/formatDate'], function(BB, formatDate) {
 			if (!this.$el.hasClass('selected')) {
 				this.list.select(this, e);
 			}
-			itemsContextMenu.currentSource = this.model;
-			itemsContextMenu.show(e.clientX, e.clientY);
+			contextMenus.get('items').currentSource = this.model;
+			contextMenus.get('items').show(e.clientX, e.clientY);
 		},
 		handleMouseDown: function(e) {
 			if (this.list.selectedItems.length > 1 && this.$el.hasClass('selected') && !e.ctrlKey && !e.shiftKey) {

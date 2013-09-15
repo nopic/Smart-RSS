@@ -1,4 +1,4 @@
-define(['backbone', 'instances/contextMenus', 'collections/Groups', 'models/Group', 'views/GroupView', 'views/ItemView', 'mixins/selectable'], 	
+define(['backbone', 'instances/contextMenus', 'collections/Groups', 'models/Group', 'views/GroupView', 'views/ItemView', 'mixins/selectable'], 
 function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 
 	var _itemHeight = 0;
@@ -345,8 +345,8 @@ function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 			}
 
 			if (this.specialName == 'trash') {
-				$('#button-reload').css('display', 'block');
-				$('#button-undelete').css('display', 'none');
+				$('[data-action="articles:update"]').css('display', 'block');
+				$('[data-action="articles:undelete"]').css('display', 'none');
 				$('#context-undelete').css('display', 'none');
 			}
 
@@ -376,8 +376,8 @@ function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 			this.specialFilter = filter;
 
 			if (this.specialName == 'trash') {
-				$('#button-reload').css('display', 'none');
-				$('#button-undelete').css('display', 'block');
+				$('[data-action="articles:update"]').css('display', 'none');
+				$('[data-action="articles:undelete"]').css('display', 'block');
 				$('#context-undelete').css('display', 'block');
 			}
 			var completeFilter = filter;
@@ -534,8 +534,8 @@ function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 		},
 		changeUnreadState: function(opt) {
 			var opt = opt || {};
-			var val = list.selectedItems.length && !opt.onlyToRead ? !list.selectedItems[0].model.get('unread') : false;
-			list.selectedItems.forEach(function(item) {
+			var val = this.selectedItems.length && !opt.onlyToRead ? !this.selectedItems[0].model.get('unread') : false;
+			this.selectedItems.forEach(function(item) {
 				if (opt.onlyToRead && item.model.get('unread') == false) {
 					// do nothing
 				} else {

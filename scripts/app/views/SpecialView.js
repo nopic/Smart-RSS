@@ -7,7 +7,7 @@ define(['backbone', 'views/TopView'], function(BB, TopView) {
 		},
 		showContextMenu: function(e) {
 			if (!this.contextMenu) return;
-			this.select(e);
+			app.feeds.feedList.select(this, e);
 			this.contextMenu.currentSource = this.model;
 			this.contextMenu.show(e.clientX, e.clientY);
 		},
