@@ -1,6 +1,6 @@
-define(['marionette'], function(Marionette) {
+define(['backbone'], function(BB) {
 
-	var Properties = Marionette.CompositeView.extend({
+	var Properties = BB.View.extend({
 		id: 'properties',
 		template: '#template-properties',
 		currentSource: null,

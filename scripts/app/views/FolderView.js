@@ -1,4 +1,4 @@
-define(['marionette', 'views/TopView', 'instances/contextMenus'], function(Marionette, TopView, contextMenus) {
+define(['backbone', 'views/TopView', 'instances/contextMenus'], function(BB, TopView, contextMenus) {
 	var FolderView = TopView.extend({
 		className: 'list-item folder',
 		template: _.template($('#template-folder').html()),

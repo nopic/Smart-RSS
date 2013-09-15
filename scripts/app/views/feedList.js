@@ -1,5 +1,5 @@
-define(['marionette', 'views/SourceView', 'views/FolderView', 'views/SpecialView', 'models/Special', 'instances/contextMenus'], 	
-function (Marionette, SourceView, FolderView, SpecialView, Special, contextMenus) {
+define(['backbone', 'views/SourceView', 'views/FolderView', 'views/SpecialView', 'models/Special', 'instances/contextMenus'], 	
+function (BB, SourceView, FolderView, SpecialView, Special, contextMenus) {
 
 
 	var trash = new Special({
@@ -28,7 +28,7 @@ function (Marionette, SourceView, FolderView, SpecialView, Special, contextMenus
 		}
 	});
 
-	var FeedListView = Marionette.CollectionView.extend({
+	var FeedListView = BB.View.extend({
 		//el: '#list',
 		tagName: 'div',
 		id: 'feed-list',
@@ -46,7 +46,7 @@ function (Marionette, SourceView, FolderView, SpecialView, Special, contextMenus
 
 			this.el.view = this;
 
-			
+			this.on('attached', this.insertFeeds);
 
 			bg.sources.on('reset', this.addSources, this);
 			bg.sources.on('add', this.addSource, this);
@@ -56,10 +56,6 @@ function (Marionette, SourceView, FolderView, SpecialView, Special, contextMenus
 
 			//window.addEventListener('message', this.handleMessage);
 			
-		},
-		attach: function() {
-			app.on('start', this.insertFeeds, this);
-			return this;
 		},
 		insertFeeds: function() {
 			this.addFolders(bg.folders);

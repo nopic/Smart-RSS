@@ -1,31 +1,39 @@
-define(['marionette', 'views/ToolbarButtonView'], 
-	function (Marionette, ToolbarButtonView) {
-		var ToolbarView = Marionette.CollectionView.extend({
-			itemView: ToolbarButtonView,
+define(['backbone', 'views/ToolbarButtonView', 'collections/ToolbarButtons'], 
+	function (BB, ToolbarButtonView, ToolbarButtons) {
+		var ToolbarView = BB.View.extend({
 			tagName: 'div',
 			className: 'toolbar',
 			buttonPosition: 'left',
-			//buttons: new ToolbarButtons(),
+			buttons: null,
 			events: {
 				'click .button': 'handleButtonClick',
 				'input input[type=search]': 'handleButtonClick'
 			},
 			initialize: function() {
-				//this.collection = this.buttons;
 				this.el.view = this;
+				this.buttons = new ToolbarButtons();
 
-				this.model.get('actions').forEach(this.addButton, this);
+				this.listenTo(this.buttons, 'add', this.addButton);
+
+				this.model.get('actions').forEach(this.createButton, this);
 			},
-			addButton: function(action) {	
+			createButton: function(action) {	
 				if (action == '!right')	{
 					this.buttonPosition = 'right';
 					return null;
 				}
-				this.collection.add({ actionName: action, position: this.buttonPosition });
+				this.buttons.add({ actionName: action, position: this.buttonPosition });
 			},
 			handleButtonClick: function(e) {
 				var button = e.currentTarget.view.model;
 				app.actions.execute(button.get('actionName'), e);
+			},
+			render: function() {
+				return this;
+			},
+			addButton: function(button) {
+				var view = new ToolbarButtonView({ model: button });
+				this.$el.append(view.render().el);
 			}
 		});
 

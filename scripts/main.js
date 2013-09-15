@@ -6,7 +6,6 @@ require.config({
 		jquery: '../libs/jquery.min',
 		underscore: '../libs/underscore.min',
 		backbone: '../libs/backbone.min',
-		marionette: '../libs/backbone.marionette.min',
 		text: '../text',
 		i18n: '../i18n',
 		domReady: '../domReady'
@@ -22,10 +21,6 @@ require.config({
 		},
 		underscore: {
 			exports: '_'
-		},
-		marionette: {
-			deps: ['jquery', 'underscore', 'backbone'],
-			exports: 'Marionette'
 		}
 	}
 });

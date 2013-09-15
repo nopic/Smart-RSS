@@ -1,8 +1,7 @@
-define(['marionette', 'jquery', 'domReady!'], function (Marionette, $) {
-	var ToolbarButtonView = Marionette.ItemView.extend({
+define(['backbone', 'jquery', 'domReady!'], function (BB, $) {
+	var ToolbarButtonView = BB.View.extend({
 		tagName: 'div',
 		className: 'button',
-		template: '#template-empty',
 		initialize: function() {
 			
 			var action = app.actions.get(this.model.get('actionName'));
@@ -24,9 +23,6 @@ define(['marionette', 'jquery', 'domReady!'], function (Marionette, $) {
 			}
 
 			this.el.view = this;
-		},
-		onRender: function() {
-			
 		}
 	});
 

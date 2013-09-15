@@ -1,25 +1,25 @@
 define([
-	'marionette', 'views/ToolbarView', 'models/Toolbar', 'collections/ToolbarButtons', 'views/articleList', 
+	'layouts/Layout', 'views/ToolbarView', 'models/Toolbar', 'views/articleList', 
 	'instances/contextMenus', 'domReady!'
 ], 
-	function (Marionette, ToolbarView, Toolbar, ToolbarButtons, articleList, contextMenus) {
+	function (Layout, ToolbarView, Toolbar, articleList, contextMenus) {
 		var toolbar = new Toolbar({ id: 'articles' });
-		var buttons = new ToolbarButtons();
 
-		var articles = new (Marionette.Layout.extend({
-			template: '#template-articles',
-			tagName: 'section',
-			className: 'region',
+		var ArticlesLayout = Layout.extend({
+			template: _.template($('#template-articles').html()),
+			el: '#region-articles',
 			events: {
 				'keydown': 'handleKeyDown',
 				'mousedown': 'handleMouseDown'
 			},
-			regions: {
-				toolbar: '.toolbar',
-				articleList: '.content'
-			},
 			initialize: function() {
 				this.el.view = this;
+
+				this.on('attached', function() {
+					/****$('#input-search').attr('placeholder', bg.lang.c.SEARCH);****/
+					this.attach('toolbar', new ToolbarView({ model: toolbar }) );
+					this.attach('articleList', articleList );
+				});
 
 
 				/****
@@ -48,16 +48,8 @@ define([
 				}
 			}
 			
-		}));
-
-		articles.on('show', function() {
-			//this.toolbar.$el = $(this.toolbar.el);
-			this.toolbar.show( new ToolbarView({ model: toolbar, collection: buttons }) );
-			this.articleList.show( articleList.attach() );
-			/****$('#input-search').attr('placeholder', bg.lang.c.SEARCH);****/
 		});
-		
 
-		return articles;
+		return ArticlesLayout;
 	}
 );

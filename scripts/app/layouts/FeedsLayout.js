@@ -1,26 +1,25 @@
 define([
-	'marionette', 'views/ToolbarView', 'models/Toolbar', 'collections/ToolbarButtons', 'views/feedList', 
+	'layouts/Layout', 'views/ToolbarView', 'models/Toolbar', 'views/feedList', 
 	'instances/contextMenus', 'views/properties', 'domReady!'
 ], 
-	function (Marionette, ToolbarView, Toolbar, ToolbarButtons, feedList, contextMenus, properties) {
+	function (Layout, ToolbarView, Toolbar, feedList, contextMenus, properties) {
 		var toolbar = new Toolbar({ id: 'feeds' });
-		var buttons = new ToolbarButtons();
 
-		var feeds = new (Marionette.Layout.extend({
-			template: '#template-feeds',
-			tagName: 'section',
-			className: 'region',
+		var FeedsLayout = Layout.extend({
+			template: _.template($('#template-feeds').html()),
+			el: '#region-feeds',
 			events: {
 				'keydown': 'handleKeyDown',
 				'mousedown': 'handleMouseDown',
 				'click #panel-toggle': 'handleClickToggle'
 			},
-			regions: {
-				toolbar: '.toolbar',
-				properties: '#properties',
-				feedList: '.content'
-			},
 			initialize: function() {
+
+				this.on('attached', function() {
+					this.attach('toolbar', new ToolbarView({ model: toolbar }) );
+					this.attach('properties', properties );
+					this.attach('feedList', feedList );
+				});
 
 				this.el.view = this;
 				window.addEventListener('focus', function() {
@@ -166,16 +165,8 @@ define([
 				$('#indicator').css('background', 'linear-gradient(to right,  #c5c5c5 ' + perc + '%, #eee ' + perc + '%)');
 				$('#indicator').html(bg.lang.c.UPDATING_FEEDS + ' (' + l.get('loaded') + '/' + l.get('maxSources') + ')');
 			}
-		}));
+		});		
 
-		feeds.on('show', function() {
-			//this.toolbar.$el = $(this.toolbar.el);
-			this.toolbar.show( new ToolbarView({ model: toolbar, collection: buttons }) );
-			this.properties.show( properties );
-			this.feedList.show( feedList.attach() );
-		});
-		
-
-		return feeds;
+		return FeedsLayout;
 	}
 );

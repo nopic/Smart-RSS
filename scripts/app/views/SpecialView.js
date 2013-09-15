@@ -1,4 +1,4 @@
-define(['marionette', 'views/TopView'], function(Marionette, TopView) {
+define(['backbone', 'views/TopView'], function(BB, TopView) {
 	var SpecialView = TopView.extend({
 		className: 'list-item special',
 		events: {

@@ -1,4 +1,4 @@
-define(['marionette', 'views/TopView'], function(Marionette, TopView) {
+define(['backbone', 'views/TopView'], function(BB, TopView) {
 	var SourceView = TopView.extend({
 		events: {
 			'mouseup': 'handleMouseUp',

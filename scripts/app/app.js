@@ -1,5 +1,5 @@
-define(['marionette', 'domReady!', 'collections/Actions', 'layouts/feeds', 'layouts/articles', 'layouts/article', 'preps/all'], 
-function (Marionette, doc, Actions, feeds, articles, article) {
+define(['layouts/Layout', 'jquery', 'domReady!', 'collections/Actions', 'layouts/FeedsLayout', 'layouts/ArticlesLayout', 'layouts/ArticleLayout', 'preps/all'], 
+function (Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ArticleLayout) {
 
 	//$('body').html( bg.translate($('body').html()) );
 	document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';
@@ -13,14 +13,22 @@ function (Marionette, doc, Actions, feeds, articles, article) {
 		e.preventDefault();
 	});	
 
-	var app = window.app = new Marionette.Application({
+	var app = window.app = new (Layout.extend({
+		el: 'body',
 		fixURL: function(url) {
 			if (url.search(/[a-z]+:\/\//) == -1) {
 				url = 'http://' + url;
 			}
 			return url;
+		},
+		start: function() {
+			this.attach('feeds', new FeedsLayout);
+			this.attach('articles', new ArticlesLayout);
+			this.attach('article', new ArticleLayout);
+
+			this.trigger('start');
 		}
-	});
+	}));
 
 
 
@@ -143,19 +151,6 @@ function (Marionette, doc, Actions, feeds, articles, article) {
 
 	app.actions = new Actions();
 
-	app.addRegions({
-		feeds: '#region-feeds',
-		articles: '#region-articles',
-		article: '#region-article'
-	});
-
-	app.feeds.show(feeds);
-	app.articles.show(articles);
-	app.article.show(article);
-
-	app.on('start', function() {
-		console.log('app started');
-	});
 
 	return app;
 });	

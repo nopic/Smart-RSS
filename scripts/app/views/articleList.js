@@ -1,5 +1,5 @@
-define(['marionette', 'instances/contextMenus', 'collections/Groups', 'models/Group', 'views/GroupView', 'views/ItemView', 'mixins/selectable'], 	
-function (Marionette, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
+define(['backbone', 'instances/contextMenus', 'collections/Groups', 'models/Group', 'views/GroupView', 'views/ItemView', 'mixins/selectable'], 	
+function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 
 	var _itemHeight = 0;
 
@@ -24,7 +24,7 @@ function (Marionette, contextMenus, Groups, Group, GroupView, ItemView, selectab
 
 	var groups = new Groups();
 
-	var ArticleListView = Marionette.CollectionView.extend({
+	var ArticleListView = BB.View.extend({
 		tagName: 'div',
 		id: 'article-list',
 		views: [],
@@ -77,6 +77,8 @@ function (Marionette, contextMenus, Groups, Group, GroupView, ItemView, selectab
 				window.focus();
 			});****/
 
+			this.on('attached', this.loadAllFeeds);
+
 
 
 			window.addEventListener('message', function(e) {
@@ -106,13 +108,6 @@ function (Marionette, contextMenus, Groups, Group, GroupView, ItemView, selectab
 			/****Why this.el.addEventListener doesn't work? ****/
 			this.$el.on('scroll', this.handleScroll.bind(this));
 
-		},
-		attach: function() {
-			app.on('start', function() {
-				this.loadAllFeeds();
-			}, this);
-
-			return this;
 		},
 		loadAllFeeds: function() {
 			var that = this;

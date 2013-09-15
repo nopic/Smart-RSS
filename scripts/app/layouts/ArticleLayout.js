@@ -1,17 +1,20 @@
 define([
-	'marionette',  'views/ToolbarView', 'models/Toolbar', 'collections/ToolbarButtons', 'views/contentView', 'domReady!'
+	'layouts/Layout',  'views/ToolbarView', 'models/Toolbar', 'views/contentView', 'domReady!'
 ], 
-	function (Marionette, ToolbarView, Toolbar, ToolbarButtons, contentView) {
+	function (Layout, ToolbarView, Toolbar, contentView) {
 		var toolbar = new Toolbar({ id: 'article' });
-		var buttons = new ToolbarButtons();
 
-		var article = new (Marionette.Layout.extend({
-			template: '#template-article',
-			tagName: 'section',
-			className: 'region',
-			regions: {
-				toolbar: '.toolbar',
-				content: 'header'
+		var ArticleLayout = Layout.extend({
+			template: _.template($('#template-article').html()),
+			el: '#region-article',
+			initialize: function() {
+
+				this.on('attached', function() {
+					this.attach('toolbar', new ToolbarView({ model: toolbar }) );
+					this.attach('content', contentView );
+				});
+				
+
 			},
 			handleSpace: function() {
 				var cw = $('iframe').get(0).contentWindow;
@@ -73,14 +76,8 @@ define([
 				}
 			}
 			
-		}));
-
-		article.on('show', function() {
-			this.toolbar.show( new ToolbarView({ model: toolbar, collection: buttons }) );
-			this.content.show( contentView.attach() );
 		});
-		
 
-		return article;
+		return ArticleLayout;
 	}
 );

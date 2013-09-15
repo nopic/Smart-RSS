@@ -1,3 +1,3 @@
-define(['preps/extendNative', 'preps/replaceRegion'], function() {
+define(['preps/extendNative'], function() {
 	return true;
 });

@@ -1,4 +1,4 @@
-define(['marionette', 'instances/contextMenus', 'jquery'], function(Marionette, contextMenus, $) {
+define(['backbone', 'instances/contextMenus', 'jquery'], function(BB, contextMenus, $) {
 	var TopView = Backbone.View.extend({
 		tagName: 'div',
 		className: 'list-item',

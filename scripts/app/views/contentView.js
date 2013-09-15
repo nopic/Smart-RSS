@@ -35,9 +35,6 @@ define(['backbone'], function(BB) {
 			bg.items.on('change:pinned', this.handleItemsPin, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 		},
-		attach: function() {
-			return this;
-		},
 		handleClearEvents: function(id) {
 			if (window == null || id == window.top.tabID) {
 				bg.items.off('change:pinned', this.handleItemsPin, this);
