@@ -71,13 +71,21 @@ define(['backbone', 'views/TopView', 'instances/contextMenus'], function(BB, Top
 			if (!e.noSelect) this.list.select(this, e);
 			
 			
-			window.top.frames[1].postMessage({
+			/*window.top.frames[1].postMessage({
 				action: 'new-folder-select',
 				value: this.model.id,
 				unreadOnly: !!e.shiftKey,
 				noFocus: !!e.noFocus
-			}, '*');
+			}, '*');*/
 			
+		},
+		getSelectData: function(e) {
+			return {
+				action: 'new-folder-select',
+				value: this.model.id,
+				unreadOnly: !!e.shiftKey,
+				noFocus: !!e.noFocus
+			};
 		}
 	});
 	

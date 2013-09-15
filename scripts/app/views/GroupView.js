@@ -2,10 +2,10 @@ define(['backbone'], function(BB) {
 	var GroupView = BB.View.extend({
 		tagName: 'div',
 		className: 'date-group',
-		initialize: function() {
+		initialize: function(model, groups) {
 			this.el.view = this;
-			/****groups.on('reset', this.handleReset, this);
-			groups.on('remove', this.handleRemove, this);****/
+			this.listenTo(groups, 'reset', this.handleReset);
+			this.listenTo(groups, 'remove', this.handleRemove);
 		},
 		render: function() {
 			this.$el.html(this.model.get('title'));
@@ -17,8 +17,7 @@ define(['backbone'], function(BB) {
 			}
 		},
 		handleReset: function() {
-			/****groups.off('reset', this.handleRemove, this);
-			groups.off('remove', this.handleRemove, this);****/
+			this.stopListening();
 			this.$el.remove();
 		}
 	});

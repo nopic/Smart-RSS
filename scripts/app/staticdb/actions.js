@@ -29,7 +29,7 @@ define({
 				if (!url)  return;
 
 				var folderID = 0;
-				var list = app.feeds.currentView.feedList.currentView;
+				var list = require('views/feedList');
 				if (list.selectedItems.length && list.selectedItems[0].classLisr.contains('folder')) {
 					var fid = list.selectedItems[0].model.get('id');
 					// make sure source is not added to folder which is not in db
@@ -57,6 +57,12 @@ define({
 				bg.folders.create({
 					title: title
 				}, { wait: true });
+			}
+		},
+		focus: {
+			title: 'Focus Feeds',
+			fn: function() {
+				app.setFocus('feeds');
 			}
 		}
 	},
@@ -102,10 +108,9 @@ define({
 			icon: 'undelete.png',
 			title: bg.lang.c.UNDELETE,
 			fn: function() {
-				var list = require('views/articleList')
-				if (list.specialName == 'trash') {
-					list.destroyBatch(list.selectedItems, list.undeleteItem);
-				}
+				var list = require('views/articleList');
+				if (!articleList.selectedItems || !articleList.selectedItems.length || articleList.specialName != 'trash') return;
+				list.destroyBatch(list.selectedItems, list.undeleteItem);
 			}
 		},
 		selectNext: {
@@ -149,6 +154,127 @@ define({
 				list.handleScroll();
 
 				list.restartSelection();
+			}
+		},
+		focusSearch: {
+			title: 'Focus Search',
+			fn: function() {
+				$('input[type=search]').focus();
+			}
+		},
+		focus: {
+			title: 'Focus Articles',
+			fn: function() {
+				app.setFocus('articles');
+			}
+		},
+		fullArticle: {
+			title: bg.lang.c.FULL_ARTICLE,
+			icon: 'full_article.png',
+			fn: function() {
+				var articleList = app.articles.articleList;
+				if (!articleList.selectedItems || !articleList.selectedItems.length) return;
+				if (articleList.selectedItems.length > 10 && bg.settings.get('askOnOpening')) {
+					if (!confirm('Do you really want to open ' + articleList.selectedItems.length + ' articles?')) {
+						return;
+					}
+				}
+				articleList.selectedItems.forEach(function(item) {
+					chrome.tabs.create({ url: escapeHtml(item.model.get('url')), active: !e.shiftKey });
+				});
+			}
+		},
+		markAndNextUnread: {
+			title: bg.lang.c.MARK_AND_NEXT_UNREAD,
+			icon: 'find_next.png',
+			fn: function() {
+				require('views/articleList').changeUnreadState({ onlyToRead: true });
+				require('views/articleList').selectNext({ selectUnread: true });
+			}
+		},
+		markAndPrevUnread: {
+			title: bg.lang.c.MARK_AND_PREV_UNREAD,
+			icon: 'find_previous.png',
+			fn: function() {
+				require('views/articleList').changeUnreadState({ onlyToRead: true });
+				require('views/articleList').selectPrev({ selectUnread: true });
+			}
+		},
+		nextUnread: {
+			title: bg.lang.c.NEXT_UNREAD,
+			icon: 'forward.png',
+			fn: function() {
+				require('views/articleList').selectNext({ selectUnread: true });
+			}
+		},
+		prevUnread: {
+			title: bg.lang.c.PREV_UNREAD,
+			icon: 'back.png',
+			fn: function() {
+				require('views/articleList').selectPrev({ selectUnread: true });
+			}
+		},
+		markAllAsRead: {
+			title: bg.lang.c.MARK_ALL_AS_READ,
+			icon: 'read.png',
+			fn: function() {
+				var articleList = require('views/articleList');
+				if (articleList.currentSource) {
+					var id = articleList.currentSource.get('id');
+					if (!id) return;
+					bg.items.forEach(function(item) {
+						if (item.get('unread') == true && item.getSource().id == id) {
+							item.save({ unread: false, visited: true });
+						}
+					});
+				} else if (articleList.specialName == 'all-feeds') {
+					if (confirm(bg.lang.c.MARK_ALL_QUESTION)) {
+						bg.items.forEach(function(item) {
+							if (item.get('unread') == true) {
+								item.save({ unread: false, visited: true });
+							}
+						});	
+					}
+				} else if (articleList.specialName) {
+					bg.items.where(articleList.specialFilter).forEach(function(item) {
+						item.save({ unread: false, visited: true });
+					});
+				} 
+			}
+		},
+		selectAll: {
+			title: 'Select All',
+			fn: function() {
+				var articleList = require('views/articleList');
+				$('.selected').removeClass('selected');
+				articleList.selectedItems = [];
+				$('.item:not(.invisible)').each(function(i, item) {
+					item.view.$el.addClass('selected');
+					articleList.selectedItems.push(item.view);
+				});
+
+				$('.last-selected').removeClass('last-selected');
+				$('.item:not(.invisible):last').addClass('last-selected');
+			}
+		},
+		pin: {
+			title: bg.lang.c.PIN,
+			icon: 'pinsource_context.png',
+			fn: function() {
+				var articleList = require('views/articleList');
+				if (!articleList.selectedItems || !articleList.selectedItems.length) return;
+				var val = !articleList.selectedItems[0].model.get('pinned');
+				articleList.selectedItems.forEach(function(item) {
+					item.model.save({ pinned: val });
+				});
+			}
+		},
+		spaceTrough: {
+			title: 'Space Through',
+			fn: function() {
+				if (!articleList.selectedItems || !articleList.selectedItems.length) return;
+				/****/
+				topWindow.frames[2].postMessage({ action: 'space-pressed' }, '*');
 			}
 		}
 	},
@@ -208,6 +334,12 @@ define({
 			icon: 'config.png',
 			fn: function() {
 				app.article.overlay.show();
+			}
+		},
+		focus: {
+			title: 'Focus Article',
+			fn: function() {
+				app.setFocus('article');
 			}
 		}
 	}

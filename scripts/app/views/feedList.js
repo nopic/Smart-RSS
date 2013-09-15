@@ -45,7 +45,7 @@ function (BB, SourceView, FolderView, SpecialView, Special, contextMenus, select
 
 			this.el.view = this;
 
-			this.on('attached', this.insertFeeds);
+			this.on('attached', this.handleAttach);
 
 			bg.sources.on('reset', this.addSources, this);
 			bg.sources.on('add', this.addSource, this);
@@ -55,6 +55,21 @@ function (BB, SourceView, FolderView, SpecialView, Special, contextMenus, select
 
 			//window.addEventListener('message', this.handleMessage);
 			
+		},
+		handleAttach: function() {
+			app.on('select-all-feeds', function() {
+				var allFeeds = $('.special:first').get(0);
+				if (!allFeeds) return;
+				this.select(allFeeds.view);
+			}, this);
+
+			app.on('select-folder', function(id) {
+				var folder = $('.folder[data-id=' + id + ']').get(0);
+				if (!folder) return;
+				this.select(folder.view);
+			}, this);
+
+			this.insertFeeds();
 		},
 		insertFeeds: function() {
 			this.addFolders(bg.folders);
@@ -86,13 +101,9 @@ function (BB, SourceView, FolderView, SpecialView, Special, contextMenus, select
 		},
 		handleMessage: function(e) {
 			if (e.data.action == 'select-folder') {
-				var folder = $('.folder[data-id=' + e.data.value + ']').get(0);
-				if (!folder) return;
-				folder.view.select();
+				
 			} else if (e.data.action == 'select-all-feeds') {
-				var allFeeds = $('.special:first').get(0);
-				if (!allFeeds) return;
-				this.select(allFeeds.view);
+				
 			}
 		},
 		handleDragOver: function(e) {
@@ -177,9 +188,10 @@ function (BB, SourceView, FolderView, SpecialView, Special, contextMenus, select
 			}
 		},
 		addFolders: function(folders) {
+			var that = this;
 			$('.folder').each(function(i, folder) {
 				if (!folder.view || !(folder instanceof FolderView)) return;
-				list.destroySource(folder.view);
+				that.destroySource(folder.view);
 			});
 			folders.forEach(function(folder) {
 				this.addFolder(folder);
@@ -253,9 +265,10 @@ function (BB, SourceView, FolderView, SpecialView, Special, contextMenus, select
 			}
 		},
 		addSources: function(sources) {
+			var that = this;
 			$('.source').each(function(i, source) {
 				if (!source.view || !(source instanceof SourceView)) return;
-				list.destroySource(source.view);
+				that.destroySource(source.view);
 			});
 			sources.forEach(function(source) {
 				this.addSource(source, true);

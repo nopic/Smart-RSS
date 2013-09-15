@@ -1,7 +1,6 @@
 define(['backbone', 'instances/contextMenus', 'collections/Groups', 'models/Group', 'views/GroupView', 'views/ItemView', 'mixins/selectable'], 
 function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 
-	var _itemHeight = 0;
 
 	function isScrolledIntoView(elem) {
 		if (!screen) {
@@ -25,6 +24,7 @@ function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 	var groups = new Groups();
 
 	var ArticleListView = BB.View.extend({
+		_itemHeight: 0,
 		tagName: 'div',
 		id: 'article-list',
 		views: [],
@@ -77,39 +77,52 @@ function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 				window.focus();
 			});****/
 
-			this.on('attached', this.handleAttached);
+			this.on('attached', this.handleAttached, this);;
+			this.on('pick', this.handlePick, this);
 
 
-
-			window.addEventListener('message', function(e) {
-				if (e.data.action == 'new-select' || e.data.action == 'new-folder-select') {
-					if (!e.data.noFocus) window.focus();
-					that.el.scrollTop = 0;
-					that.unreadOnly = e.data.unreadOnly;
-				}
-
-				if (e.data.action == 'new-select') {
-					if (typeof e.data.value == 'object') {
-						that.handleNewSpecialSelected(e.data.value, e.data.name);
-					} else {
-						that.handleNewSelected(bg.sources.findWhere({ id: e.data.value }));	
-					}
-				} else if (e.data.action == 'new-folder-select') {
-					that.handleNewFolderSelected(e.data.value);	
-				} else if (e.data.action == 'give-me-next') {
-					if (list.selectedItems[0] && list.selectedItems[0].model.get('unread') == true) {
-						list.selectedItems[0].model.save({ unread: false });
-					} 
-					
-					app.selectNext({ selectUnread: true });
-				}
-			});
+			
 
 			/****Why this.el.addEventListener doesn't work? ****/
 			this.$el.on('scroll', this.handleScroll.bind(this));
 
 		},
+		handlePick: function(view) {
+			if (view.model.get('unread') && bg.settings.get('readOnVisit')) {
+				view.model.save({
+					visited: true,
+					unread: false
+				});
+			} else if (!view.model.get('visited')) {
+				view.model.save('visited', true);
+			}
+		},
 		handleAttached: function() {
+
+			app.on('select:feed-list', function(data) {
+				if (data.action == 'new-select' || data.action == 'new-folder-select') {
+					if (!data.noFocus) window.focus();
+					this.el.scrollTop = 0;
+					this.unreadOnly = data.unreadOnly;
+				}
+
+				if (data.action == 'new-select') {
+					if (typeof data.value == 'object') {
+						this.handleNewSpecialSelected(data.value, data.name);
+					} else {
+						this.handleNewSelected(bg.sources.findWhere({ id: data.value }));	
+					}
+				} else if (data.action == 'new-folder-select') {
+					this.handleNewFolderSelected(data.value);	
+				} else if (data.action == 'give-me-next') {
+					if (this.selectedItems[0] && this.selectedItems[0].model.get('unread') == true) {
+						this.selectedItems[0].model.save({ unread: false });
+					} 
+					
+					app.selectNext({ selectUnread: true });
+				}
+			}, this);
+
 			this.loadAllFeeds();
 		},
 		loadAllFeeds: function() {
@@ -165,9 +178,10 @@ function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 			}
 		},
 		handleChangeLayout: function() {
+			var that = this;
 			requestAnimationFrame(function() {
-				list.setItemHeight();
-				list.handleScroll();
+				that.setItemHeight();
+				that.handleScroll();
 			});
 		},
 		handleSort: function(items) {
@@ -191,14 +205,14 @@ function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 			this.$el.addClass('lines-' + settings.get('lines'));
 		},
 		handleDragStart: function(e) {
-			var ids = list.selectedItems.map(function(view) {
+			var ids = this.selectedItems.map(function(view) {
 				return view.model.id
 			});
 
 			e.originalEvent.dataTransfer.setData('text/plain', JSON.stringify(ids));
 		},
 		selectAfterDelete: function(view) {
-			if (view == list.selectedItems[0]) {
+			if (view == this.selectedItems[0]) {
 				var last = $('.item:not(.invisible):last').get(0);
 				if (last && view == last.view) {
 					app.selectPrev({ currentIsRemoved: true });
@@ -243,10 +257,10 @@ function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 				if (!after) {
 					if (this.reuseIndex >= this.views.length) {
 						view = new ItemView({ model: item }, this);
-						if (!_itemHeight) {
+						if (!this._itemHeight) {
 							view.render();
 						} else {
-							view.$el.css('height', _itemHeight + 'px');
+							view.$el.css('height', this._itemHeight + 'px');
 							view.prerender();
 						}
 						this.$el.append(view.$el);	
@@ -269,8 +283,8 @@ function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 					this.views.splice(index, 0, view);
 				}
 
-				if (!_itemHeight) {
-					_itemHeight = view.el.getBoundingClientRect().height;
+				if (!this._itemHeight) {
+					this._itemHeight = view.el.getBoundingClientRect().height;
 				}
 
 
@@ -289,7 +303,7 @@ function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 		},
 		addGroup: function(model, col, opt) {
 			var before = opt.before;
-			var view = new GroupView({ model: model });
+			var view = new GroupView({ model: model }, groups);
 			
 		
 			view.render().$el.insertBefore(before);
@@ -297,7 +311,7 @@ function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 		setItemHeight: function() {
 			var firstItem = $('.item:not(.invisible):first');
 			if (firstItem.length) {
-				_itemHeight = firstItem.get(0).getBoundingClientRect().height;
+				this._itemHeight = firstItem.get(0).getBoundingClientRect().height;
 			}
 		},
 		addItems: function(items) {
@@ -422,7 +436,7 @@ function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 			if (!this.currentFolder) return;
 			var folderID = source.get('folderID'); 
 			if (folderID && this.currentFolder.id == folderID) {
-				topWindow.frames[0].postMessage({ action: 'select-folder', value: this.currentFolder.id }, '*');
+				app.trigger('select-folder', this.currentFolder.id);
 			}
 		},
 		/**
@@ -439,7 +453,8 @@ function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 			} else {
 				// select all feeds in left column
 				if (model == this.currentSource) {
-					topWindow.frames[0].postMessage({ action: 'select-all-feeds' }, '*');
+					app.trigger('select-all-feeds');
+					//topWindow.frames[0].postMessage({ action: 'select-all-feeds' }, '*');
 				} 
 
 				// load all feeds in middle column
@@ -522,12 +537,12 @@ function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 			// view.off(); - This takes from some reason quite a time, and does nothing because I'm not adding events on the view
 			view.remove(); 
 			
-			var io = list.selectedItems.indexOf(view);
-			if (io >= 0) list.selectedItems.splice(io, 1);
-			io = list.views.indexOf(view);
-			if (io >= 0) list.views.splice(io, 1);
-			io = list.viewsToRender.indexOf(view);
-			if (io >= 0) list.viewsToRender.splice(io, 1);
+			var io = this.selectedItems.indexOf(view);
+			if (io >= 0) this.selectedItems.splice(io, 1);
+			io = this.views.indexOf(view);
+			if (io >= 0) this.views.splice(io, 1);
+			io = this.viewsToRender.indexOf(view);
+			if (io >= 0) this.viewsToRender.splice(io, 1);
 
 			// not really sure what would happen if this wouldn't be here :P (too tired to think about it)
 			this.reuseIndex--;

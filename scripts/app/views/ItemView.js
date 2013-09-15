@@ -39,7 +39,7 @@ define(['backbone', 'helpers/formatDate', 'instances/contextMenus'], function(BB
 				this.clearEvents();
 				this.model = null;
 				this.el.innerHTML = '';
-				if (_itemHeight) this.$el.css('height', _itemHeight + 'px');
+				if (this.list._itemHeight) this.$el.css('height', this.list._itemHeight + 'px');
 			}
 		},
 		handleClearEvents: function(id) {

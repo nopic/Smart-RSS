@@ -14,7 +14,7 @@ define(['backbone', 'instances/contextMenus', 'jquery'], function(BB, contextMen
 			}
 		},
 		showContextMenu: function(e) {
-			this.select(e);
+			app.feeds.feedList.select(this, e);
 			contextMenus.get('sources').currentSource = this.model;
 			contextMenus.get('sources').show(e.clientX, e.clientY);
 		},
@@ -38,7 +38,7 @@ define(['backbone', 'instances/contextMenus', 'jquery'], function(BB, contextMen
 		},*/
 		showSourceItems: function(e) {
 			e = e || {};
-			if (!e.noSelect) this.list.select(this, e);
+			if (!e.noSelect) app.feeds.feedList.select(this, e);
 			
 			if (this.model.get('name') == 'all-feeds') {
 				bg.sources.forEach(function(source) {
@@ -59,6 +59,15 @@ define(['backbone', 'instances/contextMenus', 'jquery'], function(BB, contextMen
 				noFocus: !!e.noFocus
 			}, '*');****/
 			
+		},
+		getSelectData: function(e) {
+			return {
+				action: 'new-select',
+				value: this.model.id || this.model.get('filter'),
+				name: this.model.get('name'),
+				unreadOnly: !!e.shiftKey,
+				noFocus: !!e.noFocus
+			};
 		}
 	});
 

@@ -85,19 +85,19 @@ define({
 					bg.sources.trigger('clear-events', -1);
 					return;
 				}
-				app.trigger('select:' + this.el.id, { value: view.model.id });
+
+
+				if ('getSelectData' in view) {
+					app.trigger('select:' + this.el.id, view.getSelectData(e));
+				} else {
+					app.trigger('select:' + this.el.id, { action: 'new-select', value: view.model.id });
+				}
+				
 				/****topWindow.frames[2].postMessage({ action: 'new-select', value: view.model.id }, '*');****/
 			}
 
 			
-			if (view.model.get('unread') && bg.settings.get('readOnVisit')) {
-				view.model.save({
-					visited: true,
-					unread: false
-				});
-			} else if (!view.model.get('visited')) {
-				view.model.save('visited', true);
-			}
+			this.trigger('pick', view);
 			
 		} else if (e.shiftKey && this.selectPivot) {
 			$('.selected').removeClass('selected');
