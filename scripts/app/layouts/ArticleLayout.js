@@ -1,17 +1,17 @@
 define([
-	'layouts/Layout',  'views/ToolbarView', 'models/Toolbar', 'views/contentView', 'domReady!'
+	'layouts/Layout',  'views/ToolbarView', 'models/Toolbar', 'views/contentView', 'views/SandboxView', 'domReady!'
 ], 
-	function (Layout, ToolbarView, Toolbar, contentView) {
+	function (Layout, ToolbarView, Toolbar, contentView, SandboxView) {
 		var toolbar = new Toolbar({ id: 'article' });
 
 		var ArticleLayout = Layout.extend({
-			template: _.template($('#template-article').html()),
 			el: '#region-article',
 			initialize: function() {
 
 				this.on('attached', function() {
 					this.attach('toolbar', new ToolbarView({ model: toolbar }) );
 					this.attach('content', contentView );
+					this.attach('sandbox', new SandboxView() );
 				});
 				
 

@@ -1,8 +1,7 @@
-define(['backbone'], function(BB) {
+define(['backbone', 'helpers/formatDate', 'helpers/escapeHtml'], function(BB, formatDate, escapeHtml) {
 	var ContentView = BB.View.extend({
 		tagName: 'header',
-		template: '#template-header',
-		frameLoaded: false,
+		template:  _.template($('#template-header').html()),
 		events: {
 			'mousedown': 'handleMouseDown',
 			'click .pin-button': 'handlePinClick',
@@ -21,19 +20,27 @@ define(['backbone'], function(BB) {
 		},
 		initialize: function() {
 			var that = this;
-			window.addEventListener('message', function(e) {
-				if (e.data.action == 'new-select') {
-					that.handleNewSelected(bg.items.findWhere({ id: e.data.value }));
-				} else if (e.data.action == 'no-items') {
-					that.model = null;
-					that.hide();
-				} else if (e.data.action == 'space-pressed') {
-					that.handleSpace();
-				}
-			});
+			
+			this.on('attached', this.handleAttached);
 
 			bg.items.on('change:pinned', this.handleItemsPin, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
+		},
+		handleAttached: function() {
+			//window.addEventListener('message', function(e) {
+			app.on('select:article-list', function(data) {
+				this.handleNewSelected(bg.items.findWhere({ id: data.value }));
+			}, this);
+
+			/*
+			} else if (data.action == 'no-items') {
+					that.model = null;
+					that.hide();
+				} else if (data.action == 'space-pressed') {
+					that.handleSpace();
+				}
+			*/
+
 		},
 		handleClearEvents: function(id) {
 			if (window == null || id == window.top.tabID) {
@@ -63,42 +70,35 @@ define(['backbone'], function(BB) {
 			this.renderTime = setTimeout(function(that) {
 				that.show();
 
-				var date = that.getFormatedDate(that.model.get('date'));
+				var data = Object.create(that.model.attributes);
+				data.date = that.getFormatedDate(that.model.get('date'));
+				data.url = escapeHtml(data.url);
+
 				var source = that.model.getSource(); 
 				var content = that.model.get('content');
 
 
-				that.$el.find('h1 a').html(that.model.escape('title'));
-				that.$el.find('h1 a').attr('href', escapeHtml(that.model.get('url')) );
-				that.$el.find('.author').html(that.model.escape('author'));
-				that.$el.find('.date').html(date);
-				that.$el.find('.pin-button').toggleClass('pinned', that.model.get('pinned'));
-				//that.$el.find('iframe').attr('src', 'data:text/html;charset=utf-8;base64,' + content);
+				that.$el.html(that.template(data));				
 
 				// first load might be too soon
-				var fr = that.$el.find('iframe').get(0);
-				fr.contentWindow.scrollTo(0, 0);
-				fr.contentWindow.stop();
+				var sandbox = app.article.sandbox;
+				var fr = sandbox.el;
 
-				if (fr.contentDocument.readyState == 'complete') {
-					try {
+				if (sandbox.loaded) {
+					/****fr.contentDocument.documentElement.innerHTML != content****/
+					fr.contentWindow.scrollTo(0, 0);
+					fr.contentDocument.documentElement.style.fontSize = bg.settings.get('articleFontSize') + '%';
+					fr.contentDocument.querySelector('base').href = source.get('url');
+					fr.contentDocument.querySelector('#smart-rss-content').innerHTML = content;
+					fr.contentDocument.querySelector('#smart-rss-url').href = that.model.get('url');
+				} else {
+					sandbox.on('load', function() {
+						fr.contentWindow.scrollTo(0, 0);
 						fr.contentDocument.documentElement.style.fontSize = bg.settings.get('articleFontSize') + '%';
-						fr.contentDocument.querySelector('base').href = source.get('url');
+						fr.contentDocument.querySelector('base').href = source ? source.get('url') : '#';
 						fr.contentDocument.querySelector('#smart-rss-content').innerHTML = content;
 						fr.contentDocument.querySelector('#smart-rss-url').href = that.model.get('url');
-					} catch(e) {}
-				} 
-				if (!that.frameLoaded) {
-					if (!fr.contentDocument.documentElement || fr.contentDocument.documentElement.innerHTML != content) {
-						var that = that;
-						fr.onload = function() {
-							itemView.frameLoaded = true;
-							fr.contentDocument.documentElement.style.fontSize = bg.settings.get('articleFontSize') + '%';
-							fr.contentDocument.querySelector('base').href = source ? source.get('url') : '#';
-							fr.contentDocument.querySelector('#smart-rss-content').innerHTML = content;
-							fr.contentDocument.querySelector('#smart-rss-url').href = that.model.get('url');
-						};
-					}
+					});
 				}
 			}, 50, this);
 

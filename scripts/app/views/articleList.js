@@ -77,7 +77,7 @@ function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 				window.focus();
 			});****/
 
-			this.on('attached', this.loadAllFeeds);
+			this.on('attached', this.handleAttached);
 
 
 
@@ -108,6 +108,9 @@ function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 			/****Why this.el.addEventListener doesn't work? ****/
 			this.$el.on('scroll', this.handleScroll.bind(this));
 
+		},
+		handleAttached: function() {
+			this.loadAllFeeds();
 		},
 		loadAllFeeds: function() {
 			var that = this;

@@ -85,6 +85,7 @@ define({
 					bg.sources.trigger('clear-events', -1);
 					return;
 				}
+				app.trigger('select:' + this.el.id, { value: view.model.id });
 				/****topWindow.frames[2].postMessage({ action: 'new-select', value: view.model.id }, '*');****/
 			}
 

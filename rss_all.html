@@ -6,20 +6,21 @@
 	<link rel="stylesheet" type="text/css" href="styles/global.css" />
 	<link rel="stylesheet" type="text/css" href="styles/sources.css" />
 	<link rel="stylesheet" type="text/css" href="styles/items.css" />
+	<link rel="stylesheet" type="text/css" href="styles/item.css" />
 	<link rel="stylesheet" type="text/css" href="styles/rss.css" />
 	<link rel="shortcut icon" href="images/icon16_v2.png" />
-	<!--<script src="libs/jquery.min.js"></script>
-	<script src="libs/underscore.min.js"></script>
-	<script src="libs/backbone.min.js"></script>
-	<script src="scripts/sources.js"></script>
-	<script src="scripts/rss.js"></script>-->
 	<script data-main="scripts/main.js" src="scripts/libs/require.js"></script>
 </head>
 <body>
 	<div class="regions" data-cols="250,*"> <!--  cols="350,*" -->
 		<section class="region" id="region-feeds"    name="sources"></section>
 		<section class="region" id="region-articles" name="items"></section>
-		<section class="region" id="region-article"  name="item"></section>
+		<section class="region" id="region-article"  name="item">
+			<!--<iframe src="rss_content.html" frameborder="0" sandbox="allow-popups allow-same-origin" tabindex="-1"></iframe>
+			<footer>
+				<input type="button" value="Hide log" id="button-hide-log" />
+			</footer>-->
+		</section>
 	</div>
 
 	<!-- MAIN TEMPLATES -->
@@ -32,14 +33,6 @@
 
 	<script id="template-articles" type="text/template">
 		
-	</script>
-
-	<script id="template-article" type="text/template">
-		
-		<iframe src="rss_content.html" frameborder="0" sandbox="allow-popups allow-same-origin" tabindex="-1"></iframe>
-		<footer>
-			<input type="button" value="Hide log" id="button-hide-log" />
-		</footer>
 	</script>
 
 	<script id="template-empty" type="text/template">
@@ -102,11 +95,11 @@
 	</script>
 
 	<script id="template-header" type="text/template">
-		<h1><a href="#" target="_blank"></a></h1>
+		<h1><a href="<%= url ? url : '#' %>" target="_blank"><%- title %></a></h1>
 		<div id="below-h1">
-			<p class="author"></p>
-			<p class="date"></p>
-			<p class="pin-button" title="{{PIN}}"></p>
+			<p class="author"><%- author %></p>
+			<p class="date"><%= date %></p>
+			<p class="pin-button" title="{{PIN}}" <%= (pinned ? 'class="pinned"' : '') %>></p>
 		</div>
 	</script>
 
