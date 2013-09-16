@@ -20,8 +20,8 @@ define(['backbone', 'helpers/unixutc', 'helpers/getWOY'], function(BB, unixutc, 
 			dc = dc || new Date();
 
 			
-			var dtt = parseInt(unixutc(dt) / 86400000);
-			dct = dct || parseInt(unixutc(dc) / 86400000);
+			var dtt = parseInt(unixutc(dt) / 86400000, 10);
+			dct = dct || parseInt(unixutc(dc) / 86400000, 10);
 
 			if (!todayMidnight) {
 				todayMidnight = new Date(dc);
@@ -43,7 +43,7 @@ define(['backbone', 'helpers/unixutc', 'helpers/getWOY'], function(BB, unixutc, 
 				group = {
 					title: bg.lang.c.TODAY.toUpperCase(),
 					date: todayMidnight.getTime() + 86400000 * 5000 // 5000 = make sure "today" is the first element in list
-				}; 
+				};
 			} else if (dtt + 1 == dct) {
 				group = {
 					title: bg.lang.c.YESTERDAY.toUpperCase(),
@@ -78,7 +78,7 @@ define(['backbone', 'helpers/unixutc', 'helpers/getWOY'], function(BB, unixutc, 
 
 			return group;
 
-		}
+		};
 	})();
 
 	return Group;

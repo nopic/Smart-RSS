@@ -25,14 +25,14 @@ define(['backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escap
 				this.handleNewSelected(bg.items.findWhere({ id: data.value }));
 			}, this);
 
-			/****
-			} else if (data.action == 'no-items') {
-					that.model = null;
-					that.hide();
-				} else if (data.action == 'space-pressed') {
-					that.handleSpace();
-				}
-			****/
+			app.on('space-pressed', function() {
+				this.handleSpace();
+			}, this);
+
+			app.on('no-items:articles-list', function() {
+				this.model = null;
+				this.hide();
+			}, this);
 
 		},
 		handleClearEvents: function(id) {

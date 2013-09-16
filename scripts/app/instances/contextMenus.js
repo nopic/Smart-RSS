@@ -1,5 +1,7 @@
-define(['backbone', 'views/ContextMenu', 'views/feedList', 'views/properties'], 
-function(BB, ContextMenu, properties) {
+define([
+	'backbone', 'views/ContextMenu', 'views/feedList', 'views/properties', 'helpers/escapeHtml'
+],
+function(BB, ContextMenu, properties, escapeHtml) {
 	var sourcesContextMenu = new ContextMenu([
 		{
 			title: bg.lang.c.UPDATE,
@@ -8,10 +10,10 @@ function(BB, ContextMenu, properties) {
 				bg.downloadOne(sourcesContextMenu.currentSource);
 			}
 		},
-		{ 
+		{
 			title: bg.lang.c.MARK_ALL_AS_READ,
 			icon: 'read.png',
-			action: function() { 
+			action: function() {
 				if (!sourcesContextMenu.currentSource) return;
 				var id = sourcesContextMenu.currentSource.get('id');
 				bg.items.forEach(function(item) {
@@ -26,17 +28,17 @@ function(BB, ContextMenu, properties) {
 				sourcesContextMenu.currentSource.save({ hasNew: false });
 			}
 		},
-		{ 
+		{
 			title: bg.lang.c.DELETE,
 			icon: 'delete.png',
-			action: function() { 
+			action: function() {
 				if (confirm(bg.lang.c.REALLY_DELETE)) {
-					sourcesContextMenu.currentSource.destroy();	
+					sourcesContextMenu.currentSource.destroy();
 				}
 				
 			}
 		},
-		{ 
+		{
 			title: bg.lang.c.PROPERTIES,
 			icon: 'properties.png',
 			action: function() {
@@ -47,10 +49,10 @@ function(BB, ContextMenu, properties) {
 	]);
 
 	var trashContextMenu = new ContextMenu([
-		{ 
+		{
 			title: bg.lang.c.MARK_ALL_AS_READ,
 			icon: 'read.png',
-			action: function() { 
+			action: function() {
 				bg.items.where({ trashed: true, deleted: false }).forEach(function(item) {
 					if (item.get('unread') == true) {
 						item.save({
@@ -61,10 +63,10 @@ function(BB, ContextMenu, properties) {
 				});
 			}
 		},
-		{ 
+		{
 			title: bg.lang.c.EMPTY_TRASH,
 			icon: 'delete.png',
-			action: function() { 
+			action: function() {
 				if (confirm(bg.lang.c.REALLY_EMPTY_TRASH)) {
 					bg.items.where({ trashed: true, deleted: false }).forEach(function(item) {
 						item.markAsDeleted();
@@ -82,21 +84,21 @@ function(BB, ContextMenu, properties) {
 				bg.downloadAll(true);
 			}
 		},
-		{ 
+		{
 			title: bg.lang.c.MARK_ALL_AS_READ,
 			icon: 'read.png',
-			action: function() { 
+			action: function() {
 				if (confirm(bg.lang.c.MARK_ALL_QUESTION)) {
 					bg.items.forEach(function(item) {
 						item.save({ unread: false, visited: true });
-					});	
+					});
 				}
 			}
 		},
-		{ 
+		{
 			title: bg.lang.c.DELETE_ALL_ARTICLES,
 			icon: 'delete.png',
-			action: function() { 
+			action: function() {
 				if (confirm(bg.lang.c.DELETE_ALL_Q)) {
 					bg.items.forEach(function(item) {
 						if (item.get('deleted') == true) return;
@@ -117,39 +119,42 @@ function(BB, ContextMenu, properties) {
 
 				bg.sources.forEach(function(source) {
 					if (source.get('folderID') == folder.id) {
-						bg.downloadOne(source);	
+						bg.downloadOne(source);
 					}
 				});
 				bg.downloadOne(sourcesContextMenu.currentSource);
 			}
 		},
-		{ 
+		{
 			title: bg.lang.c.MARK_ALL_AS_READ,
 			icon: 'read.png',
-			action: function() { 
+			action: function() {
 				var folder = require('views/feedList').selectedItems[0].model;
 				if (!folder || !(folder instanceof bg.Folder)) return;
 
 				var sources = bg.sources.where({ folderID: folder.get('id') });
 				if (!sources.length) return;
 
-				for (var i=0; i<sources.length; i++) {
-					bg.items.forEach(function(item) {
-						if (item.get('unread') == true && item.getSource() == sources[i]) {
-							item.save({
-								unread: false,
-								visited: true
-							});
-						}
-					});
+				var i;
+				var markItemAsRead = function(item) {
+					if (item.get('unread') == true && item.getSource() == sources[i]) {
+						item.save({
+							unread: false,
+							visited: true
+						});
+					}
+				};
+
+				for (i=0; i<sources.length; i++) {
+					bg.items.forEach(markItemAsRead);
 					sources[i].save({ hasNew: false });
 				}
 			}
 		},
-		{ 
+		{
 			title: bg.lang.c.DELETE,
 			icon: 'delete.png',
-			action: function() { 
+			action: function() {
 				if (!confirm(bg.lang.c.REALLY_DELETE)) return;
 
 				var folder = require('views/feedList').selectedItems[0].model;
@@ -159,9 +164,9 @@ function(BB, ContextMenu, properties) {
 				folder.destroy();
 			}
 		},
-		{ 
+		{
 			title: bg.lang.c.RENAME,
-			action: function() { 
+			action: function() {
 				var feedList = require('views/feedList');
 				var newTitle = prompt(bg.lang.c.FOLDER_NAME + ': ', feedList.selectedItems[0].model.get('title'));
 				if (!newTitle) return;
@@ -254,7 +259,7 @@ function(BB, ContextMenu, properties) {
 			title: bg.lang.c.UNDELETE + ' (U)',
 			id: 'context-undelete',
 			icon: 'undelete.png',
-			action: function(e) {
+			action: function() {
 				var articleList = app.articles.articleList;
 				if (articleList.specialName == 'trash') {
 					articleList.destroyBatch(articleList.selectedItems, articleList.undeleteItem);
@@ -267,9 +272,9 @@ function(BB, ContextMenu, properties) {
 		list: {},
 		initialize: function() {
 			this.list = {
-				sources:  sourcesContextMenu, 
-				trash:    trashContextMenu, 
-				folder:   folderContextMenu, 
+				sources:  sourcesContextMenu,
+				trash:    trashContextMenu,
+				folder:   folderContextMenu,
 				allFeeds: allFeedsContextMenu,
 				items:    itemsContextMenu
 			};

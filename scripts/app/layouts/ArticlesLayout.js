@@ -1,8 +1,9 @@
 define([
-	'layouts/Layout', 'views/ToolbarView', 'models/Toolbar', 'views/articleList', 
+	'jquery', 'layouts/Layout', 'views/ToolbarView', 'models/Toolbar', 'views/articleList',
 	'instances/contextMenus', 'domReady!'
-], 
-	function (Layout, ToolbarView, Toolbar, articleList, contextMenus) {
+],
+function ($, Layout, ToolbarView, Toolbar, articleList, contextMenus) {
+
 		var toolbar = new Toolbar({ id: 'articles' });
 
 		var ArticlesLayout = Layout.extend({

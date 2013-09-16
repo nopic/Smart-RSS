@@ -1,4 +1,4 @@
-define(['backbone', 'collections/MenuCollection', 'views/MenuItemView'], function(BB, MenuCollection, MenuItemView) {
+define(['backbone', 'jquery', 'collections/MenuCollection', 'views/MenuItemView'], function(BB, $, MenuCollection, MenuItemView) {
 	var ContextMenu = BB.View.extend({
 		tagName: 'div',
 		className: 'context-menu',
@@ -35,10 +35,10 @@ define(['backbone', 'collections/MenuCollection', 'views/MenuItemView'], functio
 		show: function(x, y) {
 			if (x + this.$el.width() + 4 > document.body.offsetWidth) {
 				x = document.body.offsetWidth - this.$el.width() - 8;
-			} 
+			}
 			if (y + this.$el.height() + 4 > document.body.offsetHeight) {
 				y = document.body.offsetHeight - this.$el.height() - 8;
-			} 
+			}
 			this.$el.css('top', y + 'px');
 			this.$el.css('left', x + 'px');
 			this.$el.css('display', 'block');

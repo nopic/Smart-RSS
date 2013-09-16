@@ -1,4 +1,6 @@
-define({
+define(['jquery'], function($) {
+
+return {
 	selectedItems: [],
 	selectPivot: null,
 	selectFlag: false,
@@ -15,7 +17,7 @@ define({
 		if (first) this.select(first.view);
 	},
 	selectNext: function(e) {
-		var e = e || {};
+		e = e || {};
 
 		var q = e.selectUnread ? '.unread:not(.invisible)' : '.item:not(.invisible)';
 		var next;
@@ -32,19 +34,19 @@ define({
 			next = this.el.querySelector(q);
 			if (e.currentIsRemoved && next && $('.last-selected').get(0) == next) {
 				next = [];
-				topWindow.frames[2].postMessage({ action: 'no-items' }, '*');
+				app.trigger('no-items:' + this.el.id);
 			}
 		}
 		if (next && next.view) {
 			this.select(next.view, e);
 			if (!this.inView(next)) {
-				next.scrollIntoView(false);	
+				next.scrollIntoView(false);
 			}
 		}
 
 	},
 	selectPrev: function(e) {
-		var e = e || {};
+		e = e || {};
 		var q = e.selectUnread ? '.unread:not(.invisible)' : '.item:not(.invisible)';
 		var prev;
 		if (e.selectUnread &&  this.selectPivot) {
@@ -60,13 +62,13 @@ define({
 			prev = $(q + ':last').get(0);
 			if (e.currentIsRemoved && prev && $('.last-selected').get(0) == prev) {
 				prev = [];
-				topWindow.frames[2].postMessage({ action: 'no-items' }, '*');
+				app.trigger('no-items:' + this.el.id);
 			}
 		}
 		if (prev && prev.view) {
 			this.select(prev.view, e);
 			if (!this.inView(prev)) {
-				prev.scrollIntoView(true);	
+				prev.scrollIntoView(true);
 			}
 		}
 	},
@@ -142,4 +144,6 @@ define({
 		}
 		return true;
 	}
+
+};
 });

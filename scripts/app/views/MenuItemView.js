@@ -1,5 +1,5 @@
 define(['backbone'], function(BB) {
-	var MenuItemView = Backbone.View.extend({
+	var MenuItemView = BB.View.extend({
 		tagName: 'div',
 		className: 'context-menu-item',
 		contextMenu: null,

@@ -1,5 +1,7 @@
-define(['layouts/Layout', 'jquery', 'domReady!', 'collections/Actions', 'layouts/FeedsLayout', 'layouts/ArticlesLayout', 
-	'layouts/ArticleLayout', 'staticdb/shortcuts', 'preps/all' ], 
+define([
+	'layouts/Layout', 'jquery', 'domReady!', 'collections/Actions', 'layouts/FeedsLayout', 'layouts/ArticlesLayout',
+	'layouts/ArticleLayout', 'staticdb/shortcuts', 'preps/all'
+],
 function (Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ArticleLayout, shortcuts) {
 
 	//$('body').html( bg.translate($('body').html()) );
@@ -12,7 +14,7 @@ function (Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ArticleLayout, s
 
 	document.addEventListener('contextmenu', function(e) {
 		e.preventDefault();
-	});	
+	});
 
 	var app = window.app = new (Layout.extend({
 		el: 'body',
@@ -69,4 +71,4 @@ function (Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ArticleLayout, s
 
 
 	return app;
-});	
+});

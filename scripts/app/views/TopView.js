@@ -1,12 +1,12 @@
-define(['backbone', 'instances/contextMenus', 'jquery'], function(BB, contextMenus, $) {
-	var TopView = Backbone.View.extend({
+define(['backbone', 'instances/contextMenus', 'jquery', 'underscore'], function(BB, contextMenus, $, _) {
+	var TopView = BB.View.extend({
 		tagName: 'div',
 		className: 'list-item',
 		template: _.template($('#template-source').html()),
 		handleMouseDown: function(e) {
 			if (e.which == 1) {
 				this.showSourceItems(e);
-			} 
+			}
 		},
 		handleMouseUp: function(e) {
 			if (e.which == 3) {

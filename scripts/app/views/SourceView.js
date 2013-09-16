@@ -30,7 +30,7 @@ define(['backbone', 'views/TopView'], function(BB, TopView) {
 		handleChangeTitle: function() {
 			this.list.placeSource(this);
 		},
-		handleModelDestroy: function(e) {
+		handleModelDestroy: function() {
 			this.list.destroySource(this);
 		},
 		renderInterval: 'first-time',
@@ -55,7 +55,7 @@ define(['backbone', 'views/TopView'], function(BB, TopView) {
 			}
 
 			
-			this.$el.attr('title', 
+			this.$el.attr('title',
 				this.model.get('title') + ' (' + this.model.get('count') + ' ' + bg.lang.c.UNREAD + ', ' + this.model.get('countAll') + ' ' + bg.lang.c.TOTAL + ')'
 			);
 			this.$el.html(this.template(this.model.toJSON()));

@@ -22,19 +22,24 @@ module.exports = function(grunt) {
 				trailing: true,  // true: no trailing whitespaces
 				supernew: true,  // true: enable 'new Constructor' instead of 'new Constructor()' 
 				onevar:   false, // true: only one var per fn
-				funcscope: false,   // no 'var' in blocks
+				funcscope: false,   // false: no 'var' in blocks
 				maxdepth: 5,        // max nesting depth
 				quotmark: 'single', // single: force '
+				'-W041': true,      // don't warn about something == false/true
 				globals: {
 					app: true,
 					bg: true,
 					chrome: false,
 					define: false,
 					require: false,
-					requestAnimationFrame: true
+
+					/* browser globals not recognized by browser or devel options */
+					requestAnimationFrame: true,
+					URL: true,
+					HTMLCollection: true
 				}
 			},
-			files: ['scripts/app/*.js', 'scripts/app/**/*.js']
+			all: ['scripts/app/*.js', 'scripts/app/**/*.js']
 		}
 	});
 

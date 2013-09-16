@@ -1,6 +1,6 @@
-define(['backbone', 'underscore'], function(BB, _) {
+define(['backbone', 'underscore', 'jquery', 'helpers/formatDate'], function(BB, _, $, formatDate) {
 	var LogView = BB.View.extend({
-		tagName: 'footer',	
+		tagName: 'footer',
 		events: {
 			'click #button-hide-log': 'hide'
 		},

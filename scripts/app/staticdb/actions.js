@@ -1,4 +1,4 @@
-define(['helpers/escapeHtml'], function(escapeHtml) {
+define(['jquery', 'underscore', 'helpers/escapeHtml'], function($, _, escapeHtml) {
 
 return {
 	global: {
@@ -36,7 +36,7 @@ return {
 					var fid = list.selectedItems[0].model.get('id');
 					// make sure source is not added to folder which is not in db
 					if (bg.folders.get(fid)) {
-						folderID = fid;	
+						folderID = fid;
 					}
 				}
 
@@ -80,13 +80,13 @@ return {
 			icon: 'reload.png',
 			title: bg.lang.c.UPDATE,
 			fn: function() {
-				var list = require('views/articleList')
+				var list = require('views/articleList');
 				if (list.currentSource) {
-					bg.downloadOne(list.currentSource);	
+					bg.downloadOne(list.currentSource);
 				} else if (list.currentFolder) {
 					bg.sources.forEach(function(source) {
 						if (source.get('folderID') == list.currentFolder.id) {
-							bg.downloadOne(source);	
+							bg.downloadOne(source);
 						}
 					});
 				} else {
@@ -97,8 +97,8 @@ return {
 		delete: {
 			icon: 'delete.png',
 			title: bg.lang.c.DELETE,
-			fn: function() {
-				var list = require('views/articleList')
+			fn: function(e) {
+				var list = require('views/articleList');
 				if (list.specialName == 'trash' || e.shiftKey) {
 					list.destroyBatch(list.selectedItems, list.removeItemCompletely);
 				} else {
@@ -110,9 +110,9 @@ return {
 			icon: 'undelete.png',
 			title: bg.lang.c.UNDELETE,
 			fn: function() {
-				var list = require('views/articleList');
+				var articleList = require('views/articleList');
 				if (!articleList.selectedItems || !articleList.selectedItems.length || articleList.specialName != 'trash') return;
-				list.destroyBatch(list.selectedItems, list.undeleteItem);
+				articleList.destroyBatch(articleList.selectedItems, articleList.undeleteItem);
 			}
 		},
 		selectNext: {
@@ -173,7 +173,7 @@ return {
 		fullArticle: {
 			title: bg.lang.c.FULL_ARTICLE,
 			icon: 'full_article.png',
-			fn: function() {
+			fn: function(e) {
 				var articleList = app.articles.articleList;
 				if (!articleList.selectedItems || !articleList.selectedItems.length) return;
 				if (articleList.selectedItems.length > 10 && bg.settings.get('askOnOpening')) {
@@ -198,7 +198,7 @@ return {
 					if (!articleList.selectedItems || !articleList.selectedItems.length) return;
 					view = articleList.selectedItems[0];
 				}
-				if (t.view.model) {
+				if (view.model) {
 					chrome.tabs.create({ url: escapeHtml(view.model.get('url')), active: !e.shiftKey });
 				}
 			}
@@ -252,13 +252,13 @@ return {
 							if (item.get('unread') == true) {
 								item.save({ unread: false, visited: true });
 							}
-						});	
+						});
 					}
 				} else if (articleList.specialName) {
 					bg.items.where(articleList.specialFilter).forEach(function(item) {
 						item.save({ unread: false, visited: true });
 					});
-				} 
+				}
 			}
 		},
 		selectAll: {
@@ -291,9 +291,9 @@ return {
 		spaceTrough: {
 			title: 'Space Through',
 			fn: function() {
+				var articleList = require('views/articleList');
 				if (!articleList.selectedItems || !articleList.selectedItems.length) return;
-				/****/
-				topWindow.frames[2].postMessage({ action: 'space-pressed' }, '*');
+				app.trigger('space-pressed');
 			}
 		}
 	},
@@ -302,15 +302,16 @@ return {
 			title: bg.lang.c.DOWNLOAD,
 			icon: 'save.png',
 			fn: function() {
-				if (!itemView.model) return;
+				var contentView = require('views/contentView');
+				if (!contentView.model) return;
 				var tpl = _.template($('#template-download').html());
-				var attrs = Object.create(itemView.model.attributes);
-				attrs.date = itemView.getFormatedDate(attrs.date);
+				var attrs = Object.create(contentView.model.attributes);
+				attrs.date = contentView.getFormatedDate(attrs.date);
 				var blob = new Blob([ tpl(attrs) ], { type: 'text\/html' });
 				var url = URL.createObjectURL(blob);
 				window.open(url);
 				setTimeout(function() {
-					URL.revokeObjectURL(url);	
+					URL.revokeObjectURL(url);
 				}, 30000);
 			}
 		},
@@ -318,7 +319,8 @@ return {
 			title: bg.lang.c.PRINT,
 			icon: 'print.png',
 			fn: function() {
-				if (!itemView.model) return;
+				var contentView = require('views/contentView');
+				if (!contentView.model) return;
 				window.print();
 			}
 		},
@@ -326,9 +328,10 @@ return {
 			title: bg.lang.c.MARK_AS_READ,
 			icon: 'read.png',
 			fn: function() {
-				if (!itemView.model) return;
-				itemView.model.save({
-					unread: !itemView.model.get('unread'),
+				var contentView = require('views/contentView');
+				if (!contentView.model) return;
+				contentView.model.save({
+					unread: !contentView.model.get('unread'),
 					visited: true
 				});
 			}
@@ -337,11 +340,12 @@ return {
 			title: bg.lang.c.DELETE,
 			icon: 'delete.png',
 			fn: function(e) {
-				if (!itemView.model) return;
+				var contentView = require('views/contentView');
+				if (!contentView.model) return;
 				if (e.shiftKey) {
-					itemView.model.markAsDeleted();
+					contentView.model.markAsDeleted();
 				} else {
-					itemView.model.save({
+					contentView.model.save({
 						trashed: true,
 						visited: true
 					});
@@ -363,5 +367,5 @@ return {
 		}
 	}
 
-}   // end actions object
+};  // end actions object
 }); // end define function

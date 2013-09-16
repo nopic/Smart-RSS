@@ -1,4 +1,6 @@
-define(['backbone', 'views/TopView', 'instances/contextMenus'], function(BB, TopView, contextMenus) {
+define([
+	'backbone', 'jquery', 'underscore', 'views/TopView', 'instances/contextMenus'
+], function(BB, $, _, TopView, contextMenus) {
 	var FolderView = TopView.extend({
 		className: 'list-item folder',
 		template: _.template($('#template-folder').html()),
@@ -32,7 +34,7 @@ define(['backbone', 'views/TopView', 'instances/contextMenus'], function(BB, Top
 			this.model.off('change', this.render, this);
 			bg.sources.off('clear-events', this.handleClearEvents, this);
 		},
-		handleModelDestroy: function(e) {
+		handleModelDestroy: function() {
 			this.list.destroySource(this);
 		},
 		handleClickArrow: function(e) {
@@ -40,7 +42,6 @@ define(['backbone', 'views/TopView', 'instances/contextMenus'], function(BB, Top
 			$('.source[data-in-folder=' + this.model.get('id') + ']').toggleClass('in-closed-folder', !this.model.get('opened'));
 			e.stopPropagation();
 		},
-		template: _.template($('#template-folder').html()),
 		renderInterval: 'first-time',
 		render: function() {
 			if (this.renderInterval == 'first-time') return this.realRender();
@@ -59,7 +60,7 @@ define(['backbone', 'views/TopView', 'instances/contextMenus'], function(BB, Top
 			this.$el.toggleClass('opened', this.model.get('opened'));
 			this.$el.html(this.template(data));
 
-			this.$el.attr('title', 
+			this.$el.attr('title',
 				this.model.get('title') + ' (' + this.model.get('count') + ' ' + bg.lang.c.UNREAD + ', ' + this.model.get('countAll') + ' ' + bg.lang.c.TOTAL + ')'
 			);
 			this.renderInterval = null;

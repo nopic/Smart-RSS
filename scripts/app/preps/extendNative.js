@@ -27,7 +27,7 @@ define([], function() {
 			}
 		}
 		return null;
-	}
+	};
 
 	Element.prototype.findPrev = function(query) {
 		var cur = this;
@@ -37,7 +37,7 @@ define([], function() {
 			}
 		}
 		return null;
-	}
+	};
 
 	RegExp.escape = function(str) {
 		return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');

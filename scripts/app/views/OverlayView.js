@@ -1,5 +1,5 @@
-define(['backbone', 'underscore'], function(BB, _) {
-	var OverlayView = Backbone.View.extend({
+define(['backbone', 'underscore', 'jquery'], function(BB, _, $) {
+	var OverlayView = BB.View.extend({
 		tagName: 'div',
 		className: 'overlay',
 		events: {

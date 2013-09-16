@@ -13,7 +13,7 @@ bg.settingsLoaded.always(function() {
 
 	chrome.extension.sendMessage({ action: 'get-tab-id'}, function(response) {
 		if (response.action == 'response-tab-id') {
-			tabID = response.value;	
+			tabID = response.value;
 		}
 	});
 
@@ -37,7 +37,7 @@ bg.settingsLoaded.always(function() {
 	if (document.querySelectorAll('frameset').length > 1) {
 		init();
 	} else {
-		document.addEventListener('DOMContentLoaded', init);	
+		document.addEventListener('DOMContentLoaded', init);
 	}
 	
 	function setFirstFrameSize() {
@@ -45,7 +45,7 @@ bg.settingsLoaded.always(function() {
 
 		if (!bg.settings.get('thickFrameBorders')) {
 			var all = document.querySelectorAll('frameset, frame');
-			[].forEach.call(all, function(one) { 
+			[].forEach.call(all, function(one) {
 				one.setAttribute('border', 1);
 				one.setAttribute('bordercolor', '#a6a6a6');
 			});
@@ -87,7 +87,7 @@ bg.settingsLoaded.always(function() {
 		if (window == null || id == tabID) {
 			bg.settings.off('change:layout', handleLayoutChange);
 			bg.settings.off('change:panelToggled', setFirstFrameSize);
-			bg.sources.off('clear-events', handleClearEvents);			
+			bg.sources.off('clear-events', handleClearEvents);
 		}
 	}
 

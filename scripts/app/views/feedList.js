@@ -1,6 +1,8 @@
-define(['backbone', 'jquery', 'views/SourceView', 'views/FolderView', 'views/SpecialView', 'models/Special', 'instances/contextMenus', 'mixins/selectable'],
+define([
+	'backbone', 'jquery', 'views/SourceView', 'views/FolderView', 'views/SpecialView', 'models/Special',
+	'instances/contextMenus', 'mixins/selectable'
+],
 function (BB, $, SourceView, FolderView, SpecialView, Special, contextMenus, selectable) {
-
 
 	var trash = new Special({
 		title: bg.lang.c.TRASH,

@@ -1,6 +1,7 @@
-define(['backbone', 'views/TopView'], function(BB, TopView) {
+define(['jquery', 'underscore', 'views/TopView'], function($, _, TopView) {
 	var SpecialView = TopView.extend({
 		className: 'list-item special',
+		template: _.template($('#template-special').html()),
 		events: {
 			'mouseup': 'handleMouseUp',
 			'click': 'handleMouseDown'
@@ -41,7 +42,6 @@ define(['backbone', 'views/TopView'], function(BB, TopView) {
 				}
 			}
 		},
-		template: _.template($('#template-special').html()),
 		render: function(noinfo) {
 			this.$el.html(this.template(this.model.toJSON()));
 			if (!noinfo) this.changeInfo();

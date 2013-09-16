@@ -1,7 +1,8 @@
-define(['backbone', 'underscore', 'jquery', 'instances/contextMenus', 'collections/Groups', 'models/Group', 'views/GroupView', 
-	'views/ItemView', 'mixins/selectable'], 
+define([
+	'backbone', 'underscore', 'jquery', 'instances/contextMenus', 'collections/Groups', 'models/Group', 'views/GroupView',
+	'views/ItemView', 'mixins/selectable'
+],
 function (BB, _, $, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
-
 
 	function isScrolledIntoView(elem) {
 		if (!screen) {
@@ -74,7 +75,7 @@ function (BB, _, $, contextMenus, Groups, Group, GroupView, ItemView, selectable
 				window.focus();
 			});****/
 
-			this.on('attached', this.handleAttached, this);;
+			this.on('attached', this.handleAttached, this);
 			this.on('pick', this.handlePick, this);
 
 
@@ -107,17 +108,18 @@ function (BB, _, $, contextMenus, Groups, Group, GroupView, ItemView, selectable
 					if (typeof data.value == 'object') {
 						this.handleNewSpecialSelected(data.value, data.name);
 					} else {
-						this.handleNewSelected(bg.sources.findWhere({ id: data.value }));	
+						this.handleNewSelected(bg.sources.findWhere({ id: data.value }));
 					}
 				} else if (data.action == 'new-folder-select') {
-					this.handleNewFolderSelected(data.value);	
-				} else if (data.action == 'give-me-next') {
-					if (this.selectedItems[0] && this.selectedItems[0].model.get('unread') == true) {
-						this.selectedItems[0].model.save({ unread: false });
-					} 
-					
-					app.selectNext({ selectUnread: true });
+					this.handleNewFolderSelected(data.value);
 				}
+			}, this);
+
+			app.on('give-me-next', function() {
+				if (this.selectedItems[0] && this.selectedItems[0].model.get('unread') == true) {
+					this.selectedItems[0].model.save({ unread: false });
+				}
+				app.selectNext({ selectUnread: true });
 			}, this);
 
 			this.loadAllFeeds();
@@ -191,7 +193,6 @@ function (BB, _, $, contextMenus, Groups, Group, GroupView, ItemView, selectable
 				this.handleNewFolderSelected(this.currentFolder);
 			} else {
 				alert('E1: This should not happen. Please report it!');
-				debugger;
 			}
 		},
 		handleChangeLines: function(settings) {
@@ -203,7 +204,7 @@ function (BB, _, $, contextMenus, Groups, Group, GroupView, ItemView, selectable
 		},
 		handleDragStart: function(e) {
 			var ids = this.selectedItems.map(function(view) {
-				return view.model.id
+				return view.model.id;
 			});
 
 			e.originalEvent.dataTransfer.setData('text/plain', JSON.stringify(ids));
@@ -219,7 +220,7 @@ function (BB, _, $, contextMenus, Groups, Group, GroupView, ItemView, selectable
 			} else {
 				// if first item is the last item to be deleted, selecting it will trigger error - rAF to get around it
 				requestAnimationFrame(function() {
-					this.selectFirst();	
+					this.selectFirst();
 				}.bind(this));
 			}
 		},
@@ -229,13 +230,13 @@ function (BB, _, $, contextMenus, Groups, Group, GroupView, ItemView, selectable
 			 */
 			if (noManualSort !== true) {
 				if (this.currentSource && this.currentSource.id != item.get('sourceID')) {
-					return;	
+					return;
 				} else if (this.specialName && this.specialName != 'all-feeds') {
 					return;
 				} else if (this.currentFolder && this.currentFolder.id != item.getSource().get('folderID')) {
 					return;
 				}
-			} 
+			}
 
 			if (!item.get('deleted') && (!item.get('trashed') || this.specialName == 'trash') ) {
 
@@ -260,7 +261,7 @@ function (BB, _, $, contextMenus, Groups, Group, GroupView, ItemView, selectable
 							view.$el.css('height', this._itemHeight + 'px');
 							view.prerender();
 						}
-						this.$el.append(view.$el);	
+						this.$el.append(view.$el);
 						this.views.push(view);
 					} else {
 						view = this.views[this.reuseIndex];
@@ -417,11 +418,11 @@ function (BB, _, $, contextMenus, Groups, Group, GroupView, ItemView, selectable
 			this.addItems( bg.items.filter(function(item) {
 				if (this.unreadOnly && item.get('unread') == true) {
 					if (feeds.indexOf(item.get('sourceID')) >= 0) {
-						return true;	
+						return true;
 					}
 				} else if (!this.unreadOnly && feeds.indexOf(item.get('sourceID')) >= 0) {
-					return true;	
-				} 
+					return true;
+				}
 				
 			}, this) );
 		},
@@ -431,7 +432,7 @@ function (BB, _, $, contextMenus, Groups, Group, GroupView, ItemView, selectable
 		 */
 		handleSourcesDestroy: function(source) {
 			if (!this.currentFolder) return;
-			var folderID = source.get('folderID'); 
+			var folderID = source.get('folderID');
 			if (folderID && this.currentFolder.id == folderID) {
 				app.trigger('select-folder', this.currentFolder.id);
 			}
@@ -452,7 +453,7 @@ function (BB, _, $, contextMenus, Groups, Group, GroupView, ItemView, selectable
 				if (model == this.currentSource) {
 					app.trigger('select-all-feeds');
 					//topWindow.frames[0].postMessage({ action: 'select-all-feeds' }, '*');
-				} 
+				}
 
 				// load all feeds in middle column
 				this.clearOnSelect();
@@ -460,7 +461,7 @@ function (BB, _, $, contextMenus, Groups, Group, GroupView, ItemView, selectable
 				if (document.querySelector('.item')) {
 					this.once('items-destroyed', function() {
 						that.loadAllFeeds();
-					}, this);		
+					}, this);
 				} else {
 					this.loadAllFeeds();
 				}
@@ -532,7 +533,7 @@ function (BB, _, $, contextMenus, Groups, Group, GroupView, ItemView, selectable
 			// view.$el.removeData() - i removed this as I don't use jquery .data, if I will in future I have to add it again
 			// view.$el.unbind(); - - I'm not adding any jquery events
 			// view.off(); - This takes from some reason quite a time, and does nothing because I'm not adding events on the view
-			view.remove(); 
+			view.remove();
 			
 			var io = this.selectedItems.indexOf(view);
 			if (io >= 0) this.selectedItems.splice(io, 1);
@@ -545,12 +546,10 @@ function (BB, _, $, contextMenus, Groups, Group, GroupView, ItemView, selectable
 			this.reuseIndex--;
 		},
 		changeUnreadState: function(opt) {
-			var opt = opt || {};
+			opt = opt || {};
 			var val = this.selectedItems.length && !opt.onlyToRead ? !this.selectedItems[0].model.get('unread') : false;
 			this.selectedItems.forEach(function(item) {
-				if (opt.onlyToRead && item.model.get('unread') == false) {
-					// do nothing
-				} else {
+				if (!opt.onlyToRead || item.model.get('unread') == true) {
 					item.model.save({ unread: val, visited: true });
 				}
 				

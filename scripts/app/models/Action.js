@@ -3,7 +3,9 @@ define(['backbone'], function (BB) {
 		idAttribute: 'name',
 		defaults: {
 			name: 'global:default',
-			fn: function() { return function() {} },
+			fn: function() {
+				return function() {};
+			},
 			icon: 'unknown.png',
 			title: ''
 		}

@@ -1,8 +1,8 @@
 define([], function() {
-	var formatDate = function() {
+	var formatDate = (function() {
 		var that;
 		var addZero = function(num) {
-			if (num < 10) num = "0" + num;
+			if (num < 10) num = '0' + num;
 			return num;
 		};
 		var na = function(n, z) {
@@ -23,52 +23,52 @@ define([], function() {
 		};
 		var dateVal = function(all, found) {
 			switch (found) {
-				case "DD":
+				case 'DD':
 					return addZero(that.getDate());
-				case "D":
+				case 'D':
 					return that.getDate();
-				case "MM":
+				case 'MM':
 					return addZero(that.getMonth() + 1);
-				case "M":
+				case 'M':
 					return that.getMonth() + 1;
-				case "YYYY":
+				case 'YYYY':
 					return that.getFullYear();
-				case "YY":
+				case 'YY':
 					return that.getFullYear().toString().substr(2, 2);
-				case "hh":
+				case 'hh':
 					return addZero(that.getHours());
-				case "h":
+				case 'h':
 					return that.getHours();
-				case "HH":
+				case 'HH':
 					return addZero(na(that.getHours(), 12));
-				case "H":
+				case 'H':
 					return na(that.getHours(), 12);
-				case "mm":
+				case 'mm':
 					return addZero(that.getMinutes());
-				case "m":
+				case 'm':
 					return that.getMinutes();
-				case "ss":
+				case 'ss':
 					return addZero(that.getSeconds());
-				case "s":
+				case 's':
 					return that.getSeconds();
-				case "u":
+				case 'u':
 					return that.getMilliseconds();
-				case "U":
+				case 'U':
 					return that.getTime();
-				case "T":
+				case 'T':
 					return that.getTime() - that.getTimezoneOffset() * 60000;
-				case "W":
+				case 'W':
 					return that.getDay();
-				case "y":
+				case 'y':
 					return getDOY();
-				case "w":
+				case 'w':
 					return getWOY();
-				case "G":
+				case 'G':
 					return that.getTimezoneOffset();
-				case "a":
-					return that.getHours() > 12 ? "PM" : "AM";
+				case 'a':
+					return that.getHours() > 12 ? 'PM' : 'AM';
 				default:
-					return "";
+					return '';
 			}
 		};
 		return function(date, str) {
@@ -77,7 +77,7 @@ define([], function() {
 			str = str.replace(/(DD|D|MM|M|YYYY|YY|hh|h|HH|H|mm|m|ss|s|u|U|W|y|w|G|a|T)/g, dateVal);
 			return str;
 		};
-	}();
+	}());
 
 	return formatDate;
 });

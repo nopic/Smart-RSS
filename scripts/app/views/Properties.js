@@ -1,4 +1,4 @@
-define(['backbone'], function(BB) {
+define(['backbone', 'jquery'], function(BB, $) {
 
 	var Properties = BB.View.extend({
 		id: 'properties',
@@ -40,15 +40,15 @@ define(['backbone'], function(BB) {
 		handleKeyDown: function(e) {
 			if (e.keyCode == 13) {
 				this.handleClick(e);
-			} 
+			}
 		},
 		show: function(source) {
-			$('#prop-title').val(source.get('title'));;
+			$('#prop-title').val(source.get('title'));
 			$('#prop-url').val(source.get('url'));
 			$('#prop-username').val(source.get('username'));
 			$('#prop-password').val(source.get('password'));
 			if (source.get('updateEvery')) {
-				$('#prop-update-every').val(source.get('updateEvery'));	
+				$('#prop-update-every').val(source.get('updateEvery'));
 			}
 			
 			this.$el.css('display', 'block');

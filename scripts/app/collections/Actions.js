@@ -6,13 +6,12 @@ define(['backbone', 'models/Action', 'staticdb/actions'], function (BB, Action, 
 		 * Constructor
 		 */
 		initialize: function() {
-			var c;
-			for (region in db) {
-				for (name in db[region]) {
-					c = db[region][name];
+			Object.keys(db).forEach(function(region) {
+				Object.keys(db[region]).forEach(function(name) {
+					var c = db[region][name];
 					this.add({ name: region + ':' + name, fn: c.fn, icon: c.icon, title: c.title });
-				}
-			}
+				}, this);
+			}, this);
 		},
 
 		/**

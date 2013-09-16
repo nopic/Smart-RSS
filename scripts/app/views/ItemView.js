@@ -1,4 +1,6 @@
-define(['backbone', 'helpers/formatDate', 'instances/contextMenus'], function(BB, formatDate, contextMenus) {
+define([
+	'backbone', 'jquery', 'underscore', 'helpers/formatDate', 'instances/contextMenus'
+], function(BB, $, _, formatDate, contextMenus) {
 	var ItemView = BB.View.extend({
 		tagName: 'div',
 		className: 'item',
@@ -29,7 +31,7 @@ define(['backbone', 'helpers/formatDate', 'instances/contextMenus'], function(BB
 		},
 		prerendered: false,
 		prerender: function() {
-			prerendered = true;
+			this.prerendered = true;
 			this.list.viewsToRender.push(this);
 			this.el.className = this.model.get('unread') ? 'item unread' : 'item';
 		},
@@ -45,7 +47,7 @@ define(['backbone', 'helpers/formatDate', 'instances/contextMenus'], function(BB
 		handleClearEvents: function(id) {
 			if (window == null || id == window.top.tabID) {
 				this.clearEvents();
-			} 
+			}
 		},
 		clearEvents: function() {
 			if (this.model) {
@@ -79,10 +81,10 @@ define(['backbone', 'helpers/formatDate', 'instances/contextMenus'], function(BB
 			if (data.date) {
 				if (bg.settings.get('fullDate')) {
 					data.date = formatDate(new Date(data.date), pickedFormat + ' ' + timeFormat);
-				} else if (parseInt(formatDate(data.date, 'T') / 86400000) >= parseInt(formatDate(Date.now(), 'T') / 86400000)) {
+				} else if (parseInt(formatDate(data.date, 'T') / 86400000, 10) >= parseInt(formatDate(Date.now(), 'T') / 86400000, 10)) {
 					data.date = formatDate(new Date(data.date), timeFormat);
 				} else if ((new Date(data.date)).getFullYear() == (new Date()).getFullYear() ) {
-					data.date = formatDate(new Date(data.date), pickedFormat.replace(/\/?YYYY(?!-)/, ''));	
+					data.date = formatDate(new Date(data.date), pickedFormat.replace(/\/?YYYY(?!-)/, ''));
 				} else {
 					data.date = formatDate(new Date(data.date), pickedFormat);
 				}
@@ -98,7 +100,7 @@ define(['backbone', 'helpers/formatDate', 'instances/contextMenus'], function(BB
 			if (e.which == 3) {
 				this.showContextMenu(e);
 			} else if (this.list.selectedItems.length > 1 && this.list.selectFlag) {
-				this.list.select(this, { shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });	
+				this.list.select(this, { shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });
 				this.list.selectFlag = false;
 			}
 		},
@@ -114,7 +116,7 @@ define(['backbone', 'helpers/formatDate', 'instances/contextMenus'], function(BB
 				this.list.selectFlag = true;
 				return;
 			}
-			this.list.select(this, { shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });	
+			this.list.select(this, { shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });
 		},
 		handleModelChange: function() {
 			if (this.model.get('deleted') || (this.list.specialName != 'trash' && this.model.get('trashed')) ) {

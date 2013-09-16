@@ -1,4 +1,4 @@
-define(['backbone', 'views/ToolbarButtonView', 'collections/ToolbarButtons'], 
+define(['backbone', 'views/ToolbarButtonView', 'collections/ToolbarButtons'],
 	function (BB, ToolbarButtonView, ToolbarButtons) {
 		var ToolbarView = BB.View.extend({
 			tagName: 'div',
@@ -17,7 +17,7 @@ define(['backbone', 'views/ToolbarButtonView', 'collections/ToolbarButtons'],
 
 				this.model.get('actions').forEach(this.createButton, this);
 			},
-			createButton: function(action) {	
+			createButton: function(action) {
 				if (action == '!right')	{
 					this.buttonPosition = 'right';
 					return null;
