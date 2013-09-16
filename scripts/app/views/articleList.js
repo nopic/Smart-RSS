@@ -1,5 +1,6 @@
-define(['backbone', 'instances/contextMenus', 'collections/Groups', 'models/Group', 'views/GroupView', 'views/ItemView', 'mixins/selectable'], 
-function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
+define(['backbone', 'underscore', 'jquery', 'instances/contextMenus', 'collections/Groups', 'models/Group', 'views/GroupView', 
+	'views/ItemView', 'mixins/selectable'], 
+function (BB, _, $, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 
 
 	function isScrolledIntoView(elem) {
@@ -43,11 +44,8 @@ function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 			'mouseup .item': 'handleMouseUp',
 			'mousedown .item-pin,.item-pinned': 'handleClickPin',
 		},
-		handleItemDblClick: function(e) {
-			var t = e.currentTarget;
-			if (t.view.model) {
-				chrome.tabs.create({ url: escapeHtml(t.view.model.get('url')), active: !e.shiftKey });
-			}
+		handleItemDblClick: function() {
+			app.actions.execute('articles:oneFullArticle');
 		},
 		handleClickPin: function(e) {
 			e.currentTarget.parentNode.view.handleClickPin(e);
@@ -60,7 +58,6 @@ function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 		},
 		initialize: function() {
 
-			var that = this;
 			this.$el.addClass('lines-' + bg.settings.get('lines'));
 			bg.items.on('reset', this.addItems, this);
 			bg.items.on('add', this.addItem, this);
@@ -184,7 +181,7 @@ function (BB, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
 				that.handleScroll();
 			});
 		},
-		handleSort: function(items) {
+		handleSort: function() {
 			$('#input-search').val('');
 			if (this.specialName) {
 				this.handleNewSpecialSelected(this.specialFilter, this.specialName);

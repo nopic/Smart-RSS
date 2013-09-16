@@ -1,4 +1,6 @@
-define({
+define(['helpers/escapeHtml'], function(escapeHtml) {
+
+return {
 	global: {
 		default: {
 			title: 'Unknown',
@@ -184,6 +186,23 @@ define({
 				});
 			}
 		},
+		oneFullArticle: {
+			title: 'One full article',
+			fn: function(e) {
+				e = e || {};
+				var articleList = app.articles.articleList;
+				var view;
+				if ('currentTarget' in e) {
+					view = e.currentTarget.view;
+				} else {
+					if (!articleList.selectedItems || !articleList.selectedItems.length) return;
+					view = articleList.selectedItems[0];
+				}
+				if (t.view.model) {
+					chrome.tabs.create({ url: escapeHtml(view.model.get('url')), active: !e.shiftKey });
+				}
+			}
+		},
 		markAndNextUnread: {
 			title: bg.lang.c.MARK_AND_NEXT_UNREAD,
 			icon: 'find_next.png',
@@ -343,4 +362,6 @@ define({
 			}
 		}
 	}
-});
+
+}   // end actions object
+}); // end define function

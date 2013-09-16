@@ -1,5 +1,5 @@
-define(['backbone', 'views/SourceView', 'views/FolderView', 'views/SpecialView', 'models/Special', 'instances/contextMenus', 'mixins/selectable'],
-function (BB, SourceView, FolderView, SpecialView, Special, contextMenus, selectable) {
+define(['backbone', 'jquery', 'views/SourceView', 'views/FolderView', 'views/SpecialView', 'models/Special', 'instances/contextMenus', 'mixins/selectable'],
+function (BB, $, SourceView, FolderView, SpecialView, Special, contextMenus, selectable) {
 
 
 	var trash = new Special({
@@ -99,13 +99,6 @@ function (BB, SourceView, FolderView, SpecialView, Special, contextMenus, select
 
 			return this;
 		},
-		handleMessage: function(e) {
-			if (e.data.action == 'select-folder') {
-				
-			} else if (e.data.action == 'select-all-feeds') {
-				
-			}
-		},
 		handleDragOver: function(e) {
 			var f = e.currentTarget.dataset.inFolder;
 			if (f) {
@@ -135,10 +128,11 @@ function (BB, SourceView, FolderView, SpecialView, Special, contextMenus, select
 			var item = bg.sources.findWhere({ id: id });
 			if (!item) return;
 
+			var folderID;
 			if ($(e.currentTarget).hasClass('folder')) {
-				var folderID = e.currentTarget.dataset.id;
+				folderID = e.currentTarget.dataset.id;
 			} else {
-				var folderID = e.currentTarget.dataset.inFolder;	
+				folderID = e.currentTarget.dataset.inFolder;
 			}
 
 			item.save({ folderID: folderID });
@@ -151,10 +145,10 @@ function (BB, SourceView, FolderView, SpecialView, Special, contextMenus, select
 			e.originalEvent.dataTransfer.setData('dnd-sources', id);
 		},
 		handleChangeFolder: function(source) {
-			var source = $('.source[data-id=' + source.get('id') + ']').get(0);
+			source = $('.source[data-id=' + source.get('id') + ']').get(0);
 			if (!source) return;
 
-			this.placeSource(source.view)
+			this.placeSource(source.view);
 		},
 		handleClearEvents: function(id) {
 			if (window == null || id == window.top.tabID) {
@@ -218,7 +212,7 @@ function (BB, SourceView, FolderView, SpecialView, Special, contextMenus, select
 				} else if (sourceViews.length) {
 					this.insertBefore(view.render(), sourceViews);
 				} else {
-					view.render().$el.insertAfter(folder);	
+					view.render().$el.insertAfter(folder);
 				}
 
 				if (!folder.get(0).view.model.get('opened')) {
@@ -229,8 +223,9 @@ function (BB, SourceView, FolderView, SpecialView, Special, contextMenus, select
 			}
 
 
-
+			var fls;
 			sourceViews = $('.source:not([data-in-folder])').toArray();
+
 			if (sourceViews.length && noManualSort) {
 				view.render().$el.insertAfter(sourceViews.last());
 			} else if (sourceViews.length) {
@@ -252,15 +247,14 @@ function (BB, SourceView, FolderView, SpecialView, Special, contextMenus, select
 				}
 			});
 			if (before) {
-				what.$el.insertBefore(before);	
+				what.$el.insertBefore(before);
 			} else {
 				if (what instanceof FolderView) {
 					var folderSources = $('[data-in-folder=' + where.last().view.model.get('id') + ']');
 					if (folderSources.length) {
-
-						where.last(folderSources.last());	
+						where.last(folderSources.last());
 					}
-				} 
+				}
 				what.$el.insertAfter(where.last());
 			}
 		},
@@ -273,14 +267,14 @@ function (BB, SourceView, FolderView, SpecialView, Special, contextMenus, select
 			sources.forEach(function(source) {
 				this.addSource(source, true);
 			}, this);
-		},	
+		},
 		removeSource: function(view) {
 			view.model.destroy();
 		},
 		destroySource: function(view) {
 			view.clearEvents();
 			view.undelegateEvents();
-			view.$el.removeData().unbind(); 
+			view.$el.removeData().unbind();
 			view.off();
 			view.remove();
 			var io = this.selectedItems.indexOf(view);

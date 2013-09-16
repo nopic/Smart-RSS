@@ -1,4 +1,4 @@
-define(['backbone', 'helpers/formatDate', 'helpers/escapeHtml'], function(BB, formatDate, escapeHtml) {
+define(['backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escapeHtml'], function(BB, $, _, formatDate, escapeHtml) {
 	var ContentView = BB.View.extend({
 		tagName: 'header',
 		template:  _.template($('#template-header').html()),
@@ -14,8 +14,6 @@ define(['backbone', 'helpers/formatDate', 'helpers/escapeHtml'], function(BB, fo
 			});
 		},
 		initialize: function() {
-			var that = this;
-			
 			this.on('attached', this.handleAttached);
 
 			bg.items.on('change:pinned', this.handleItemsPin, this);
@@ -27,14 +25,14 @@ define(['backbone', 'helpers/formatDate', 'helpers/escapeHtml'], function(BB, fo
 				this.handleNewSelected(bg.items.findWhere({ id: data.value }));
 			}, this);
 
-			/*
+			/****
 			} else if (data.action == 'no-items') {
 					that.model = null;
 					that.hide();
 				} else if (data.action == 'space-pressed') {
 					that.handleSpace();
 				}
-			*/
+			****/
 
 		},
 		handleClearEvents: function(id) {
@@ -69,11 +67,11 @@ define(['backbone', 'helpers/formatDate', 'helpers/escapeHtml'], function(BB, fo
 				data.date = that.getFormatedDate(that.model.get('date'));
 				data.url = escapeHtml(data.url);
 
-				var source = that.model.getSource(); 
+				var source = that.model.getSource();
 				var content = that.model.get('content');
 
 
-				that.$el.html(that.template(data));				
+				that.$el.html(that.template(data));
 
 				// first load might be too soon
 				var sandbox = app.article.sandbox;
@@ -105,9 +103,8 @@ define(['backbone', 'helpers/formatDate', 'helpers/escapeHtml'], function(BB, fo
 				// should not happen but happens
 				this.hide();
 			} else {
-				this.render();	
+				this.render();
 			}
-			
 		},
 		hide: function() {
 			$('header,iframe').css('display', 'none');
