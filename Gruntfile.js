@@ -3,6 +3,8 @@ module.exports = function(grunt) {
 	// Project configuration.
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
+
+
 		jshint: {
 			options: {
 				curly:    false, // true: force { }
@@ -40,11 +42,52 @@ module.exports = function(grunt) {
 				}
 			},
 			all: ['scripts/app/*.js', 'scripts/app/**/*.js']
+		},
+
+		requirejs: {
+			compile: {
+				options: {
+					name: '../main',
+					baseUrl: 'scripts/app',
+					paths: {
+						jquery: '../libs/jquery.min',
+						underscore: '../libs/underscore.min',
+						backbone: '../libs/backbone.min',
+						text: '../text',
+						i18n: '../i18n',
+						domReady: '../domReady'
+					},
+					shim: {
+						jquery: {
+							exports: '$'
+						},
+						backbone: {
+							deps: ['underscore', 'jquery'],
+							exports: 'Backbone'
+						},
+						underscore: {
+							exports: '_'
+						}
+					},
+					out: 'scripts/main-compiled.js',
+					done: function(done, output) {
+						var duplicates = require('rjs-build-analysis').duplicates(output);
+
+						if (duplicates.length > 0) {
+							grunt.log.subhead('Duplicates found in requirejs build:');
+							grunt.log.warn(duplicates);
+							done(new Error('r.js built duplicate modules, please check the excludes option.'));
+						}
+
+						done();
+					}
+				}
+			}
 		}
 	});
 
-	// Load the plugin that provides the 'uglify' task.
 	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-contrib-requirejs');
 
 	// Default task(s).
 	grunt.registerTask('default', ['jshint']);

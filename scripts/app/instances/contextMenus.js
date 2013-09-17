@@ -1,7 +1,7 @@
 define([
-	'backbone', 'views/ContextMenu', 'views/feedList', 'views/properties'
+	'backbone', 'views/ContextMenu', 'views/feedList'
 ],
-function(BB, ContextMenu, properties) {
+function(BB, ContextMenu) {
 	var sourcesContextMenu = new ContextMenu([
 		{
 			title: bg.lang.c.UPDATE,
