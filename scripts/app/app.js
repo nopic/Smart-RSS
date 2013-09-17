@@ -24,6 +24,9 @@ function (Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ArticleLayout, s
 			}
 			return url;
 		},
+		focusLayout: function(e) {
+			this.setFocus(e.currentTarget.getAttribute('name'));
+		},
 		start: function() {
 			this.attach('feeds', new FeedsLayout);
 			this.attach('articles', new ArticlesLayout);
@@ -56,9 +59,11 @@ function (Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ArticleLayout, s
 			return;
 		}
 
-		if (app.focus) {
-			if (str in shortcuts[app.focus]) {
-				app.actions.execute( shortcuts[app.focus][str], e);
+		var focus = document.activeElement.getAttribute('name');
+
+		if (focus) {
+			if (str in shortcuts[focus]) {
+				app.actions.execute( shortcuts[focus][str], e);
 				e.preventDefault();
 				return;
 			}

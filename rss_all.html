@@ -13,9 +13,9 @@
 </head>
 <body>
 	<div class="regions" data-cols="250,*"> <!--  cols="350,*" -->
-		<section class="region" id="region-feeds"    name="sources"></section>
-		<section class="region" id="region-articles" name="items"></section>
-		<section class="region" id="region-article"  name="item"></section>
+		<section class="region" id="region-feeds"    tabindex="1" name="feeds"></section>
+		<section class="region" id="region-articles" tabindex="2" name="articles"></section>
+		<section class="region" id="region-article"  tabindex="3" name="article"></section>
 	</div>
 
 	<!-- MAIN TEMPLATES -->
@@ -83,7 +83,7 @@
 	</script>
 
 	<script id="template-header" type="text/template">
-		<h1><a href="<%= url ? url : '#' %>" target="_blank"><%- title %></a></h1>
+		<h1><a href="<%= url ? url : '#' %>" target="_blank" tabindex="-1"><%- title %></a></h1>
 		<div id="below-h1">
 			<p class="author"><%- author %></p>
 			<p class="date"><%= date %></p>

@@ -22,12 +22,13 @@ function ($, _, Layout, ToolbarView, Toolbar, feedList, contextMenus, properties
 				});
 
 				this.el.view = this;
-				window.addEventListener('focus', function() {
-					document.documentElement.classList.add('focused');
+
+				this.$el.on('focus', function() {
+					$(this).addClass('focused');
 				});
 
-				window.addEventListener('blur', function() {
-					document.documentElement.classList.remove('focused');
+				this.$el.on('blur', function() {
+					$(this).removeClass('focused');
 				});
 
 

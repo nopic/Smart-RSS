@@ -20,16 +20,17 @@ function ($, Layout, ToolbarView, Toolbar, articleList, contextMenus) {
 					this.attach('articleList', articleList );
 				});
 
+				this.$el.on('focus', function() {
+					$(this).addClass('focused');
+				});
+
+				this.$el.on('blur', function() {
+					$(this).removeClass('focused');
+				});
 
 				/****
 				window.addEventListener('resize', this.handleResize.bind(this));
-				window.addEventListener('focus', function() {
-					document.documentElement.classList.add('focused');
-				});
-
-				window.addEventListener('blur', function() {
-					document.documentElement.classList.remove('focused');
-				});****/
+				****/
 			},
 			handleResize: function() {
 				if (bg.settings.get('layout') == 'horizontal') {

@@ -13,6 +13,7 @@ define(['backbone', 'jquery', 'domReady!'], function (BB, $) {
 				this.$el.replaceWith(newEl);
 				this.$el = newEl;
 				this.$el.attr('placeholder', bg.lang.c.SEARCH);
+				this.$el.attr('tabindex', -1);
 				this.el = this.$el.get(0);
 			}
 

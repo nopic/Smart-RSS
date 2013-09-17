@@ -24,6 +24,12 @@ define({
 		'down': 'articles:selectNext',
 		'u': 'articles:selectPrevious',
 		'up': 'articles:selectPrevious',
+
+		'shift+j': 'articles:selectNext',
+		'shift+down': 'articles:selectNext',
+		'shift+u': 'articles:selectPrevious',
+		'shift+up': 'articles:selectPrevious',
+
 		'g': 'articles:markAndNextUnread',
 		't': 'articles:markAndPrevUnread',
 		'h': 'articles:nextUnread',

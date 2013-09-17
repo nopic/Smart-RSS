@@ -20,6 +20,14 @@ function ($, Layout, ToolbarView, Toolbar, contentView, SandboxView, OverlayView
 					this.attach('log', new LogView() );
 					this.attach('overlay', new OverlayView() );
 				});
+
+				this.$el.on('focus', function() {
+					$(this).addClass('focused');
+				});
+
+				this.$el.on('blur', function() {
+					$(this).removeClass('focused');
+				});
 				
 			},
 			handleMouseDown: function(e) {

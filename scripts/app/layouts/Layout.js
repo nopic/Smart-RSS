@@ -1,11 +1,8 @@
 define(['backbone'], function(BB) {
 	var Layout = BB.View.extend({
-		focus: null,
 		setFocus: function(name) {
-			if (!name || !this[name] || name == this.focus) return;
-			if (this.focus) this[this.focus].trigger('blur');
-			this.focus = name;
-			this[name].trigger('focus');
+			if (!name || !this[name]) return;
+			this[name].el.focus();
 		},
 		attach: function(name, view) {
 			this[name] = view;

@@ -30,7 +30,7 @@
 	border-bottom-color: rgb(51, 153, 255);
 }
 
-html:not(.focused) .selected {
+.region:not(.focused) .selected {
 	background: #94C6F7;
 	border-bottom-color: #ccc;
 }
@@ -45,7 +45,7 @@ html:not(.focused) .selected {
 	outline: 1px dotted grey;
 }
 
-html:not(.focused) .last-selected {
+.region:not(.focused) .last-selected {
 	outline: none;
 }
 
