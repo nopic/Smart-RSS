@@ -1,8 +1,8 @@
 define([
 	'jquery', 'underscore', 'layouts/Layout', 'views/ToolbarView', 'models/Toolbar', 'views/feedList',
-	'instances/contextMenus', 'views/properties', 'domReady!'
+	'instances/contextMenus', 'views/properties', 'mixins/resizable', 'domReady!'
 ],
-function ($, _, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties) {
+function ($, _, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties, resizable) {
 
 		var toolbar = new Toolbar({ id: 'feeds' });
 
@@ -44,6 +44,8 @@ function ($, _, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties
 				}
 
 				window.addEventListener('resize', this.handleResize.bind(this));
+
+				this.enableResizing();
 			},
 			handleClearEvents: function(id) {
 				if (window == null || id == window.top.tabID) {
@@ -91,6 +93,8 @@ function ($, _, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties
 				$('#indicator').html(bg.lang.c.UPDATING_FEEDS + ' (' + l.get('loaded') + '/' + l.get('maxSources') + ')');
 			}
 		});
+
+		FeedsLayout = FeedsLayout.extend(resizable);
 
 		return FeedsLayout;
 	}

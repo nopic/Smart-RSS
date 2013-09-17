@@ -199,3 +199,13 @@ input[type=search]:not(:focus):not(:valid) {
 .region:focus {
 	outline-width: 0;
 }
+
+.resizer {
+	position: fixed;
+	left: 0;
+	top: 0;
+	height: 100%;
+	cursor: w-resize;
+	-webkit-user-select: none;
+	user-select: none;
+}

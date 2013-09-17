@@ -1,8 +1,8 @@
 define([
 	'jquery', 'layouts/Layout', 'views/ToolbarView', 'models/Toolbar', 'views/articleList',
-	'instances/contextMenus', 'domReady!'
+	'instances/contextMenus', 'mixins/resizable', 'domReady!'
 ],
-function ($, Layout, ToolbarView, Toolbar, articleList, contextMenus) {
+function ($, Layout, ToolbarView, Toolbar, articleList, contextMenus, resizable) {
 
 		var toolbar = new Toolbar({ id: 'articles' });
 
@@ -28,6 +28,8 @@ function ($, Layout, ToolbarView, Toolbar, articleList, contextMenus) {
 					$(this).removeClass('focused');
 				});
 
+				this.enableResizing();
+
 				/****
 				window.addEventListener('resize', this.handleResize.bind(this));
 				****/
@@ -49,6 +51,8 @@ function ($, Layout, ToolbarView, Toolbar, articleList, contextMenus) {
 			}
 			
 		});
+
+		ArticlesLayout = ArticlesLayout.extend(resizable);
 
 		return ArticlesLayout;
 	}
