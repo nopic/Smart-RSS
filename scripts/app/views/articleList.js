@@ -29,6 +29,7 @@ function (BB, _, $, contextMenus, Groups, Group, GroupView, ItemView, selectable
 		_itemHeight: 0,
 		tagName: 'div',
 		id: 'article-list',
+		itemClass: 'item',
 		views: [],
 		viewsToRender: [],
 		currentSource: null,

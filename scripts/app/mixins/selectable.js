@@ -7,24 +7,29 @@ return {
 	restartSelection: function() {
 		if (this.selectedItems.length) {
 			this.selectedItems = [];
-			$('.selected').removeClass('selected');
-			$('.last-selected').removeClass('last-selected');
+			this.$el.find('.selected').removeClass('selected');
+			this.$el.find('.last-selected').removeClass('last-selected');
 		}
 		this.selectFirst();
 	},
 	selectFirst: function() {
-		var first = $('.item:not(.invisible)').get(0);
+		var first = $('.' + this.itemClass + ':not(.invisible)').get(0);
 		if (first) this.select(first.view);
 	},
 	selectNext: function(e) {
 		e = e || {};
 
-		var q = e.selectUnread ? '.unread:not(.invisible)' : '.item:not(.invisible)';
+		var q = e.selectUnread ? '.unread:not(.invisible)' : '.' + this.itemClass + ':not(.invisible)';
 		var next;
 		if (e.selectUnread &&  this.selectPivot) {
 			next = this.selectPivot.el.nextElementSibling;
 		} else {
-			next = $('.last-selected').get(0).nextElementSibling;
+			next = this.$el.find('.last-selected');
+			if (next.length) {
+				next = next.get(0).nextElementSibling;
+			} else {
+				next = this.el.firstElementChild;
+			}
 		}
 		while (next && !next.matchesSelector(q)) {
 			next = next.nextElementSibling;
@@ -32,7 +37,7 @@ return {
 
 		if (!next && !e.shiftKey && !e.ctrlKey) {
 			next = this.el.querySelector(q);
-			if (e.currentIsRemoved && next && $('.last-selected').get(0) == next) {
+			if (e.currentIsRemoved && next && this.$el.find('.last-selected').get(0) == next) {
 				next = [];
 				app.trigger('no-items:' + this.el.id);
 			}
@@ -47,20 +52,25 @@ return {
 	},
 	selectPrev: function(e) {
 		e = e || {};
-		var q = e.selectUnread ? '.unread:not(.invisible)' : '.item:not(.invisible)';
+		var q = e.selectUnread ? '.unread:not(.invisible)' : '.' + this.itemClass + ':not(.invisible)';
 		var prev;
 		if (e.selectUnread &&  this.selectPivot) {
 			prev = this.selectPivot.el.previousElementSibling;
 		} else {
-			prev = $('.last-selected').get(0).previousElementSibling;
+			prev = this.$el.find('.last-selected');
+			if (prev.length) {
+				prev = prev.get(0).previousElementSibling;
+			} else {
+				prev = this.el.lastElementChild;
+			}
 		}
 		while (prev && !prev.matchesSelector(q)) {
 			prev = prev.previousElementSibling;
 		}
 
 		if (!prev && !e.shiftKey && !e.ctrlKey) {
-			prev = $(q + ':last').get(0);
-			if (e.currentIsRemoved && prev && $('.last-selected').get(0) == prev) {
+			prev = this.$el.find(q + ':last').get(0);
+			if (e.currentIsRemoved && prev && this.$el.find('.last-selected').get(0) == prev) {
 				prev = [];
 				app.trigger('no-items:' + this.el.id);
 			}
@@ -78,7 +88,7 @@ return {
 		if ( (e.shiftKey != true && e.ctrlKey != true) || (e.shiftKey && !this.selectPivot) ) {
 			this.selectedItems = [];
 			this.selectPivot = view;
-			$('.selected').removeClass('selected');
+			this.$el.find('.selected').removeClass('selected');
 
 			if (!e.preventLoading) {
 				if (!window || !window.frames) {
@@ -102,7 +112,7 @@ return {
 			this.trigger('pick', view);
 			
 		} else if (e.shiftKey && this.selectPivot) {
-			$('.selected').removeClass('selected');
+			this.$el.find('.selected').removeClass('selected');
 			this.selectedItems = [this.selectPivot];
 			this.selectedItems[0].$el.addClass('selected');
 
@@ -130,7 +140,7 @@ return {
 			this.selectPivot = view;
 		}
 
-		$('.last-selected').removeClass('last-selected');
+		this.$el.find('.last-selected').removeClass('last-selected');
 		if (this.selectedItems[0] != view) {
 			this.selectedItems.push(view);
 			view.$el.addClass('selected');

@@ -33,6 +33,7 @@ function (BB, $, SourceView, FolderView, SpecialView, Special, contextMenus, sel
 	var FeedListView = BB.View.extend({
 		//el: '#list',
 		tagName: 'div',
+		itemClass: 'list-item',
 		id: 'feed-list',
 		events: {
 			'dragstart .source':     'handleDragStart',

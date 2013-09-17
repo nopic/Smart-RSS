@@ -195,3 +195,7 @@ input[type=search]:not(:focus):not(:valid) {
 	flex: 1 1 auto;
 	border-right: none;
 }
+
+.region:focus {
+	outline-width: 0;
+}
