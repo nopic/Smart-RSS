@@ -28,8 +28,11 @@
 
 	<!-- PROPERTIES -->
 	<script id="template-properties" type="text/template">
-		<label>{{NAME}}: <input type="text" id="prop-title" placeholder="{{FETCH_TITLE_TIP}}" title="{{FETCH_TITLE_TIP}}" /></label>
-		<label>{{ADDRESS}}: <input type="url" id="prop-url" /></label>
+		<label>
+			{{NAME}}: 
+			<input type="text" id="prop-title" placeholder="{{FETCH_TITLE_TIP}}" title="{{FETCH_TITLE_TIP}}" value="<%- title %>"/>
+		</label>
+		<label>{{ADDRESS}}: <input type="url" id="prop-url" value="<%= url %>" /></label>
 		<label>{{UPDATE}}: <select id="prop-update-every">
 			<option value="0">{{NEVER}}</option>
 			<option value="5">{{EVERY_5_MINUTES}}</option>
@@ -45,8 +48,8 @@
 		</select></label>
 		<div id="advanced-switch">{{MORE}}</div>
 		<div id="properties-advanced">
-			<label>{{USERNAME}}: <input type="text" id="prop-username" /></label>
-			<label>{{PASSWORD}}: <input type="password" id="prop-password" /></label>
+			<label>{{USERNAME}}: <input type="text" id="prop-username" value="<%= username %>" /></label>
+			<label>{{PASSWORD}}: <input type="password" id="prop-password" value="<%= password %>" /></label>
 		</div>
 		<button id="prop-ok">{{OK}}</button><button id="prop-cancel">{{CANCEL}}</button>
 	</script>

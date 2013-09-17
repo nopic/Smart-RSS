@@ -1,8 +1,7 @@
-define(['backbone', 'jquery'], function(BB, $) {
+define(['backbone', 'jquery', 'underscore'], function(BB, $, _) {
 
 	var Properties = BB.View.extend({
 		id: 'properties',
-		template: '#template-properties',
 		currentSource: null,
 		events: {
 			'click button' : 'handleClick',
@@ -10,7 +9,7 @@ define(['backbone', 'jquery'], function(BB, $) {
 			'click #advanced-switch' : 'handleSwitchClick',
 		},
 		initialize: function() {
-			
+			this.template = _.template($('#template-properties').html());
 		},
 		handleClick: function(e) {
 			var t = e.currentTarget;
@@ -42,14 +41,19 @@ define(['backbone', 'jquery'], function(BB, $) {
 				this.handleClick(e);
 			}
 		},
-		show: function(source) {
-			$('#prop-title').val(source.get('title'));
-			$('#prop-url').val(source.get('url'));
-			$('#prop-username').val(source.get('username'));
-			$('#prop-password').val(source.get('password'));
+		render: function(source) {
+			if (!source) return;
+
+			this.$el.html(this.template(source.attributes));
+
 			if (source.get('updateEvery')) {
 				$('#prop-update-every').val(source.get('updateEvery'));
 			}
+
+			return this;
+		},
+		show: function(source) {
+			this.render(source);
 			
 			this.$el.css('display', 'block');
 		},
@@ -62,5 +66,5 @@ define(['backbone', 'jquery'], function(BB, $) {
 		}
 	});
 
-	return new Properties();
+	return Properties;
 });

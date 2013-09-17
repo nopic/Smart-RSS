@@ -42,6 +42,7 @@ function(BB, ContextMenu, properties) {
 			title: bg.lang.c.PROPERTIES,
 			icon: 'properties.png',
 			action: function() {
+				var properties = app.feeds.properties;
 				properties.show(sourcesContextMenu.currentSource);
 				properties.currentSource = sourcesContextMenu.currentSource;
 			}

@@ -2,7 +2,7 @@ define([
 	'jquery', 'underscore', 'layouts/Layout', 'views/ToolbarView', 'models/Toolbar', 'views/feedList',
 	'instances/contextMenus', 'views/properties', 'domReady!'
 ],
-function ($, _, Layout, ToolbarView, Toolbar, feedList, contextMenus, properties) {
+function ($, _, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties) {
 
 		var toolbar = new Toolbar({ id: 'feeds' });
 
@@ -17,7 +17,7 @@ function ($, _, Layout, ToolbarView, Toolbar, feedList, contextMenus, properties
 
 				this.on('attached', function() {
 					this.attach('toolbar', new ToolbarView({ model: toolbar }) );
-					this.attach('properties', properties );
+					this.attach('properties', new Properties );
 					this.attach('feedList', feedList );
 				});
 
