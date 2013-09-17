@@ -1,12 +1,9 @@
 #toolbar {
-	-webkit-flex: 0 0 auto;
 	flex: 0 0 auto;
 }
 
 #article-list {
-	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
-	-webkit-user-select: none;
 	user-select: none;
 	overflow-x: hidden;
 	overflow-y: auto;
@@ -18,9 +15,7 @@
 	padding: 4px 5px 4px 5px;
 	cursor: pointer;
 	border-bottom: 1px solid #ccc;
-	display: -webkit-flex;
 	display: flex;
-	-webkit-flex-flow: row wrap;
 	flex-flow: row wrap;
 }
 
@@ -70,7 +65,6 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 	font-size: 0.8rem;
-	-webkit-flex: 1 1 100%;
 	flex: 1 1 100%;
 	padding-left: 1rem;
 }
@@ -79,7 +73,6 @@
 	color: #664666;
 	padding-top: 0.2rem;
 	font-size: 0.75rem;
-	-webkit-flex: 1 1 10px;
 	flex: 1 1 10px;
 	white-space: nowrap;
 	min-width: 10px;
@@ -96,7 +89,6 @@
 	border-radius: 0.4rem;
 	background: radial-gradient(circle at center, white 30%, #c6c6c6 30%);
 	border: 1px solid white;
-	-webkit-flex: 0 0 0.4rem;
 	flex: 0 0 0.4rem;
 }
 .pinned {
@@ -108,7 +100,6 @@
 	color: #6d6d6d;
 	padding-top: 0.2rem;
 	font-size: 0.75rem;
-	-webkit-flex: 1 1 20px;
 	flex: 1 1 20px;
 	white-space: nowrap;
 	font-weight: normal;
@@ -138,20 +129,16 @@
 
 @media all and (min-width: 37rem) {
 	.lines-auto .item {
-		-webkit-flex-wrap: nowrap;
 		flex-wrap: nowrap;
-		-webkit-justify-content: flex-end;
 		justify-content: flex-end;
 	}
 	.lines-auto .item-title {
-		-webkit-flex: 1 1 auto;
 		flex: 1 1 auto;
 		padding-right: 20px;
 		padding-left: 0;
 		font-size: 0.75rem;
 	}
 	.lines-auto .item-pin {
-		-webkit-order: -1;
 		order: -1;
 		margin-top: 0.3rem;
 	}
@@ -159,12 +146,10 @@
 		padding: 0;
 	}
 	.lines-auto .item-author {
-		-webkit-flex: 0 0 12rem;
 		flex: 0 0 12rem;
 	}
 
 	.lines-auto .item-date {
-		-webkit-flex: 0 0 auto;
 		flex: 0 0 auto;
 		padding-right: 5px;
 	}
@@ -173,20 +158,16 @@
 
 
 .lines-one-line .item {
-	-webkit-flex-wrap: nowrap;
 	flex-wrap: nowrap;
-	-webkit-justify-content: flex-end;
 	justify-content: flex-end;
 }
 .lines-one-line .item-title {
-	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
 	padding-right: 20px;
 	padding-left: 0;
 	font-size: 0.75rem;
 }
 .lines-one-line .item-pin {
-	-webkit-order: -1;
 	order: -1;
 	margin-top: 0.3rem;
 }
@@ -194,12 +175,10 @@
 	padding: 0;
 }
 .lines-one-line .item-author {
-	-webkit-flex: 0 0 12rem;
 	flex: 0 0 12rem;
 }
 
 .lines-one-line .item-date {
-	-webkit-flex: 0 0 auto;
 	flex: 0 0 auto;
 	padding-right: 5px;
 }
@@ -220,7 +199,6 @@
 		display: none;
 	}
 	.lines-one-line .item-date {
-		-webkit-flex: 0 0 auto;
 		flex: 0 0 auto;
 	}
 }

@@ -3,7 +3,6 @@ header {
 	padding: 25px 15px 15px 30px;
 	font-family: sans-serif;
 	border-bottom: 1px solid rgb(199, 203, 214);
-	-webkit-flex: 0 0 auto;
 	flex: 0 0 auto;
 	overflow: hidden;
 }
@@ -31,9 +30,7 @@ h1 a {
 }
 
 #below-h1 {
-	display: -webkit-flex;
 	display: flex;
-	-webkit-flex-flow: row nowrap;
 	flex-flow: row nowrap;
 	width: 100%;
 }
@@ -50,23 +47,19 @@ header p {
 }
 
 header .author {
-	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
 }
 
 header .date {
-	-webkit-flex: 0 1 auto;
 	flex: 0 1 200px;
 	text-align: right;
 }
 
 header .pin-button {
-	-webkit-flex: 0 0 25px;
 	flex: 0 0 25px;
 	height: 16px;
 	background: url('/images/mail_unpinned.png') no-repeat right center;
 	opacity: 0.8;
-	-webkit-transition: opacity 0.1s;
 	transition: opacity 0.1s;
 	cursor: pointer;
 }
@@ -81,7 +74,6 @@ header .pin-button.pinned {
 
 iframe {
 	display: none;
-	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
 	width: 100%;
 }
@@ -92,7 +84,6 @@ footer {
 	padding: 5px 10px;
 	font-size: 0.75rem;
 	display: none;
-	-webkit-flex: 0 1 auto;
 	max-height: 200px;
 	overflow-x: hidden;
 	overflow-y: auto;
