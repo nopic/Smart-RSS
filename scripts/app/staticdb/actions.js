@@ -62,9 +62,72 @@ return {
 			}
 		},
 		focus: {
-			title: 'Focus Feeds',
+			title: 'Focus feeds',
 			fn: function() {
 				app.setFocus('feeds');
+			}
+		},
+		selectNext: {
+			title: 'Select next',
+			fn: function(e) {
+				require('views/feedList').selectNext(e);
+			}
+		},
+		selectPrevious: {
+			title: 'Select previous',
+			fn: function(e) {
+				require('views/feedList').selectPrev(e);
+			}
+		},
+		closeFolders: {
+			title: 'Close folders',
+			fn: function(e) {
+				var folders = $('.folder.opened');
+				if (!folders.length) return;
+				folders.each(function(i, folder) {
+					if (folder.view) {
+						folder.view.handleClickArrow(e);
+					}
+				});
+			}
+		},
+		openFolders: {
+			title: 'Open folders',
+			fn: function(e) {
+				var folders = $('.folder:not(.opened)');
+				if (!folders.length) return;
+				folders.each(function(i, folder) {
+					if (folder.view) {
+						folder.view.handleClickArrow(e);
+					}
+				});
+			}
+		},
+		toggleFolder: {
+			title: 'Toggle folder',
+			fn: function(e) {
+				var cs = $('.selected:first');
+				if (cs.length && cs.hasClass('folder')) {
+					cs.get(0).view.handleClickArrow(e);
+				}
+			}
+		},
+		showArticles: {
+			title: 'Show articles',
+			fn: function(e) {
+				var cs = $('.selected:first');
+				if (cs.length) {
+					cs.get(0).view.showSourceItems({ noSelect: true, shiftKey: e.shiftKey, noFocus: true });
+				}
+			}
+		},
+		showAndFocusArticles: {
+			title: 'Show and focus articles',
+			fn: function(e) {
+				var cs = $('.selected:first');
+				if (cs.length) {
+					cs.get(0).view.showSourceItems({ noSelect: true, shiftKey: e.shiftKey });
+				}
 			}
 		}
 	},
@@ -131,7 +194,6 @@ return {
 				e = e || {};
 				var str = e.currentTarget.value || '';
 				var list = require('views/articleList');
-
 				if (str == '') {
 					$('.date-group').css('display', 'block');
 				} else {
@@ -363,6 +425,57 @@ return {
 			title: 'Focus Article',
 			fn: function() {
 				app.setFocus('article');
+			}
+		},
+		scrollDown: {
+			title: 'Scroll down',
+			fn: function() {
+				var cw = $('iframe').get(0).contentWindow;
+				cw.scrollBy(0, 40);
+			}
+		},
+		scrollUp: {
+			title: 'Scroll up',
+			fn: function() {
+				var cw = $('iframe').get(0).contentWindow;
+				cw.scrollBy(0, -40);
+			}
+		},
+		spaceThrough: {
+			title: 'Space trough',
+			fn: function() {
+				require('views/contentView').handleSpace();
+			}
+		},
+		pageUp: {
+			title: 'Page up',
+			fn: function() {
+				var cw = $('iframe').get(0).contentWindow;
+				var d = $('iframe').get(0).contentWindow.document;
+				cw.scrollBy(0, -d.documentElement.clientHeight * 0.85);
+			}
+		},
+		pageDown: {
+			title: 'Page down',
+			fn: function() {
+				var cw = $('iframe').get(0).contentWindow;
+				var d = $('iframe').get(0).contentWindow.document;
+				cw.scrollBy(0, d.documentElement.clientHeight * 0.85);
+			}
+		},
+		scrollToBottom: {
+			title: 'Scroll to bottom',
+			fn: function() {
+				var cw = $('iframe').get(0).contentWindow;
+				var d = $('iframe').get(0).contentWindow.document;
+				cw.scrollTo(0, d.documentElement.offsetHeight);
+			}
+		},
+		scrollToTop: {
+			title: 'Scroll to top',
+			fn: function() {
+				var cw = $('iframe').get(0).contentWindow;
+				cw.scrollTo(0, 0);
 			}
 		}
 	}

@@ -189,7 +189,3 @@
 #advanced-switch.switched {
 	background: url('/images/down.png') no-repeat left 45%;
 }
-
-.in-closed-folder {
-	display: none !important;
-}

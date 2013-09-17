@@ -39,7 +39,7 @@ define([
 		},
 		handleClickArrow: function(e) {
 			this.model.save('opened', !this.model.get('opened'));
-			$('.source[data-in-folder=' + this.model.get('id') + ']').toggleClass('in-closed-folder', !this.model.get('opened'));
+			$('.source[data-in-folder=' + this.model.get('id') + ']').toggleClass('invisible', !this.model.get('opened'));
 			e.stopPropagation();
 		},
 		renderInterval: 'first-time',

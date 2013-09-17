@@ -47,7 +47,14 @@ function (Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ArticleLayout, s
 		var str = '';
 		if (e.ctrlKey) str += 'ctrl+';
 		if (e.shiftKey) str += 'shift+';
-		str += String.fromCharCode(e.keyCode).toLowerCase();
+
+		if (e.keyCode > 46 && e.keyCode < 91) {
+			str += String.fromCharCode(e.keyCode).toLowerCase();
+		} else if (e.keyCode in shortcuts.keys) {
+			str += shortcuts.keys[e.keyCode];
+		} else {
+			return;
+		}
 
 		if (app.focus) {
 			if (str in shortcuts[app.focus]) {

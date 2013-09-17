@@ -119,7 +119,7 @@ function (BB, _, $, contextMenus, Groups, Group, GroupView, ItemView, selectable
 				if (this.selectedItems[0] && this.selectedItems[0].model.get('unread') == true) {
 					this.selectedItems[0].model.save({ unread: false });
 				}
-				app.selectNext({ selectUnread: true });
+				this.selectNext({ selectUnread: true });
 			}, this);
 
 			this.loadAllFeeds();
@@ -213,9 +213,9 @@ function (BB, _, $, contextMenus, Groups, Group, GroupView, ItemView, selectable
 			if (view == this.selectedItems[0]) {
 				var last = $('.item:not(.invisible):last').get(0);
 				if (last && view == last.view) {
-					app.selectPrev({ currentIsRemoved: true });
+					this.selectPrev({ currentIsRemoved: true });
 				} else {
-					app.selectNext({ currentIsRemoved: true });
+					this.selectNext({ currentIsRemoved: true });
 				}
 			} else {
 				// if first item is the last item to be deleted, selecting it will trigger error - rAF to get around it

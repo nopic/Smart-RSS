@@ -35,6 +35,15 @@ define(['backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escap
 			}, this);
 
 		},
+		handleSpace: function() {
+			var cw = $('iframe').get(0).contentWindow;
+			var d = $('iframe').get(0).contentWindow.document;
+			if (d.documentElement.clientHeight + $(d.body).scrollTop() >= d.body.offsetHeight ) {
+				app.trigger('give-me-next');
+			} else {
+				cw.scrollBy(0, d.documentElement.clientHeight * 0.85);
+			}
+		},
 		handleClearEvents: function(id) {
 			if (window == null || id == window.top.tabID) {
 				bg.items.off('change:pinned', this.handleItemsPin, this);

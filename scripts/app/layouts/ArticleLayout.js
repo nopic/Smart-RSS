@@ -26,15 +26,6 @@ function ($, Layout, ToolbarView, Toolbar, contentView, SandboxView, OverlayView
 				if (this.overlay.isVisible() && !e.target.matchesSelector('.overlay, .overlay *')) {
 					this.overlay.hide();
 				}
-			},
-			handleSpace: function() {
-				var cw = $('iframe').get(0).contentWindow;
-				var d = $('iframe').get(0).contentWindow.document;
-				if (d.documentElement.clientHeight + $(d.body).scrollTop() >= d.body.offsetHeight ) {
-					app.trigger('give-me-next');
-				} else {
-					cw.scrollBy(0, d.documentElement.clientHeight * 0.85);
-				}
 			}
 			
 		});

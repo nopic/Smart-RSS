@@ -18,6 +18,10 @@ body {
 	display: block !important;
 }
 
+.invisible {
+	display: none !important;
+}
+
 .hidden {
 	display: none !important;
 }

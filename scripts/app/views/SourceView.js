@@ -50,7 +50,7 @@ define(['backbone', 'views/TopView'], function(BB, TopView) {
 			if (this.model.get('folderID')) {
 				this.el.dataset.inFolder = this.model.get('folderID');
 			} else {
-				this.$el.removeClass('in-closed-folder');
+				this.$el.removeClass('invisible');
 				delete this.el.dataset.inFolder;
 			}
 

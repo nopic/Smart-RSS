@@ -1,7 +1,7 @@
 define([
-	'backbone', 'views/ContextMenu', 'views/feedList', 'views/properties', 'helpers/escapeHtml'
+	'backbone', 'views/ContextMenu', 'views/feedList', 'views/properties'
 ],
-function(BB, ContextMenu, properties, escapeHtml) {
+function(BB, ContextMenu, properties) {
 	var sourcesContextMenu = new ContextMenu([
 		{
 			title: bg.lang.c.UPDATE,
@@ -181,78 +181,56 @@ function(BB, ContextMenu, properties, escapeHtml) {
 			title: bg.lang.c.NEXT_UNREAD + ' (H)',
 			icon: 'forward.png',
 			action: function() {
-				app.selectNext({ selectUnread: true });
+				app.actions.execute('articles:nextUnread');
 			}
 		},
 		{
 			title: bg.lang.c.PREV_UNREAD + ' (Y)',
 			icon: 'back.png',
 			action: function() {
-				app.selectPrev({ selectUnread: true });
+				app.actions.execute('articles:prevUnread');
 			}
 		},
 		{
 			title: bg.lang.c.MARK_AS_READ + ' (K)',
 			icon: 'read.png',
 			action: function() {
-				app.articles.articleList.changeUnreadState();
+				app.actions.execute('articles:mark');
 			}
 		},
 		{
 			title: bg.lang.c.MARK_AND_NEXT_UNREAD + ' (G)',
 			icon: 'find_next.png',
 			action: function() {
-				app.articles.articleList.changeUnreadState({ onlyToRead: true });
-				app.selectNext({ selectUnread: true });
+				app.actions.execute('articles:markAndNextUnread');
 			}
 		},
 		{
 			title: bg.lang.c.MARK_AND_PREV_UNREAD + ' (T)',
 			icon: 'find_previous.png',
 			action: function() {
-				app.articles.articleList.changeUnreadState({ onlyToRead: true });
-				this.selectPrev({ selectUnread: true });
+				app.actions.execute('articles:markAndPrevUnread');
 			}
 		},
 		{
 			title: bg.lang.c.FULL_ARTICLE,
 			icon: 'full_article.png',
 			action: function(e) {
-				var articleList = app.articles.articleList;
-				if (!articleList.selectedItems || !articleList.selectedItems.length) return;
-				if (articleList.selectedItems.length > 10 && bg.settings.get('askOnOpening')) {
-					if (!confirm('Do you really want to open ' + articleList.selectedItems.length + ' articles?')) {
-						return;
-					}
-				}
-				articleList.selectedItems.forEach(function(item) {
-					chrome.tabs.create({ url: escapeHtml(item.model.get('url')), active: !e.shiftKey });
-				});
+				app.actions.execute('articles:fullArticle', e);
 			}
 		},
 		{
 			title: bg.lang.c.PIN + ' (P)',
 			icon: 'pinsource_context.png',
 			action: function() {
-				var articleList = app.articles.articleList;
-				if (!articleList.selectedItems || !articleList.selectedItems.length) return;
-				var val = !articleList.selectedItems[0].model.get('pinned');
-				articleList.selectedItems.forEach(function(item) {
-					item.model.save({ pinned: val });
-				});
+				app.actions.execute('articles:pin');
 			}
 		},
 		{
 			title: bg.lang.c.DELETE + ' (D)',
 			icon: 'delete.png',
 			action: function(e) {
-				e = e || {};
-				var articleList = app.articles.articleList;
-				if (articleList.specialName == 'trash' || e.shiftKey) {
-					articleList.destroyBatch(articleList.selectedItems, articleList.removeItemCompletely);
-				} else {
-					articleList.destroyBatch(articleList.selectedItems, articleList.removeItem);
-				}
+				app.actions.execute('articles:delete', e);
 			}
 		},
 		{
@@ -260,10 +238,7 @@ function(BB, ContextMenu, properties, escapeHtml) {
 			id: 'context-undelete',
 			icon: 'undelete.png',
 			action: function() {
-				var articleList = app.articles.articleList;
-				if (articleList.specialName == 'trash') {
-					articleList.destroyBatch(articleList.selectedItems, articleList.undeleteItem);
-				}
+				app.actions.execute('articles:undelete');
 			}
 		}
 	]);

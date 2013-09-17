@@ -6,7 +6,13 @@ define({
 		'esc': 'global:hideContextMenus'
 	},
 	feeds: {
-
+		'up': 'feeds:selectPrevious',
+		'down': 'feeds:selectNext',
+		'ctrl+left': 'feeds:closeFolders',
+		'ctrl+right': 'feeds:openFolders',
+		'left': 'feeds:toggleFolder',
+		'right': 'feeds:showArticles',
+		'enter': 'feeds:showAndFocusArticles'
 	},
 	articles: {
 		'd': 'articles:delete',
@@ -28,21 +34,47 @@ define({
 		'p': 'articles:pin',
 		'n': 'articles:undelete',
 		'space': 'articles:spaceThrough',
-		'r': 'article:update'
+		'r': 'articles:update'
 	},
 	article: {
-
+		'up': 'article:scrollUp',
+		'down': 'article:scrollDown',
+		'space': 'article:spaceThrough',
+		'pgup': 'article:pageUp',
+		'pgdown': 'article:pageDown',
+		'end': 'article:scrollToBottom',
+		'home': 'article:scrollToTop',
+		'del': 'article:delete',
+		'd': 'article:delete',
+		'r': 'article:mark'
+	},
+	keys: {
+		8: 'backspace',
+		9: 'tab',
+		13: 'enter',
+		16: 'shift',
+		17: 'ctrl',
+		20: 'capslock',
+		32: 'space',
+		33: 'pgup',
+		34: 'pgdown',
+		35: 'end',
+		36: 'home',
+		37: 'left',
+		38: 'up',
+		39: 'right',
+		40: 'down',
+		45: 'insert',
+		46: 'del'
 	}
 });
 
+/*CTRL:17,NUM1:49,NUM2:50,NUM3:51,NUM4:52,NUM5:53,NUM6:54,
+    NUM7:55,NUM8:56,NUM9:57,END:35,HOME:36,PGUP:33,PGDOWN:34,INSERT:45,
+    DELETE:46,BACKSPACE:8*/
+
 /****
-if (e.keyCode == 50 && e.shiftKey) {
-	window.top.frames[1].focus();
-	e.preventDefault();
-} else if (e.keyCode == 51 && e.shiftKey) {
-	window.top.frames[2].focus();
-	e.preventDefault();
-} else if (e.keyCode == 38) {
+if (e.keyCode == 38) {
 	var cs = $('.selected:first');
 	var s;
 	if (cs.length) {
@@ -62,88 +94,7 @@ if (e.keyCode == 50 && e.shiftKey) {
 	}
 	if (s) s.view.select();
 	e.preventDefault();
-} else if (e.keyCode == 37 && e.ctrlKey) {
-	var folders = $('.folder.opened');
-	if (!folders.length) return;
-	folders.each(function(i, folder) {
-		if (folder.view) {
-			folder.view.handleClickArrow(e);
-		}
-	});
-} else if (e.keyCode == 39 && e.ctrlKey) {
-	var folders = $('.folder:not(.opened)');
-	if (!folders.length) return;
-	folders.each(function(i, folder) {
-		if (folder.view) {
-			folder.view.handleClickArrow(e);
-		}
-	});
-} else if (e.keyCode == 37) {
-	var cs = $('.selected:first');
-	if (cs.length && cs.hasClass('folder')) {
-		cs.get(0).view.handleClickArrow(e);
-	}
-	e.preventDefault();
-} else if (e.keyCode == 39) {
-	var cs = $('.selected:first');
-	if (cs.length) {
-		cs.get(0).view.showSourceItems({ noSelect: true, shiftKey: e.shiftKey, noFocus: true });
-	}
-	e.preventDefault();
-} else if (e.keyCode == 13) {
-	var cs = $('.selected:first');
-	if (cs.length) {
-		cs.get(0).view.showSourceItems({ noSelect: true, shiftKey: e.shiftKey });
-	}
-	e.preventDefault();
-}
+} 
 
 ****/
 
-
-/****
-
-if (e.keyCode == 49 && e.shiftKey) {
-	topWindow.frames[0].focus();
-	e.preventDefault();
-} else if (e.keyCode == 50 && e.shiftKey) {
-	topWindow.frames[1].focus();
-	e.preventDefault();
-} else if (e.keyCode == 38) {
-	var cw = $('iframe').get(0).contentWindow;
-	cw.scrollBy(0, -40);
-	e.preventDefault();
-} else if (e.keyCode == 40) {
-	var cw = $('iframe').get(0).contentWindow;
-	cw.scrollBy(0, 40);
-	e.preventDefault();
-} else if (e.keyCode == 32) {
-	this.handleSpace();
-	e.preventDefault();
-} else if (e.keyCode == 33) {
-	var cw = $('iframe').get(0).contentWindow;
-	var d = $('iframe').get(0).contentWindow.document;
-	cw.scrollBy(0, -d.documentElement.clientHeight * 0.85);
-	e.preventDefault();
-} else if (e.keyCode == 34) {
-	var cw = $('iframe').get(0).contentWindow;
-	var d = $('iframe').get(0).contentWindow.document;
-	cw.scrollBy(0, d.documentElement.clientHeight * 0.85);
-	e.preventDefault();
-} else if (e.keyCode == 35) {
-	var cw = $('iframe').get(0).contentWindow;
-	var d = $('iframe').get(0).contentWindow.document;
-	cw.scrollTo(0, d.documentElement.offsetHeight);
-	e.preventDefault();
-} else if (e.keyCode == 36) {
-	var cw = $('iframe').get(0).contentWindow;
-	cw.scrollTo(0, 0);
-	e.preventDefault();
-} else if (e.keyCode == 68 || e.keyCode == 46) {
-	toolbar.handleButtonDelete(e);
-	e.preventDefault();
-} else if (e.keyCode == 75) {
-	toolbar.handleButtonRead();
-	e.preventDefault();
-}
-****/

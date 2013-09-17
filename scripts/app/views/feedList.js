@@ -218,7 +218,7 @@ function (BB, $, SourceView, FolderView, SpecialView, Special, contextMenus, sel
 				}
 
 				if (!folder.get(0).view.model.get('opened')) {
-					view.$el.addClass('in-closed-folder');
+					view.$el.addClass('invisible');
 				}
 
 				return;
