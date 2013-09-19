@@ -2,6 +2,12 @@
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
+body.loading {
+  background: url("/images/tabloading.gif") no-repeat center center;
+}
+body.loading * {
+  visibility: hidden;
+}
 html,
 body {
   height: 100%;
@@ -155,12 +161,14 @@ input[type=search]:not(:focus):not(:valid) {
   display: -webkit-flex;
   display: flex;
 }
+.regions.vertical {
+  -webkit-flex-flow: column;
+  flex-flow: column;
+}
 .region {
-  -webkit-flex: 0 0 350px;
-  flex: 0 0 350px;
   min-width: 100px;
-  width: 350px;
-  max-height: 100%;
+/*width: 350px;
+	max-height: 100%;*/
   border-right: 1px solid #a6a6a6;
 /*border: 0;
 	border-image: linear-gradient(to bottom, #eee 0, #a6a6a6 30px);
@@ -173,10 +181,24 @@ input[type=search]:not(:focus):not(:valid) {
   -webkit-align-items: stretch;
   align-items: stretch;
 }
+.vertical .region {
+  border-right: none;
+  border-bottom: 1px solid #a6a6a6;
+}
 .region:last-child {
+  border: none;
+}
+#region-feeds {
+  -webkit-flex: 0 0 300px;
+  flex: 0 0 300px;
+}
+#region-articles {
+  -webkit-flex: 0 0 400px;
+  flex: 0 0 400px;
+}
+#region-content {
   -webkit-flex: 1 1 auto;
   flex: 1 1 auto;
-  border-right: none;
 }
 .region:focus {
   outline-width: 0;
@@ -185,8 +207,6 @@ input[type=search]:not(:focus):not(:valid) {
   position: fixed;
   left: 0;
   top: 0;
-  height: 100%;
-  cursor: w-resize;
   -webkit-user-select: none;
   user-select: none;
 }

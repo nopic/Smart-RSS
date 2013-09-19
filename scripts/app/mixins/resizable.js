@@ -13,9 +13,15 @@ define(['jquery'], function($) {
 
 	function handleMouseMove(e) {
 		if (this.resizing) {
-			setPosition.call(this, e.clientX);
 			e.preventDefault();
-			this.$el.css('flex-basis', Math.abs(e.clientX - this.el.offsetLeft) );
+			if (this.layout == 'vertical') {
+				setPosition.call(this, e.clientY);
+				this.$el.css('flex-basis', Math.abs(e.clientY - this.el.offsetTop) );
+			} else {
+				setPosition.call(this, e.clientX);
+				this.$el.css('flex-basis', Math.abs(e.clientX - this.el.offsetLeft) );	
+			}
+			
 			this.trigger('resize');
 
 			for (var i=0; i<els.length; i++) {
@@ -33,17 +39,28 @@ define(['jquery'], function($) {
 	}
 
 	function setPosition(pos) {
-		this.resizer.style.left = pos - Math.round(resizeWidth / 2) - 1 + 'px';
+		if (this.layout == 'vertical') {
+			this.resizer.style.top = pos - Math.round(resizeWidth / 2) - 1 + 'px';
+		} else {
+			this.resizer.style.left = pos - Math.round(resizeWidth / 2) - 1 + 'px';	
+		}
 	}
 
 	function loadPosition() {
-		setPosition.call(this, this.el.offsetLeft + this.el.offsetWidth);
+		if (this.layout == 'vertical') {
+			setPosition.call(this, this.el.offsetTop + this.el.offsetHeight);
+		} else {
+			setPosition.call(this, this.el.offsetLeft + this.el.offsetWidth);	
+		}
 	}
 
 	return {
 		resizing: false,
 		resizer: null,
-		enableResizing: function() {
+		layout: 'horizontal',
+		enableResizing: function(layout) {
+
+			this.layout = layout;
 
 			els.push(this);
 
@@ -51,9 +68,19 @@ define(['jquery'], function($) {
 			this.resizer = document.createElement('div');
 			this.resizer.className = 'resizer';
 
-			loadPosition.call(this);
+			if (layout == 'vertical') {
+				this.resizer.style.width = '100%';
+				this.resizer.style.cursor = 'n-resize';
+				this.resizer.style.height = resizeWidth + 'px';
+			} else {
+				this.resizer.style.height = '100%';
+				this.resizer.style.cursor = 'w-resize';
+				this.resizer.style.width = resizeWidth + 'px';
+			}
 
-			this.resizer.style.width = resizeWidth + 'px';
+			requestAnimationFrame(function() {
+				loadPosition.call(this);
+			}.bind(this));
 
 			this.resizer.addEventListener('mousedown', function(e) {
 				handleMouseDown.call(that, e);

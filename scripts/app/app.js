@@ -30,11 +30,19 @@ function (Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ArticleLayout, s
 		start: function() {
 			this.attach('feeds', new FeedsLayout);
 			this.attach('articles', new ArticlesLayout);
-			this.attach('article', new ArticleLayout);
+			this.attach('content', new ArticleLayout);
 
 			this.setFocus('articles');
 
+			if (bg.settings.get('layout')) {
+				$('.regions .regions').addClass('vertical');
+			}
+
 			this.trigger('start');
+
+			setTimeout(function() {
+				$('body').removeClass('loading');
+			}, 0);
 		}
 	}));
 

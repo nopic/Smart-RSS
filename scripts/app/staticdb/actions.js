@@ -418,7 +418,7 @@ return {
 			title: bg.lang.c.SETTINGS,
 			icon: 'config.png',
 			fn: function() {
-				app.article.overlay.show();
+				app.content.overlay.show();
 			}
 		},
 		focus: {

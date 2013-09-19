@@ -7,7 +7,7 @@ function ($, Layout, ToolbarView, Toolbar, contentView, SandboxView, OverlayView
 		var toolbar = new Toolbar({ id: 'article' });
 
 		var ArticleLayout = Layout.extend({
-			el: '#region-article',
+			el: '#region-content',
 			events: {
 				'mousedown': 'handleMouseDown'
 			},

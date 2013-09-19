@@ -28,7 +28,7 @@ function ($, Layout, ToolbarView, Toolbar, articleList, contextMenus, resizable)
 					$(this).removeClass('focused');
 				});
 
-				this.enableResizing();
+				this.enableResizing(bg.settings.get('layout'));
 
 				/****
 				window.addEventListener('resize', this.handleResize.bind(this));

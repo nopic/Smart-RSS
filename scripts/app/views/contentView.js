@@ -83,7 +83,7 @@ define(['backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escap
 				that.$el.html(that.template(data));
 
 				// first load might be too soon
-				var sandbox = app.article.sandbox;
+				var sandbox = app.content.sandbox;
 				var fr = sandbox.el;
 
 				if (sandbox.loaded) {
