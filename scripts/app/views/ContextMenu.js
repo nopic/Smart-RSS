@@ -1,6 +1,6 @@
 define([
 	'backbone', 'jquery', 'collections/MenuCollection', 'views/MenuItemView', 'controllers/comm'
-], 
+],
 function(BB, $, MenuCollection, MenuItemView, comm) {
 	var ContextMenu = BB.View.extend({
 		tagName: 'div',

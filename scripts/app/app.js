@@ -4,9 +4,9 @@
 define([
 	'controllers/comm',
 	'layouts/Layout', 'jquery', 'domReady!', 'collections/Actions', 'layouts/FeedsLayout', 'layouts/ArticlesLayout',
-	'layouts/ContentLayout', 'staticdb/shortcuts', 'instances/contextMenus', 'preps/all'
+	'layouts/ContentLayout', 'staticdb/shortcuts', 'preps/all'
 ],
-function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLayout, shortcuts, contextMenus) {
+function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLayout, shortcuts) {
 
 	//$('body').html( bg.translate($('body').html()) );
 	document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';

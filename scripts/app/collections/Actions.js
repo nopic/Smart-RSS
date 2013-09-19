@@ -1,9 +1,20 @@
+/**
+ * @module App
+ * @submodule collections/Actions
+ */
 define(['backbone', 'models/Action', 'staticdb/actions'], function (BB, Action, db) {
+
+	/**
+	 * Collection of executable actions. Actions are usually executed by shorcuts, buttons or context menus.
+	 * @class Actions
+	 * @constructor
+	 * @extends Backbone.Collection
+	 */
 	var Actions = BB.Collection.extend({
 		model: Action,
 
 		/**
-		 * Constructor
+		 * @method initialize
 		 */
 		initialize: function() {
 			Object.keys(db).forEach(function(region) {
@@ -16,7 +27,8 @@ define(['backbone', 'models/Action', 'staticdb/actions'], function (BB, Action, 
 
 		/**
 		 * Executes given action
-		 * @action string | models/Action
+		 * @method execute
+		 * @param action {string|models/Action}
 		 */
 		execute: function(action) {
 			if (typeof action == 'string') action = this.get(action);
