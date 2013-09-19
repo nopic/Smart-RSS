@@ -1,12 +1,43 @@
+/**
+ * @module App
+ * @submodule models/Group
+ */
 define(['backbone', 'helpers/unixutc', 'helpers/getWOY'], function(BB, unixutc, getWOY) {
+
+	/**
+	 * Date group model
+	 * @class Group
+	 * @constructor
+	 * @extends Backbone.Model
+	 */
 	var Group = BB.Model.extend({
 		defaults: {
+			/**
+			 * Title of the date group (Today, Yesterday, 2012, ...)
+			 * @attribute title
+			 * @type String
+			 * @default '<no title>'
+			 */
 			title: '<no title>',
+
+			/**
+			 * End date of date group (yesterdays date is midnight between yesterday and today) in unix time
+			 * @attribute date
+			 * @type Integer
+			 * @default 0
+			 */
 			date: 0
 		},
 		idAttribute: 'date'
 	});
 
+	/**
+	 * Gets date group attributes of given date
+	 * @method getGroup
+	 * @static
+	 * @param date {Integer|Date}
+	 * @return {Object} Object contaning title & date attributes
+	 */
 	Group.getGroup = (function() {
 		var days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
 		var months = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
