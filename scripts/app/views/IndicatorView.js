@@ -63,6 +63,7 @@ define(['backbone'], function(BB) {
 		/**
 		 * Renders the indicator (gradient/text)
 		 * @method render
+		 * @chainable
 		 */
 		render: function() {
 			var l = bg.loader;
@@ -70,6 +71,7 @@ define(['backbone'], function(BB) {
 			var perc = Math.round(l.get('loaded') * 100 / l.get('maxSources'));
 			this.$el.css('background', 'linear-gradient(to right,  #c5c5c5 ' + perc + '%, #eee ' + perc + '%)');
 			this.$el.html(bg.lang.c.UPDATING_FEEDS + ' (' + l.get('loaded') + '/' + l.get('maxSources') + ')');
+			return this;
 		}
 	});
 

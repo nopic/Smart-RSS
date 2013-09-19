@@ -1,3 +1,11 @@
+/**
+ * Returns formatted date string
+ * @module App
+ * @submodule helpers/formatDate
+ * @param date {Integer|Date} Date to be formated
+ * @param formatString {String} String consisting of special characters
+ * @example formatDate(new Date, 'YYYY-MM-DD hh:mm');
+ */
 define([], function() {
 	var formatDate = (function() {
 		var that;

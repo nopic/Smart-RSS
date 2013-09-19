@@ -1,3 +1,9 @@
+/**
+ * Escapes following characters: &, <, >, ", '
+ * @module App
+ * @submodule helpers/escapeHtml
+ * @param string {String} String with html to be escaped
+ */
 define([], function() {
 	var entityMap = {
 		'&': '&amp;',

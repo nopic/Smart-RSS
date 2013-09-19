@@ -1,3 +1,9 @@
+/**
+ * Get week of year
+ * @module App
+ * @submodule helpers/getWOY
+ * @param date {string|Date} Get the week based on this date
+ */
 define([], function() {
 	var getWOY = function(pdate) {
 		pdate = new Date(pdate);
