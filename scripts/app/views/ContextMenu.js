@@ -1,4 +1,7 @@
-define(['backbone', 'jquery', 'collections/MenuCollection', 'views/MenuItemView'], function(BB, $, MenuCollection, MenuItemView) {
+define([
+	'backbone', 'jquery', 'collections/MenuCollection', 'views/MenuItemView', 'controllers/comm'
+], 
+function(BB, $, MenuCollection, MenuItemView, comm) {
 	var ContextMenu = BB.View.extend({
 		tagName: 'div',
 		className: 'context-menu',
@@ -28,6 +31,8 @@ define(['backbone', 'jquery', 'collections/MenuCollection', 'views/MenuItemView'
 			this.menuCollection = new MenuCollection(mc);
 			this.addItems(this.menuCollection);
 			$('body').append(this.render().$el);
+
+			this.listenTo(comm, 'hide-overlays', this.hide);
 
 			/*window.addEventListener('blur', this.hide.bind(this));
 			window.addEventListener('resize', this.hide.bind(this));*/

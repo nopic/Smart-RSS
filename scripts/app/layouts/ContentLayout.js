@@ -4,9 +4,9 @@
  */
 define([
 	'jquery', 'layouts/Layout', 'views/ToolbarView', 'models/Toolbar', 'views/contentView', 'views/SandboxView',
-	'views/OverlayView', 'views/LogView', 'domReady!'
+	'views/OverlayView', 'views/LogView', 'controllers/comm', 'domReady!'
 ],
-function ($, Layout, ToolbarView, Toolbar, contentView, SandboxView, OverlayView, LogView) {
+function ($, Layout, ToolbarView, Toolbar, contentView, SandboxView, OverlayView, LogView, comm) {
 
 	var toolbar = new Toolbar({ id: 'article' });
 
@@ -17,10 +17,18 @@ function ($, Layout, ToolbarView, Toolbar, contentView, SandboxView, OverlayView
 	 * @extends Layout
 	 */
 	var ContentLayout = Layout.extend({
+
+		/**
+		 * View element
+		 * @property el
+		 * @default #region-content
+		 * @type HTMLElement
+		 */
 		el: '#region-content',
-		events: {
-			'mousedown': 'handleMouseDown'
-		},
+
+		/**
+		 * @method initialize
+		 */
 		initialize: function() {
 			this.on('attached', function() {
 
@@ -29,6 +37,8 @@ function ($, Layout, ToolbarView, Toolbar, contentView, SandboxView, OverlayView
 				this.attach('sandbox', new SandboxView() );
 				this.attach('log', new LogView() );
 				this.attach('overlay', new OverlayView() );
+
+				this.listenTo(comm, 'hide-overlays', this.hideOverlay);
 			});
 
 			this.$el.on('focus', function() {
@@ -40,8 +50,13 @@ function ($, Layout, ToolbarView, Toolbar, contentView, SandboxView, OverlayView
 			});
 			
 		},
-		handleMouseDown: function(e) {
-			if (this.overlay.isVisible() && !e.target.matchesSelector('.overlay, .overlay *')) {
+
+		/**
+		 * Hides config overlay
+		 * @method hideOverlay
+		 */
+		hideOverlay: function() {
+			if (this.overlay.isVisible()) {
 				this.overlay.hide();
 			}
 		}

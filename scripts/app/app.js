@@ -2,10 +2,11 @@
  * @module App
  */
 define([
+	'controllers/comm',
 	'layouts/Layout', 'jquery', 'domReady!', 'collections/Actions', 'layouts/FeedsLayout', 'layouts/ArticlesLayout',
 	'layouts/ContentLayout', 'staticdb/shortcuts', 'instances/contextMenus', 'preps/all'
 ],
-function (Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLayout, shortcuts, contextMenus) {
+function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLayout, shortcuts, contextMenus) {
 
 	//$('body').html( bg.translate($('body').html()) );
 	document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';
@@ -35,15 +36,12 @@ function (Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLayout, s
 			window.addEventListener('blur', this.hideContextMenus.bind(this));
 		},
 		handleMouseDown: function(e) {
-			if (!e.target.matchesSelector('.context-menu, .context-menu *')) {
+			if (!e.target.matchesSelector('.context-menu, .context-menu *, .overlay, .overlay *')) {
 				this.hideContextMenus();
 			}
 		},
 		hideContextMenus: function() {
-			if (contextMenus.areActive()) {
-				// make sure the action gets executed
-				contextMenus.hideAll();
-			}
+			comm.trigger('hide-overlays');
 		},
 		focusLayout: function(e) {
 			this.setFocus(e.currentTarget.getAttribute('name'));

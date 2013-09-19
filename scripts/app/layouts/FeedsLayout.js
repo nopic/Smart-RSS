@@ -3,10 +3,10 @@
  * @submodule layouts/FeedsLayout
  */
 define([
-	'jquery', 'underscore', 'layouts/Layout', 'views/ToolbarView', 'models/Toolbar', 'views/feedList',
+	'jquery', 'layouts/Layout', 'views/ToolbarView', 'models/Toolbar', 'views/feedList',
 	'instances/contextMenus', 'views/properties', 'mixins/resizable', 'views/IndicatorView', 'domReady!'
 ],
-function ($, _, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties, resizable, IndicatorView) {
+function ($, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties, resizable, IndicatorView) {
 
 	var toolbar = new Toolbar({ id: 'feeds' });
 
@@ -17,13 +17,6 @@ function ($, _, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties
 	 * @extends Layout
 	 */
 	var FeedsLayout = Layout.extend({
-		/**
-		 * Underscore template
-		 * @property template
-		 * @type Object
-		 */
-		template: _.template($('#template-feeds').html()),
-
 		/**
 		 * View element
 		 * @property el
