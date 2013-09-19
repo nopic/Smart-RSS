@@ -11,7 +11,7 @@ function ($, _, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties
 	var toolbar = new Toolbar({ id: 'feeds' });
 
 	/**
-	 * Left column layout
+	 * Feeds layout view
 	 * @class FeedsLayout
 	 * @constructor
 	 * @extends Layout

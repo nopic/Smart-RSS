@@ -3,9 +3,9 @@
  */
 define([
 	'layouts/Layout', 'jquery', 'domReady!', 'collections/Actions', 'layouts/FeedsLayout', 'layouts/ArticlesLayout',
-	'layouts/ArticleLayout', 'staticdb/shortcuts', 'instances/contextMenus', 'preps/all'
+	'layouts/ContentLayout', 'staticdb/shortcuts', 'instances/contextMenus', 'preps/all'
 ],
-function (Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ArticleLayout, shortcuts, contextMenus) {
+function (Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLayout, shortcuts, contextMenus) {
 
 	//$('body').html( bg.translate($('body').html()) );
 	document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';
@@ -51,7 +51,7 @@ function (Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ArticleLayout, s
 		start: function() {
 			this.attach('feeds', new FeedsLayout);
 			this.attach('articles', new ArticlesLayout);
-			this.attach('content', new ArticleLayout);
+			this.attach('content', new ContentLayout);
 
 			this.setFocus('articles');
 

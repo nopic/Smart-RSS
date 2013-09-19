@@ -11,7 +11,7 @@ function ($, Layout, ToolbarView, Toolbar, articleList, resizable) {
 	var toolbar = new Toolbar({ id: 'articles' });
 
 	/**
-	 * Articles layout
+	 * Articles layout view
 	 * @class ArticlesLayout
 	 * @constructor
 	 * @extends Layout
