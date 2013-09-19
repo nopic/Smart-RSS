@@ -46,7 +46,7 @@ function ($, _, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties
 				this.attach('toolbar', new ToolbarView({ model: toolbar }) );
 				this.attach('properties', new Properties);
 				this.attach('feedList', feedList);
-				this.attach('feedList', new IndicatorView);
+				this.attach('indicator', new IndicatorView);
 			});
 
 			this.el.view = this;
@@ -72,7 +72,7 @@ function ($, _, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties
 		},
 
 		/**
-		 * Clears events when tab is closed
+		 * Clears bg events it listens to
 		 * @method handleClearEvents
 		 * @param id {Integer} ID of the closed tab
 		 */

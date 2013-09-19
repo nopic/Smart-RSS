@@ -31,7 +31,7 @@ define(['backbone'], function(BB) {
 		},
 
 		/**
-		 * Clears events when tab is closed
+		 * Clears bg events it listens to
 		 * @method handleClearEvents
 		 * @param id {Integer} ID of the closed tab
 		 */
