@@ -61,6 +61,7 @@ define({
 		16: 'shift',
 		17: 'ctrl',
 		20: 'capslock',
+		27: 'esc',
 		32: 'space',
 		33: 'pgup',
 		34: 'pgdown',

@@ -1,8 +1,11 @@
+/**
+ * @module App
+ */
 define([
 	'layouts/Layout', 'jquery', 'domReady!', 'collections/Actions', 'layouts/FeedsLayout', 'layouts/ArticlesLayout',
-	'layouts/ArticleLayout', 'staticdb/shortcuts', 'preps/all'
+	'layouts/ArticleLayout', 'staticdb/shortcuts', 'instances/contextMenus', 'preps/all'
 ],
-function (Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ArticleLayout, shortcuts) {
+function (Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ArticleLayout, shortcuts, contextMenus) {
 
 	//$('body').html( bg.translate($('body').html()) );
 	document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';
@@ -23,6 +26,24 @@ function (Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ArticleLayout, s
 				url = 'http://' + url;
 			}
 			return url;
+		},
+		events: {
+			'mousedown': 'handleMouseDown'
+		},
+		initialize: function() {
+			this.actions = new Actions();
+			window.addEventListener('blur', this.hideContextMenus.bind(this));
+		},
+		handleMouseDown: function(e) {
+			if (!e.target.matchesSelector('.context-menu, .context-menu *')) {
+				this.hideContextMenus();
+			}
+		},
+		hideContextMenus: function() {
+			if (contextMenus.areActive()) {
+				// make sure the action gets executed
+				contextMenus.hideAll();
+			}
 		},
 		focusLayout: function(e) {
 			this.setFocus(e.currentTarget.getAttribute('name'));
@@ -83,11 +104,6 @@ function (Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ArticleLayout, s
 		}
 		
 	});
-
-
-
-
-	app.actions = new Actions();
 
 
 	return app;

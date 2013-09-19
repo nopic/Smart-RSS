@@ -1,8 +1,8 @@
 define([
-	'backbone', 'underscore', 'jquery', 'instances/contextMenus', 'collections/Groups', 'models/Group', 'views/GroupView',
+	'backbone', 'underscore', 'jquery', 'collections/Groups', 'models/Group', 'views/GroupView',
 	'views/ItemView', 'mixins/selectable'
 ],
-function (BB, _, $, contextMenus, Groups, Group, GroupView, ItemView, selectable) {
+function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 
 	function isScrolledIntoView(elem) {
 		if (!screen) {

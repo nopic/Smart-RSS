@@ -19,7 +19,7 @@ define(['jquery'], function($) {
 				this.$el.css('flex-basis', Math.abs(e.clientY - this.el.offsetTop) );
 			} else {
 				setPosition.call(this, e.clientX);
-				this.$el.css('flex-basis', Math.abs(e.clientX - this.el.offsetLeft) );	
+				this.$el.css('flex-basis', Math.abs(e.clientX - this.el.offsetLeft) );
 			}
 			
 			this.trigger('resize');
@@ -42,7 +42,7 @@ define(['jquery'], function($) {
 		if (this.layout == 'vertical') {
 			this.resizer.style.top = pos - Math.round(resizeWidth / 2) - 1 + 'px';
 		} else {
-			this.resizer.style.left = pos - Math.round(resizeWidth / 2) - 1 + 'px';	
+			this.resizer.style.left = pos - Math.round(resizeWidth / 2) - 1 + 'px';
 		}
 	}
 
@@ -50,7 +50,7 @@ define(['jquery'], function($) {
 		if (this.layout == 'vertical') {
 			setPosition.call(this, this.el.offsetTop + this.el.offsetHeight);
 		} else {
-			setPosition.call(this, this.el.offsetLeft + this.el.offsetWidth);	
+			setPosition.call(this, this.el.offsetLeft + this.el.offsetWidth);
 		}
 	}
 
