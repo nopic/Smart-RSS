@@ -18,8 +18,11 @@ define(['backbone', 'underscore', 'jquery', 'helpers/formatDate'], function(BB, 
 			}
 		},
 		addItem: function(model) {
-			this.$el.css('display', 'block');
+			this.show();
 			$('<div class="log">' + formatDate(new Date, 'hh:mm:ss') + ': ' + model.get('message') + '</div>').insertAfter(this.$el.find('#button-hide-log'));
+		},
+		show: function() {
+			this.$el.css('display', 'block');
 		},
 		hide: function() {
 			this.$el.css('display', 'none');

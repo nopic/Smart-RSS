@@ -33,7 +33,7 @@ define([], function() {
 	};
 
 	/**
-	 * Get index of element in HTMLCollection (returned by querySelectorAll)
+	 * Get index of element in HTMLCollection (used by eg. Element#children)
 	 * @method indexOf
 	 * @extends HTMLCollection
 	 * @param element {HTMLElement} Element fo find index of

@@ -3,7 +3,8 @@ define({
 		'shift+1': 'feeds:focus',
 		'shift+2': 'articles:focus',
 		'shift+3': 'article:focus',
-		'esc': 'global:hideContextMenus'
+		'esc': 'global:hideContextMenus',
+		'shift+insert': 'global:runTests'
 	},
 	feeds: {
 		'up': 'feeds:selectPrevious',

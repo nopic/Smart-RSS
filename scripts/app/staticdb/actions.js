@@ -13,6 +13,12 @@ return {
 			fn: function() {
 				require('instances/contextMenus').hideAll();
 			}
+		},
+		runTests: {
+			title: 'Run tests (dev dependencies needed)',
+			fn: function() {
+				require(['runtests']);
+			}
 		}
 	},
 	feeds: {

@@ -53,7 +53,7 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 
 			this.setFocus('articles');
 
-			if (bg.settings.get('layout')) {
+			if (bg.settings.get('layout') == 'vertical') {
 				$('.regions .regions').addClass('vertical');
 			}
 

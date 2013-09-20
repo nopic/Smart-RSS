@@ -8,7 +8,10 @@ require.config({
 		backbone: '../libs/backbone.min',
 		text: '../text',
 		i18n: '../i18n',
-		domReady: '../domReady'
+		domReady: '../domReady',
+		mocha: '../../node_modules/mocha/mocha',
+		mochacss: '../../node_modules/mocha/mocha.css',
+		chai: '../../node_modules/chai/chai'
 	},
 
 	shim: {
@@ -21,6 +24,9 @@ require.config({
 		},
 		underscore: {
 			exports: '_'
+		},
+		mocha: {
+			exports: 'mocha'
 		}
 	}
 });
