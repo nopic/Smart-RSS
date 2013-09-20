@@ -154,9 +154,9 @@ var info = new(Backbone.Model.extend({
 
 var Source = Backbone.Model.extend({
 	defaults: {
-		title: '<no title>',
+		title: '',
 		url: 'about:blank',
-		updateEvery: 0,
+		updateEvery: 180,
 		lastUpdate: 0,
 		count: 0, // unread
 		countAll: 0,
@@ -319,14 +319,12 @@ var logs = new(Backbone.Collection.extend({
 
 
 window.onerror = function(a, b, c) {
-	var msg = a.toString() + ' (Line: ' + c.toString() + ')';
+	var file = b.replace(/chrome\-extension:\/\/[^\/]+\//, '');
+	var msg = a.toString() + ' (Line: ' + c.toString() + ', File: ' + file + ')';
 	logs.add({
 		message: msg
 	});
 }
-
-
-
 
 /**
  * RSS Downloader
@@ -821,10 +819,14 @@ function downloadURL(urls, cb) {
 			info.set({
 				allCountUnvisited: info.get('allCountUnvisited') + createdNo
 			});
+
+			sourceToLoad.trigger('update', { ok: true });
 			
 		},
 		error: function(e) {
 			console.log('Failed load RSS: ' + sourceToLoad.get('url'));
+
+			sourceToLoad.trigger('update', { ok: false });
 		},
 		complete: function() {
 			loader.set('loaded', loader.get('loaded') + 1);

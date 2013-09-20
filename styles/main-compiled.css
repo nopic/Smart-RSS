@@ -586,7 +586,6 @@ header p {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-/*max-width: 220px;*/
 }
 header .author {
   flex: 1 1 auto;
@@ -630,7 +629,7 @@ footer .log {
 footer .log:not(:last-of-type) {
   border-bottom: 1px solid #ccc;
 }
-#button-hide-log {
+footer #button-hide-log {
   margin: 0;
   padding: 0 4px;
   border: 1px solid #a6a6a6;
@@ -645,7 +644,7 @@ footer .log:not(:last-of-type) {
 .overlay #config-layout {
   padding: 5px;
 }
-#config-layout input[type=image] {
+.overlay #config-layout input[type=image] {
   margin: 3px;
 }
 .overlay select {

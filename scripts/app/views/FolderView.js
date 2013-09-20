@@ -45,7 +45,7 @@ define([
 		renderInterval: 'first-time',
 		render: function() {
 			if (this.renderInterval == 'first-time') return this.realRender();
-			if (this.renderInterval) return;
+			if (this.renderInterval) return this;
 			
 			var that = this;
 			this.renderInterval = requestAnimationFrame(function() {
