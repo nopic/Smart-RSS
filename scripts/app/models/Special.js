@@ -12,6 +12,7 @@ define(['backbone'], function(BB) {
 	var Special = BB.Model.extend({
 		defaults: {
 			/**
+			 * Visible title of special. Chnages with localization.
 			 * @attribute title
 			 * @type String
 			 * @default All feeds
@@ -26,6 +27,7 @@ define(['backbone'], function(BB) {
 			icon: 'icon16_v2.png',
 
 			/**
+			 * Name of the special. It is always the same for one special.
 			 * @attribute name
 			 * @type String
 			 * @default ''
@@ -33,9 +35,11 @@ define(['backbone'], function(BB) {
 			name: '',
 
 			/**
+			 * Filter used in 'where' function of items collection
 			 * @attribute filter
 			 * @type Object
 			 * @default {}
+			 * @example { unread: true, trashed: false }
 			 */
 			filter: {},
 

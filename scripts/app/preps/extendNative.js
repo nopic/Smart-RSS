@@ -1,16 +1,44 @@
+/**
+ * Extends prototypes of native objects with various methods.
+ * Removes prefixes for some nonstandard fucntions.
+ * @module App
+ * @submodule preps/extendNative
+ */
 define([], function() {
+
+	/**
+	 * Set or get last array item
+	 * @method last
+	 * @extends Array
+	 * @param value {Any} Value to set - optional
+	 * @return {Any} Last item of array, null if array is empty
+	 */
 	Array.prototype.last = function(val) {
 		if (!this.length) return null;
 		if (val) this[this.length - 1] = val;
 		return this[this.length - 1];
 	};
 
+	/**
+	 * Set or get first array item
+	 * @method last
+	 * @extends Array
+	 * @param value {Any} Value to set - optional
+	 * @return {Any} First item of array, null if array is empty
+	 */
 	Array.prototype.first = function(val) {
 		if (!this.length) return null;
 		if (val) this[0] = val;
 		return this[0];
 	};
 
+	/**
+	 * Get index of element in HTMLCollection (returned by querySelectorAll)
+	 * @method indexOf
+	 * @extends HTMLCollection
+	 * @param element {HTMLElement} Element fo find index of
+	 * @return {Any} First item of array, null if array is empty
+	 */
 	HTMLCollection.prototype.indexOf = Array.prototype.indexOf;
 
 	window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame;
@@ -19,6 +47,13 @@ define([], function() {
 		Element.prototype.matchesSelector = Element.prototype.webkitMatchesSelector;
 	}
 
+	/**
+	 * Git first next sibling that matches given selector
+	 * @method findNext
+	 * @extends Element
+	 * @param query {String} CSS selector
+	 * @return {HTMLELement|null} Found element
+	 */
 	Element.prototype.findNext = function(query) {
 		var cur = this;
 		while (cur = cur.nextElementSibling) {
@@ -29,6 +64,13 @@ define([], function() {
 		return null;
 	};
 
+	/**
+	 * Git first previous sibling that matches given selector
+	 * @method findPrev
+	 * @extends Element
+	 * @param query {String} CSS selector
+	 * @return {HTMLELement|null} Found element
+	 */
 	Element.prototype.findPrev = function(query) {
 		var cur = this;
 		while (cur = cur.previousElementSibling) {
@@ -39,7 +81,15 @@ define([], function() {
 		return null;
 	};
 
+	/**
+	 * Escapes regexp characters in string
+	 * @method escape
+	 * @extends RegExp
+	 * @static
+	 * @param text {String} String to be escaped
+	 * @return {String} Escaped string
+	 */
 	RegExp.escape = function(str) {
-		return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+		return String(str).replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
 	};
 });
