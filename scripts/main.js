@@ -9,9 +9,10 @@ require.config({
 		text: '../text',
 		i18n: '../i18n',
 		domReady: '../domReady',
-		mocha: '../../node_modules/mocha/mocha',
-		mochacss: '../../node_modules/mocha/mocha.css',
-		chai: '../../node_modules/chai/chai'
+		//mocha: '../../node_modules/mocha/mocha',
+		mocha: 'https://cdnjs.cloudflare.com/ajax/libs/mocha/1.12.1/mocha.min',
+		mochacss: 'https://cdnjs.cloudflare.com/ajax/libs/mocha/1.12.1/mocha.min.css?nojs',
+		chai: 'https://raw.github.com/chaijs/chai/master/chai'
 	},
 
 	shim: {

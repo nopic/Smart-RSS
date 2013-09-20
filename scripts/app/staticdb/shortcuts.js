@@ -2,7 +2,7 @@ define({
 	global: {
 		'shift+1': 'feeds:focus',
 		'shift+2': 'articles:focus',
-		'shift+3': 'article:focus',
+		'shift+3': 'content:focus',
 		'esc': 'global:hideContextMenus',
 		'shift+insert': 'global:runTests'
 	},
@@ -43,24 +43,24 @@ define({
 		'space': 'articles:spaceThrough',
 		'r': 'articles:update'
 	},
-	article: {
-		'up': 'article:scrollUp',
-		'down': 'article:scrollDown',
-		'space': 'article:spaceThrough',
-		'pgup': 'article:pageUp',
-		'pgdown': 'article:pageDown',
-		'end': 'article:scrollToBottom',
-		'home': 'article:scrollToTop',
-		'del': 'article:delete',
-		'd': 'article:delete',
-		'r': 'article:mark'
+	content: {
+		'up': 'content:scrollUp',
+		'down': 'content:scrollDown',
+		'space': 'content:spaceThrough',
+		'pgup': 'content:pageUp',
+		'pgdown': 'content:pageDown',
+		'end': 'content:scrollToBottom',
+		'home': 'content:scrollToTop',
+		'del': 'content:delete',
+		'd': 'content:delete',
+		'r': 'content:mark'
 	},
 	keys: {
 		8: 'backspace',
 		9: 'tab',
 		13: 'enter',
-		16: 'shift',
-		17: 'ctrl',
+		//16: 'shift',
+		//17: 'ctrl',
 		20: 'capslock',
 		27: 'esc',
 		32: 'space',

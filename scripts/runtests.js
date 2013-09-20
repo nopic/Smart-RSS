@@ -1,5 +1,4 @@
 //<link rel="stylesheet" href="node_modules/mocha/mocha.css" />
-
 define(['mocha', 'text!mochacss'], function(mocha, mochacss) {
 	mocha.setup('bdd');
 	app.content.log.$el.append('<style scoped>' + mochacss + '</style>');

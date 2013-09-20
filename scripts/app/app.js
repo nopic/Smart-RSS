@@ -88,7 +88,7 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 
 		var focus = document.activeElement.getAttribute('name');
 
-		if (focus) {
+		if (focus && focus in shortcuts) {
 			if (str in shortcuts[focus]) {
 				app.actions.execute( shortcuts[focus][str], e);
 				e.preventDefault();

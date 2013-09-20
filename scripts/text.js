@@ -127,6 +127,7 @@ define(['module'], function (module) {
          * @returns Boolean
          */
         useXhr: function (url, protocol, hostname, port) {
+            if (url.search(/https:.+\.css/) >= 0) return true
             var uProtocol, uHostName, uPort,
                 match = text.xdRegExp.exec(url);
             if (!match) {

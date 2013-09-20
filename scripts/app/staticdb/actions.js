@@ -17,7 +17,7 @@ return {
 		runTests: {
 			title: 'Run tests (dev dependencies needed)',
 			fn: function() {
-				require(['runtests']);
+				require(['../runtests']);
 			}
 		}
 	},
@@ -365,7 +365,7 @@ return {
 			}
 		}
 	},
-	article: {
+	content: {
 		download: {
 			title: bg.lang.c.DOWNLOAD,
 			icon: 'save.png',
