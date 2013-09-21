@@ -545,6 +545,10 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 
 			// not really sure what would happen if this wouldn't be here :P (too tired to think about it)
 			this.reuseIndex--;
+			if (this.reuseIndex < 0) {
+				this.reuseIndex = 0;
+				console.log('reuse index under zero');
+			}
 		},
 		changeUnreadState: function(opt) {
 			opt = opt || {};

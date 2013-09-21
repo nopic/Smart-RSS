@@ -34,6 +34,30 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 		initialize: function() {
 			this.actions = new Actions();
 			window.addEventListener('blur', this.hideContextMenus.bind(this));
+
+			bg.settings.on('change:layout', this.handleLayoutChange, this);
+			bg.sources.on('clear-events', this.handleClearEvents, this);
+		},
+		handleClearEvents: function(id) {
+			if (window == null || id == tabID) {
+				bg.settings.off('change:layout', this.handleLayoutChange, this);
+				bg.sources.off('clear-events', this.handleClearEvents, this);
+			}
+		},
+		handleLayoutChange: function() {
+			if (bg.settings.get('layout') == 'vertical') {
+				this.layoutToVertical();
+				this.articles.enableResizing(bg.settings.get('layout'), bg.settings.get('posC'));
+			} else {
+				this.layoutToHorizontal();
+				this.articles.enableResizing(bg.settings.get('layout'), bg.settings.get('posB'));
+			}
+		},
+		layoutToVertical: function() {
+			$('.regions .regions').addClass('vertical');
+		},
+		layoutToHorizontal: function() {
+			$('.regions .regions').removeClass('vertical');
 		},
 		handleMouseDown: function(e) {
 			if (!e.target.matchesSelector('.context-menu, .context-menu *, .overlay, .overlay *')) {
@@ -53,15 +77,12 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 
 			this.setFocus('articles');
 
-			if (bg.settings.get('layout') == 'vertical') {
-				$('.regions .regions').addClass('vertical');
-			}
-
 			this.trigger('start');
 
-			setTimeout(function() {
+			setTimeout(function(that) {
 				$('body').removeClass('loading');
-			}, 0);
+				that.handleLayoutChange();
+			}, 0, this);
 		}
 	}));
 

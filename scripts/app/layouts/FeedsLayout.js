@@ -59,9 +59,10 @@ function ($, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties, r
 				$('#panel-toggle').css('display', 'block');
 			}
 
-			window.addEventListener('resize', this.handleResize.bind(this));
+			this.on('resize:after', this.handleResize);
+			//window.addEventListener('resize', this.handleResize.bind(this));
 
-			this.enableResizing();
+			this.enableResizing('horizontal', bg.settings.get('posA'));
 		},
 
 		/**
@@ -100,7 +101,7 @@ function ($, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties, r
 		handleResize: function() {
 			if (bg.settings.get('panelToggled')) {
 				var wid = this.el.offsetWidth;
-				bg.settings.save({ posA: wid + ',*' });
+				bg.settings.save({ posA: wid });
 			}
 		}
 	});

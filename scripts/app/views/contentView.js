@@ -30,6 +30,9 @@ define(['backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escap
 			}, this);
 
 			app.on('no-items:articles-list', function() {
+				if (this.renderTimeout) {
+					clearTimeout(this.renderTimeout);
+				}
 				this.model = null;
 				this.hide();
 			}, this);
@@ -63,13 +66,13 @@ define(['backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escap
 
 			return formatDate(new Date(unixtime), pickedFormat + ' ' + timeFormat);
 		},
-		renderTime: null,
+		renderTimeout: null,
 		render: function() {
-			clearTimeout(this.renderTime);
+			clearTimeout(this.renderTimeout);
 
-			if (!this.model) return;
+			this.renderTimeout = setTimeout(function(that) {
 
-			this.renderTime = setTimeout(function(that) {
+				if (!that.model) return;
 				that.show();
 
 				var data = Object.create(that.model.attributes);

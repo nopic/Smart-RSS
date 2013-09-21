@@ -23,11 +23,6 @@ define(['jquery'], function($) {
 			}
 			
 			this.trigger('resize');
-
-			for (var i=0; i<els.length; i++) {
-				if (this == els[i]) continue;
-				loadPosition.call(els[i]);
-			}
 		}
 	}
 
@@ -35,13 +30,18 @@ define(['jquery'], function($) {
 		if (!this.resizing) return;
 		$('iframe').css('pointer-events', 'auto');
 		this.resizing = false;
+		for (var i=0; i<els.length; i++) {
+			loadPosition.call(els[i]);
+		}
 		this.trigger('resize:after');
 	}
 
 	function setPosition(pos) {
 		if (this.layout == 'vertical') {
+			this.resizer.style.left = this.el.offsetLeft  + 'px';
 			this.resizer.style.top = pos - Math.round(resizeWidth / 2) - 1 + 'px';
 		} else {
+			this.resizer.style.top = this.el.offsetTop + 'px';
 			this.resizer.style.left = pos - Math.round(resizeWidth / 2) - 1 + 'px';
 		}
 	}
@@ -58,15 +58,19 @@ define(['jquery'], function($) {
 		resizing: false,
 		resizer: null,
 		layout: 'horizontal',
-		enableResizing: function(layout) {
+		enableResizing: function(layout, size) {
 
-			this.layout = layout;
+			layout = this.layout = layout || 'horizontal';
+
+			this.$el.css('flex-basis', size + 'px');
 
 			els.push(this);
 
 			var that = this;
-			this.resizer = document.createElement('div');
-			this.resizer.className = 'resizer';
+			if (!this.resizer) {
+				this.resizer = document.createElement('div');
+				this.resizer.className = 'resizer';
+			}
 
 			if (layout == 'vertical') {
 				this.resizer.style.width = '100%';
