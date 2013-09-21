@@ -1,4 +1,4 @@
-define(['backbone', 'views/TopView'], function(BB, TopView) {
+define(['backbone', 'views/TopView', 'instances/contextMenus'], function(BB, TopView, contextMenus) {
 	var SourceView = TopView.extend({
 		events: {
 			'mouseup': 'handleMouseUp',
@@ -27,6 +27,11 @@ define(['backbone', 'views/TopView'], function(BB, TopView) {
 			this.model.off('change:title', this.handleChangeTitle, this);
 			bg.sources.off('clear-events', this.handleClearEvents, this);
 		},
+		showContextMenu: function(e) {
+			app.feeds.feedList.select(this, e);
+			contextMenus.get('source').currentSource = this.model;
+			contextMenus.get('source').show(e.clientX, e.clientY);
+		},
 		handleChangeTitle: function() {
 			this.list.placeSource(this);
 		},
@@ -54,10 +59,8 @@ define(['backbone', 'views/TopView'], function(BB, TopView) {
 				delete this.el.dataset.inFolder;
 			}
 
+			this.setTitle(this.model.get('count'), this.model.get('countAll'));
 			
-			this.$el.attr('title',
-				this.model.get('title') + ' (' + this.model.get('count') + ' ' + bg.lang.c.UNREAD + ', ' + this.model.get('countAll') + ' ' + bg.lang.c.TOTAL + ')'
-			);
 			this.$el.html(this.template(this.model.toJSON()));
 			this.renderInterval = null;
 

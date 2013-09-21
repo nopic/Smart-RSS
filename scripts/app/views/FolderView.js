@@ -60,9 +60,8 @@ define([
 			this.$el.toggleClass('opened', this.model.get('opened'));
 			this.$el.html(this.template(data));
 
-			this.$el.attr('title',
-				this.model.get('title') + ' (' + this.model.get('count') + ' ' + bg.lang.c.UNREAD + ', ' + this.model.get('countAll') + ' ' + bg.lang.c.TOTAL + ')'
-			);
+			this.setTitle(this.model.get('count'), this.model.get('countAll'));
+
 			this.renderInterval = null;
 
 			return this;
@@ -70,15 +69,6 @@ define([
 		showSourceItems: function(e) {
 			e = e || {};
 			if (!e.noSelect) this.list.select(this, e);
-			
-			
-			/*window.top.frames[1].postMessage({
-				action: 'new-folder-select',
-				value: this.model.id,
-				unreadOnly: !!e.shiftKey,
-				noFocus: !!e.noFocus
-			}, '*');*/
-			
 		},
 		getSelectData: function(e) {
 			return {

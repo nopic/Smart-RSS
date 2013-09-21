@@ -42,7 +42,7 @@ define(['backbone'], function(BB) {
 					this.$el.append(view.el);
 				}
 			}
-			view.trigger('attached');
+			view.trigger('attach');
 			if (!this.focus) this.setFocus(name);
 		}
 	});

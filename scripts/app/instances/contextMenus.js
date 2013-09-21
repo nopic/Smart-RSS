@@ -2,20 +2,20 @@ define([
 	'backbone', 'views/ContextMenu', 'views/feedList'
 ],
 function(BB, ContextMenu) {
-	var sourcesContextMenu = new ContextMenu([
+	var sourceContextMenu = new ContextMenu([
 		{
 			title: bg.lang.c.UPDATE,
 			icon: 'reload.png',
 			action: function() {
-				bg.downloadOne(sourcesContextMenu.currentSource);
+				bg.downloadOne(sourceContextMenu.currentSource);
 			}
 		},
 		{
 			title: bg.lang.c.MARK_ALL_AS_READ,
 			icon: 'read.png',
 			action: function() {
-				if (!sourcesContextMenu.currentSource) return;
-				var id = sourcesContextMenu.currentSource.get('id');
+				if (!sourceContextMenu.currentSource) return;
+				var id = sourceContextMenu.currentSource.get('id');
 				bg.items.forEach(function(item) {
 					if (item.get('unread') == true && item.getSource().id == id) {
 						item.save({
@@ -25,7 +25,7 @@ function(BB, ContextMenu) {
 					}
 				});
 
-				sourcesContextMenu.currentSource.save({ hasNew: false });
+				sourceContextMenu.currentSource.save({ hasNew: false });
 			}
 		},
 		{
@@ -33,7 +33,7 @@ function(BB, ContextMenu) {
 			icon: 'delete.png',
 			action: function() {
 				if (confirm(bg.lang.c.REALLY_DELETE)) {
-					sourcesContextMenu.currentSource.destroy();
+					sourceContextMenu.currentSource.destroy();
 				}
 				
 			}
@@ -43,8 +43,8 @@ function(BB, ContextMenu) {
 			icon: 'properties.png',
 			action: function() {
 				var properties = app.feeds.properties;
-				properties.show(sourcesContextMenu.currentSource);
-				properties.currentSource = sourcesContextMenu.currentSource;
+				properties.show(sourceContextMenu.currentSource);
+				properties.currentSource = sourceContextMenu.currentSource;
 			}
 		}
 	]);
@@ -123,7 +123,7 @@ function(BB, ContextMenu) {
 						bg.downloadOne(source);
 					}
 				});
-				bg.downloadOne(sourcesContextMenu.currentSource);
+				bg.downloadOne(sourceContextMenu.currentSource);
 			}
 		},
 		{
@@ -248,7 +248,7 @@ function(BB, ContextMenu) {
 		list: {},
 		initialize: function() {
 			this.list = {
-				sources:  sourcesContextMenu,
+				source:   sourceContextMenu,
 				trash:    trashContextMenu,
 				folder:   folderContextMenu,
 				allFeeds: allFeedsContextMenu,

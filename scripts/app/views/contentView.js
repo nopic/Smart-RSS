@@ -14,7 +14,7 @@ define(['backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escap
 			});
 		},
 		initialize: function() {
-			this.on('attached', this.handleAttached);
+			this.on('attach', this.handleAttached);
 
 			bg.items.on('change:pinned', this.handleItemsPin, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);

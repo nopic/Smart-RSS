@@ -35,7 +35,7 @@ function ($, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties, r
 		 */
 		initialize: function() {
 
-			this.on('attached', function() {
+			this.on('attach', function() {
 				this.attach('toolbar', new ToolbarView({ model: toolbar }) );
 				this.attach('properties', new Properties);
 				this.attach('feedList', feedList);

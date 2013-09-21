@@ -26,10 +26,14 @@ define(['jquery', 'underscore', 'views/TopView'], function($, _, TopView) {
 		},
 		changeInfo: function() {
 			if (this.model.get('name') == 'all-feeds') {
-				this.$el.attr('title', this.model.get('title') + ' (' + bg.info.get('allCountUnread') + ' ' + bg.lang.c.UNREAD + ', ' + bg.info.get('allCountTotal') + ' ' + bg.lang.c.TOTAL + ')');
+				this.setTitle(bg.info.get('allCountUnread'), bg.info.get('allCountTotal'));
 			} else if (this.model.get('name') == 'trash') {
 				var tot = bg.info.get('trashCountTotal');
-				this.$el.attr('title', this.model.get('title') + ' (' + bg.info.get('trashCountUnread') + ' ' + bg.lang.c.UNREAD + ', ' + tot + ' ' + bg.lang.c.TOTAL + ')');
+				this.setTitle(bg.info.get('trashCountUnread'), tot);
+
+				/**
+				 * Change trash icon (0, 1-99, 100+)
+				 */
 				if (tot <= 0 && this.model.get('icon') != 'trashsource.png') {
 					this.model.set('icon', 'trashsource.png');
 					this.render(true);

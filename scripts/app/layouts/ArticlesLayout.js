@@ -25,7 +25,7 @@ function ($, Layout, ToolbarView, Toolbar, articleList, resizable) {
 		initialize: function() {
 			this.el.view = this;
 
-			this.on('attached', function() {
+			this.on('attach', function() {
 				this.attach('toolbar', new ToolbarView({ model: toolbar }) );
 				this.attach('articleList', articleList );
 			});

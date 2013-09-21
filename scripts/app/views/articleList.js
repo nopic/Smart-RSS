@@ -76,7 +76,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 				window.focus();
 			});****/
 
-			this.on('attached', this.handleAttached, this);
+			this.on('attach', this.handleAttached, this);
 			this.on('pick', this.handlePick, this);
 
 

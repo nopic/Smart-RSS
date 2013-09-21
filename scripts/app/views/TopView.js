@@ -1,4 +1,4 @@
-define(['backbone', 'instances/contextMenus', 'jquery', 'underscore'], function(BB, contextMenus, $, _) {
+define(['backbone', 'jquery', 'underscore'], function(BB, $, _) {
 	var TopView = BB.View.extend({
 		tagName: 'div',
 		className: 'list-item',
@@ -13,14 +13,9 @@ define(['backbone', 'instances/contextMenus', 'jquery', 'underscore'], function(
 				this.showContextMenu(e);
 			}
 		},
-		showContextMenu: function(e) {
-			app.feeds.feedList.select(this, e);
-			contextMenus.get('sources').currentSource = this.model;
-			contextMenus.get('sources').show(e.clientX, e.clientY);
-		},
 		showSourceItems: function(e) {
 			e = e || {};
-			if (!e.noSelect) app.feeds.feedList.select(this, e);
+			if (!e.noSelect) require('feedList').select(this, e);
 			
 			if (this.model.get('name') == 'all-feeds') {
 				bg.sources.forEach(function(source) {
@@ -42,6 +37,11 @@ define(['backbone', 'instances/contextMenus', 'jquery', 'underscore'], function(
 				unreadOnly: !!e.shiftKey,
 				noFocus: !!e.noFocus
 			};
+		},
+		setTitle: function(unread, total) {
+			this.$el.attr('title',
+				this.model.get('title') + ' (' + unread + ' ' + bg.lang.c.UNREAD + ', ' + total + ' ' + bg.lang.c.TOTAL + ')'
+			);
 		}
 	});
 

@@ -410,7 +410,7 @@ fetchAll().always(function() {
 		downloadOne(source);
 	});
 
-	sources.on('change:updateEvery', function(source) {
+	sources.on('change:updateEvery reset-alarm', function(source) {
 		if (source.get('updateEvery') > 0) {
 			chrome.alarms.create('source-' + source.get('id'), {
 				delayInMinutes: source.get('updateEvery'),
@@ -832,10 +832,7 @@ function downloadURL(urls, cb) {
 			loader.set('loaded', loader.get('loaded') + 1);
 
 			// reset alarm to make sure next call isn't too soon + to make sure alarm acutaly exists (it doesn't after import)
-			chrome.alarms.create('source-' + sourceToLoad.get('id'), {
-				delayInMinutes: sourceToLoad.get('updateEvery'),
-				periodInMinutes: sourceToLoad.get('updateEvery')	
-			});
+			sourceToLoad.trigger('reset-alarm', sourceToLoad);
 
 
 			downloadURL();

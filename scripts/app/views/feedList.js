@@ -1,34 +1,8 @@
 define([
 	'backbone', 'jquery', 'views/SourceView', 'views/FolderView', 'views/SpecialView', 'models/Special',
-	'instances/contextMenus', 'mixins/selectable'
+	'instances/contextMenus', 'mixins/selectable', 'instances/specials'
 ],
-function (BB, $, SourceView, FolderView, SpecialView, Special, contextMenus, selectable) {
-
-	var trash = new Special({
-		title: bg.lang.c.TRASH,
-		icon: 'trashsource.png',
-		filter: { trashed: true, deleted: false },
-		position: 'bottom',
-		name: 'trash',
-		onReady: function() {
-			this.contextMenu = contextMenus.get('trash');
-			this.el.addEventListener('dragover', function(e) {
-				e.preventDefault();
-			});
-			this.el.addEventListener('drop', function(e) {
-				e.preventDefault();
-				var ids = JSON.parse(e.dataTransfer.getData('text/plain') || '[]') || [];
-				ids.forEach(function(id) {
-					var item = bg.items.findWhere({ id: id });
-					if (item && !item.get('trashed')) {
-						item.save({
-							trashed: true
-						});
-					}
-				});
-			});
-		}
-	});
+function (BB, $, SourceView, FolderView, SpecialView, Special, contextMenus, selectable, specials) {
 
 	var FeedListView = BB.View.extend({
 		//el: '#list',
@@ -48,7 +22,7 @@ function (BB, $, SourceView, FolderView, SpecialView, Special, contextMenus, sel
 
 			this.el.view = this;
 
-			this.on('attached', this.handleAttach);
+			this.on('attach', this.handleAttach);
 
 			bg.sources.on('reset', this.addSources, this);
 			bg.sources.on('add', this.addSource, this);
@@ -77,26 +51,11 @@ function (BB, $, SourceView, FolderView, SpecialView, Special, contextMenus, sel
 		insertFeeds: function() {
 			this.addFolders(bg.folders);
 
-			this.addSpecial(new Special({
-				title: bg.lang.c.ALL_FEEDS,
-				icon: 'icon16_v2.png',
-				filter: { trashed: false },
-				position: 'top',
-				name: 'all-feeds',
-				onReady: function() {
-					this.contextMenu = contextMenus.get('allFeeds');
-				}
-			}));
+			this.addSpecial(specials.allFeeds);
 
-			this.addSpecial(new Special({
-				title: bg.lang.c.PINNED,
-				icon: 'pinsource.png',
-				filter: { trashed: false, pinned: true },
-				position: 'bottom',
-				name: 'pinned'
-			}));
+			this.addSpecial(specials.pinned);
 
-			this.addSpecial(trash);
+			this.addSpecial(specials.trash);
 
 			this.addSources(bg.sources);
 

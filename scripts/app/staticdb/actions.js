@@ -430,7 +430,7 @@ return {
 		focus: {
 			title: 'Focus Article',
 			fn: function() {
-				app.setFocus('article');
+				app.setFocus('content');
 			}
 		},
 		scrollDown: {

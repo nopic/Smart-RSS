@@ -8,7 +8,7 @@ define([
 ],
 function ($, Layout, ToolbarView, Toolbar, contentView, SandboxView, OverlayView, LogView, comm) {
 
-	var toolbar = new Toolbar({ id: 'article' });
+	var toolbar = new Toolbar({ id: 'content' });
 
 	/**
 	 * Content layout view
@@ -30,7 +30,7 @@ function ($, Layout, ToolbarView, Toolbar, contentView, SandboxView, OverlayView
 		 * @method initialize
 		 */
 		initialize: function() {
-			this.on('attached', function() {
+			this.on('attach', function() {
 
 				this.attach('toolbar', new ToolbarView({ model: toolbar }) );
 				this.attach('content', contentView );
