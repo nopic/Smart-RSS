@@ -79,7 +79,7 @@ define(['jquery'], function($) {
 			layout = this.layout = layout || 'horizontal';
 
 			if (size) {
-				this.$el.css('flex-basis', size + 'px');	
+				this.$el.css('flex-basis', size + 'px');
 			}
 			
 

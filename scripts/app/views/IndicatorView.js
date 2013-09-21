@@ -36,7 +36,7 @@ define(['backbone'], function(BB) {
 		 * @param id {Integer} ID of the closed tab
 		 */
 		handleClearEvents: function(id) {
-			if (window == null || id == window.top.tabID) {
+			if (window == null || id == tabID) {
 				bg.loader.off('change:loading', this.handleLoadingChange, this);
 				bg.loader.off('change:loaded', this.render, this);
 				bg.loader.off('change:maxSources', this.render, this);

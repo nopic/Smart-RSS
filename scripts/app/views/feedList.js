@@ -113,7 +113,7 @@ function (BB, $, SourceView, FolderView, SpecialView, Special, contextMenus, sel
 			this.placeSource(source.view);
 		},
 		handleClearEvents: function(id) {
-			if (window == null || id == window.top.tabID) {
+			if (window == null || id == tabID) {
 				bg.sources.off('reset', this.addSources, this);
 				bg.sources.off('add', this.addSource, this);
 				bg.sources.off('change:folderID', this.handleChangeFolder, this);

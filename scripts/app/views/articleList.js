@@ -160,7 +160,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 			}
 		},
 		handleClearEvents: function(id) {
-			if (window == null || id == window.top.tabID) {
+			if (window == null || id == tabID) {
 				bg.items.off('reset', this.addItems, this);
 				bg.items.off('add', this.addItem, this);
 				bg.items.off('sort', this.handleSort, this);

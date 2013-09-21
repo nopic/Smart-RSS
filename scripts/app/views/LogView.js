@@ -12,7 +12,7 @@ define(['backbone', 'underscore', 'jquery', 'helpers/formatDate'], function(BB, 
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 		},
 		handleClearEvents: function(id) {
-			if (window == null || id == window.top.tabID) {
+			if (window == null || id == tabID) {
 				bg.logs.off('add', this.addItem, this);
 				bg.sources.off('clear-events', this.handleClearEvents, this);
 			}

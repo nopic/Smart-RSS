@@ -45,7 +45,7 @@ define([
 			}
 		},
 		handleClearEvents: function(id) {
-			if (window == null || id == window.top.tabID) {
+			if (window == null || id == tabID) {
 				this.clearEvents();
 			}
 		},

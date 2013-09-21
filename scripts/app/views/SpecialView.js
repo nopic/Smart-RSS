@@ -18,11 +18,16 @@ define(['jquery', 'underscore', 'views/TopView'], function($, _, TopView) {
 				this.model.get('onReady').call(this);
 			}
 			bg.info.on('change', this.changeInfo, this);
-			bg.sources.on('clear-events', this.clearEvents, this);
+			bg.sources.on('clear-events', this.handleClearEvents, this);
+		},
+		handleClearEvents: function(id) {
+			if (window == null || id == tabID) {
+				this.clearEvents();
+			}
 		},
 		clearEvents: function() {
 			bg.info.off('change', this.changeInfo, this);
-			bg.sources.off('clear-events', this.clearEvents, this);
+			bg.sources.off('clear-events', this.handleClearEvents, this);
 		},
 		changeInfo: function() {
 			if (this.model.get('name') == 'all-feeds') {

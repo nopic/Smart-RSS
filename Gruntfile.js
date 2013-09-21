@@ -31,6 +31,7 @@ module.exports = function(grunt) {
 				globals: {
 					app: true,
 					bg: true,
+					tabID: true,
 					chrome: false,
 					define: false,
 					require: false,

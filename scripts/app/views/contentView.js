@@ -48,7 +48,7 @@ define(['backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escap
 			}
 		},
 		handleClearEvents: function(id) {
-			if (window == null || id == window.top.tabID) {
+			if (window == null || id == tabID) {
 				bg.items.off('change:pinned', this.handleItemsPin, this);
 				bg.sources.off('clear-events', this.handleClearEvents, this);
 			}

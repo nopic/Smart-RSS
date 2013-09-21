@@ -17,7 +17,7 @@ define(['backbone', 'views/TopView', 'instances/contextMenus'], function(BB, Top
 			this.el.view = this;
 		},
 		handleClearEvents: function(id) {
-			if (window == null || id == window.top.tabID) {
+			if (window == null || id == tabID) {
 				this.clearEvents();
 			}
 		},

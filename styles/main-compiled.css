@@ -188,12 +188,12 @@ input[type=search]:not(:focus):not(:valid) {
 }
 .thick-borders .region {
   border-width: 5px;
-  -webkit-border-image: -webkit-linear-gradient(left, #969696 0%, #eee 20%, #f2f2f2 80%, #969696 100%) 0 100% 0 0/0 5px 0 0 stretch;
-  border-image: linear-gradient(to right, #969696 0%, #eee 20%, #f2f2f2 80%, #969696 100%) 0 100% 0 0/0 5px 0 0 stretch;
+  -webkit-border-image: -webkit-linear-gradient(left, #868686 0%, #eee 20%, #f2f2f2 80%, #868686 100%) 0 100% 0 0/0 5px 0 0 stretch;
+  border-image: linear-gradient(to right, #868686 0%, #eee 20%, #f2f2f2 80%, #868686 100%) 0 100% 0 0/0 5px 0 0 stretch;
 }
 .thick-borders .vertical .region {
-  -webkit-border-image: -webkit-linear-gradient(top, #969696 0%, #eee 20%, #f2f2f2 80%, #969696 100%) 0 0 100% 0/0 0 5px 0 stretch;
-  border-image: linear-gradient(to bottom, #969696 0%, #eee 20%, #f2f2f2 80%, #969696 100%) 0 0 100% 0/0 0 5px 0 stretch;
+  -webkit-border-image: -webkit-linear-gradient(top, #868686 0%, #eee 20%, #f2f2f2 80%, #868686 100%) 0 0 100% 0/0 0 5px 0 stretch;
+  border-image: linear-gradient(to bottom, #868686 0%, #eee 20%, #f2f2f2 80%, #868686 100%) 0 0 100% 0/0 0 5px 0 stretch;
 }
 .region:last-child {
   border: none !important;

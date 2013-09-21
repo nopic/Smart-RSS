@@ -29,6 +29,11 @@ define([
 
 			this.el.dataset.id = this.model.get('id');
 		},
+		handleClearEvents: function(id) {
+			if (window == null || id == tabID) {
+				this.clearEvents();
+			}
+		},
 		clearEvents: function() {
 			this.model.off('destroy', this.handleModelDestroy, this);
 			this.model.off('change', this.render, this);
