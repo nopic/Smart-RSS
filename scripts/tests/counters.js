@@ -13,7 +13,7 @@ define(['chai', 'preps/extendNative'], function(chai) {
 			before(function(done) {
 				source = bg.sources.create({
 					url: 'http://smartrss.martinkadlec.eu/test1.rss'
-				});
+				}, { wait: true });
 
 				source.on('update', function() {
 					done();
@@ -29,11 +29,11 @@ define(['chai', 'preps/extendNative'], function(chai) {
 			});
 
 			it('should increase all feeds unread counter', function() {
-				expect(bg.info.get('allCountUnread')).to.equal(3);
+				expect(bg.info.get('allCountUnread')).to.equal(allUnread + 3);
 			});
 
 			it('should increase all feeds total counter', function() {
-				expect(bg.info.get('allCountTotal')).to.equal(3);
+				expect(bg.info.get('allCountTotal')).to.equal(allTotal + 3);
 			});
 
 			
@@ -60,11 +60,11 @@ define(['chai', 'preps/extendNative'], function(chai) {
 			});
 
 			it('should increase all feeds unread counter', function() {
-				expect(bg.info.get('allCountUnread')).to.equal(4);
+				expect(bg.info.get('allCountUnread')).to.equal(allUnread + 4);
 			});
 
 			it('should increase all feeds total counter', function() {
-				expect(bg.info.get('allCountTotal')).to.equal(4);
+				expect(bg.info.get('allCountTotal')).to.equal(allTotal + 4);
 			});
 		});
 
@@ -165,7 +165,7 @@ define(['chai', 'preps/extendNative'], function(chai) {
 		var source;
 		var sourceItems = [];
 		var allUnread = bg.info.get('allCountUnread');
-		//var allTotal = bg.info.get('allCountTotal');
+		var allTotal = bg.info.get('allCountTotal');
 		
 		this.timeout(5000);
 
@@ -174,7 +174,7 @@ define(['chai', 'preps/extendNative'], function(chai) {
 			before(function(done) {
 				source = bg.sources.create({
 					url: 'http://smartrss.martinkadlec.eu/test1.rss'
-				});
+				}, { wait: true });
 
 				source.on('update', function() {
 					sourceItems = bg.items.where({ sourceID: source.id });
@@ -191,7 +191,7 @@ define(['chai', 'preps/extendNative'], function(chai) {
 			});
 
 			it('should decrease all feeds unread counter', function() {
-				expect(bg.info.get('allCountUnread')).to.equal(2);
+				expect(bg.info.get('allCountUnread')).to.equal(allUnread + 2);
 			});
 			
 			after(function() {
@@ -205,7 +205,7 @@ define(['chai', 'preps/extendNative'], function(chai) {
 			before(function(done) {
 				source = bg.sources.create({
 					url: 'http://smartrss.martinkadlec.eu/test1.rss'
-				});
+				}, { wait: true });
 
 				source.on('update', function() {
 					sourceItems = bg.items.where({ sourceID: source.id });
@@ -226,11 +226,11 @@ define(['chai', 'preps/extendNative'], function(chai) {
 			});
 
 			it('should decrease all feeds unread counter', function() {
-				expect(bg.info.get('allCountUnread')).to.equal(2);
+				expect(bg.info.get('allCountUnread')).to.equal(allUnread + 2);
 			});
 
 			it('should decrease all feeds total counter', function() {
-				expect(bg.info.get('allCountTotal')).to.equal(2);
+				expect(bg.info.get('allCountTotal')).to.equal(allTotal + 2);
 			});
 			
 			after(function() {
@@ -244,7 +244,7 @@ define(['chai', 'preps/extendNative'], function(chai) {
 			before(function(done) {
 				source = bg.sources.create({
 					url: 'http://smartrss.martinkadlec.eu/test1.rss'
-				});
+				}, {wait: true });
 
 				source.on('update', function() {
 					sourceItems = bg.items.where({ sourceID: source.id });
@@ -262,11 +262,11 @@ define(['chai', 'preps/extendNative'], function(chai) {
 			});
 
 			it('should decrease all feeds unread counter', function() {
-				expect(bg.info.get('allCountUnread')).to.equal(2);
+				expect(bg.info.get('allCountUnread')).to.equal(allUnread + 2);
 			});
 
 			it('should decrease all feeds total counter', function() {
-				expect(bg.info.get('allCountTotal')).to.equal(2);
+				expect(bg.info.get('allCountTotal')).to.equal(allTotal + 2);
 			});
 			
 			after(function() {

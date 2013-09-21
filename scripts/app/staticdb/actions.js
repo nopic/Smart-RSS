@@ -38,7 +38,7 @@ return {
 
 				var folderID = 0;
 				var list = require('views/feedList');
-				if (list.selectedItems.length && list.selectedItems[0].classLisr.contains('folder')) {
+				if (list.selectedItems.length && list.selectedItems[0].$el.hasClass('folder')) {
 					var fid = list.selectedItems[0].model.get('id');
 					// make sure source is not added to folder which is not in db
 					if (bg.folders.get(fid)) {

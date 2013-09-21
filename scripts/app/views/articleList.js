@@ -87,6 +87,10 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 
 		},
 		handlePick: function(view) {
+			if (!view.model.collection) {
+				debugger;
+			}
+
 			if (view.model.get('unread') && bg.settings.get('readOnVisit')) {
 				view.model.save({
 					visited: true,
@@ -243,7 +247,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 
 				var after = null;
 				if (noManualSort !== true) {
-					$.makeArray($('#list .item, #list .date-group')).some(function(itemEl) {
+					$.makeArray($('#article-list .item, #article-list .date-group')).some(function(itemEl) {
 						if (bg.items.comparator(itemEl.view.model, item) === 1) {
 							after = itemEl;
 							return true;
@@ -313,7 +317,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 				this._itemHeight = firstItem.get(0).getBoundingClientRect().height;
 			}
 		},
-		addItems: function(items) {
+		addItems: function(items) {			
 
 			groups.reset();
 			
