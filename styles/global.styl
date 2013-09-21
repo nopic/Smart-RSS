@@ -226,3 +226,13 @@ input[type=search]:not(:focus):not(:valid) {
 	top: 0;
 	user-select: none;
 }
+
+#panel-toggle {
+	user-select: none;
+	display: none;
+	flex: 0 0 4px;
+	background: url('/images/toggle_left.png') no-repeat center center #d3daed;
+}
+#panel-toggle:not(.toggled) {
+	background-image: url('/images/toggle_right.png');
+}

@@ -25,11 +25,6 @@ function ($, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties, r
 		 */
 		el: '#region-feeds',
 
-		events: {
-			'mousedown': 'handleMouseDown',
-			'click #panel-toggle': 'handleClickToggle'
-		},
-
 		/**
 		 * @method initialize
 		 */
@@ -52,46 +47,10 @@ function ($, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties, r
 				$(this).removeClass('focused');
 			});
 
-			bg.settings.on('change:panelToggled', this.handleToggleChange, this);
-			bg.sources.on('clear-events', this.handleClearEvents, this);
-			this.handleToggleChange();
-			if (bg.settings.get('enablePanelToggle')) {
-				$('#panel-toggle').css('display', 'block');
-			}
-
 			this.on('resize:after', this.handleResize);
 			//window.addEventListener('resize', this.handleResize.bind(this));
 
 			this.enableResizing('horizontal', bg.settings.get('posA'));
-		},
-
-		/**
-		 * Clears bg events it listens to
-		 * @method handleClearEvents
-		 * @param id {Integer} ID of the closed tab
-		 */
-		handleClearEvents: function(id) {
-			if (window == null || id == window.top.tabID) {
-				bg.settings.off('change:panelToggled', this.handleToggleChange, this);
-				bg.sources.off('clear-events', this.handleClearEvents, this);
-			}
-		},
-
-		/**
-		 * Saves the panel toggle state (panel visible/hidden)
-		 * @method handleClickToggle
-		 */
-		handleClickToggle: function() {
-			bg.settings.save('panelToggled', !bg.settings.get('panelToggled'));
-		},
-
-		/**
-		 * Shows/hides the panel
-		 * @method handleToggleChange
-		 */
-		handleToggleChange: function() {
-			$('#panel').toggleClass('hidden', !bg.settings.get('panelToggled'));
-			$('#panel-toggle').toggleClass('toggled', bg.settings.get('panelToggled'));
 		},
 
 		/**

@@ -29,18 +29,25 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 			return url;
 		},
 		events: {
-			'mousedown': 'handleMouseDown'
+			'mousedown': 'handleMouseDown',
+			'click #panel-toggle': 'handleClickToggle'
 		},
 		initialize: function() {
 			this.actions = new Actions();
 			window.addEventListener('blur', this.hideContextMenus.bind(this));
 
 			bg.settings.on('change:layout', this.handleLayoutChange, this);
+			bg.settings.on('change:panelToggled', this.handleToggleChange, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
+
+			if (bg.settings.get('enablePanelToggle')) {
+				$('#panel-toggle').css('display', 'block');
+			}
 		},
 		handleClearEvents: function(id) {
 			if (window == null || id == tabID) {
 				bg.settings.off('change:layout', this.handleLayoutChange, this);
+				bg.settings.off('change:panelToggled', this.handleToggleChange, this);
 				bg.sources.off('clear-events', this.handleClearEvents, this);
 			}
 		},
@@ -59,6 +66,29 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 		layoutToHorizontal: function() {
 			$('.regions .regions').removeClass('vertical');
 		},
+
+		/**
+		 * Saves the panel toggle state (panel visible/hidden)
+		 * @method handleClickToggle
+		 */
+		handleClickToggle: function() {
+			bg.settings.save('panelToggled', !bg.settings.get('panelToggled'));
+		},
+
+		/**
+		 * Shows/hides the panel
+		 * @method handleToggleChange
+		 */
+		handleToggleChange: function() {
+			this.feeds.$el.toggleClass('hidden', !bg.settings.get('panelToggled'));
+			$('#panel-toggle').toggleClass('toggled', bg.settings.get('panelToggled'));
+
+			if (!bg.settings.get('panelToggled')) {
+				this.feeds.disableResizing();
+			} else {
+				this.feeds.enableResizing('horizontal', bg.settings.get('posA'));
+			}
+		},
 		handleMouseDown: function(e) {
 			if (!e.target.matchesSelector('.context-menu, .context-menu *, .overlay, .overlay *')) {
 				this.hideContextMenus();
@@ -76,6 +106,8 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 			this.attach('content', new ContentLayout);
 
 			this.setFocus('articles');
+
+			this.handleToggleChange();
 
 			this.trigger('start');
 			this.trigger('start:after');
