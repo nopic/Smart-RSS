@@ -38,6 +38,10 @@ define(['backbone', 'underscore', 'jquery'], function(BB, _, $) {
 			this.$el.css('display', 'none');
 		},
 		show: function() {
+			var config = $('[data-action="content:showConfig"]');
+			if (config.length) {
+				this.el.style.top = config.offset().top + config.height() + 5 + 'px';
+			}
 			this.render().$el.css('display', 'block');
 		},
 		isVisible: function() {

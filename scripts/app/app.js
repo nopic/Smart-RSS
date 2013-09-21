@@ -78,6 +78,7 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 			this.setFocus('articles');
 
 			this.trigger('start');
+			this.trigger('start:after');
 
 			setTimeout(function(that) {
 				$('body').removeClass('loading');

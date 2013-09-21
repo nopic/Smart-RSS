@@ -33,6 +33,7 @@ define(['jquery'], function($) {
 		for (var i=0; i<els.length; i++) {
 			loadPosition.call(els[i]);
 		}
+		this.trigger('resize');
 		this.trigger('resize:after');
 	}
 
@@ -84,6 +85,7 @@ define(['jquery'], function($) {
 
 			requestAnimationFrame(function() {
 				loadPosition.call(this);
+				this.trigger('resize:enabled');
 			}.bind(this));
 
 			this.resizer.addEventListener('mousedown', function(e) {

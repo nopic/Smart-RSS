@@ -38,16 +38,28 @@ function ($, Layout, ToolbarView, Toolbar, articleList, resizable) {
 				$(this).removeClass('focused');
 			});
 
-			this.on('resize:after', this.handleResize);
+			this.on('resize:after', this.handleResizeAfter);
+			this.on('resize', this.handleResize);
+			this.on('resize:enabled', this.handleResize);
 
 		},
-		handleResize: function() {
+		handleResizeAfter: function() {
 			if (bg.settings.get('layout') == 'horizontal') {
 				var wid = this.el.offsetWidth;
 				bg.settings.save({ posB: wid });
 			} else {
 				var hei = this.el.offsetHeight;
 				bg.settings.save({ posC:hei });
+			}
+		},
+		handleResize: function() {
+			if (bg.settings.get('lines') == 'auto') {
+				var oneRem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+				if (this.el.offsetWidth > 37 * oneRem) {
+					this.articleList.$el.addClass('lines-one-line');
+				} else {
+					this.articleList.$el.removeClass('lines-one-line');
+				}
 			}
 		}
 		
