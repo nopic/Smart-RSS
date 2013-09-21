@@ -200,8 +200,19 @@ input[type=search]:not(:focus):not(:valid) {
 	border-bottom: 1px solid #a6a6a6;
 }
 
+.thick-borders .region {
+	border-width: 5px;
+	
+	border-image: linear-gradient(to right, #969696 0%, #eee 20%, #f2f2f2 80%, #969696 100%) 0 100% 0 0/0 5px 0 0 stretch;
+}
+
+.thick-borders .vertical .region {
+	border-image: linear-gradient(to bottom, #969696 0%, #eee 20%, #f2f2f2 80%, #969696 100%) 0 0 100% 0/0 0 5px 0 stretch;
+}
+
 .region:last-child {
-	border: none;
+	border: none  !important;
+	border-image: none !important;
 }
 
 #region-feeds {

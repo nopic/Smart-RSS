@@ -43,6 +43,10 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 			if (bg.settings.get('enablePanelToggle')) {
 				$('#panel-toggle').css('display', 'block');
 			}
+
+			if (bg.settings.get('thickFrameBorders')) {
+				this.$el.addClass('thick-borders');
+			}
 		},
 		handleClearEvents: function(id) {
 			if (window == null || id == tabID) {

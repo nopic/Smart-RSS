@@ -202,7 +202,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 			
 			$('#smart-imported').html('Importing, please wait!');
 
-			var worker = new Worker('scripts/worker.js');
+			var worker = new Worker('scripts/options/worker.js');
 			worker.onmessage = function(e) {
 				if (e.data.action == 'finished'){
 					$('#smart-imported').html('Loading data to memory!');

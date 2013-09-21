@@ -2,7 +2,7 @@ define(['jquery'], function($) {
 
 	var els = [];
 
-	var resizeWidth = 6;
+	var resizeWidth = bg.settings.get('thickFrameBorders') ? 10 : 6;
 
 	function handleMouseDown(e) {
 		this.resizing = true;
@@ -13,13 +13,14 @@ define(['jquery'], function($) {
 
 	function handleMouseMove(e) {
 		if (this.resizing) {
+			var toLeft = bg.settings.get('thickFrameBorders') ? 5 : 1;
 			e.preventDefault();
 			if (this.layout == 'vertical') {
 				setPosition.call(this, e.clientY);
-				this.$el.css('flex-basis', Math.abs(e.clientY - this.el.offsetTop) );
+				this.$el.css('flex-basis', Math.abs(e.clientY - this.el.offsetTop + toLeft) );
 			} else {
 				setPosition.call(this, e.clientX);
-				this.$el.css('flex-basis', Math.abs(e.clientX - this.el.offsetLeft) );
+				this.$el.css('flex-basis', Math.abs(e.clientX - this.el.offsetLeft + toLeft) );
 			}
 			
 			this.trigger('resize');
@@ -38,12 +39,13 @@ define(['jquery'], function($) {
 	}
 
 	function setPosition(pos) {
+		var toLeft = bg.settings.get('thickFrameBorders') ? 5 : 1;
 		if (this.layout == 'vertical') {
 			this.resizer.style.left = this.el.offsetLeft  + 'px';
-			this.resizer.style.top = pos - Math.round(resizeWidth / 2) - 1 + 'px';
+			this.resizer.style.top = pos - Math.round(resizeWidth / 2) - toLeft + 'px';
 		} else {
 			this.resizer.style.top = this.el.offsetTop + 'px';
-			this.resizer.style.left = pos - Math.round(resizeWidth / 2) - 1 + 'px';
+			this.resizer.style.left = pos - Math.round(resizeWidth / 2) - toLeft + 'px';
 		}
 	}
 

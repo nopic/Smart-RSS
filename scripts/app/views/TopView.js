@@ -15,7 +15,7 @@ define(['backbone', 'jquery', 'underscore'], function(BB, $, _) {
 		},
 		showSourceItems: function(e) {
 			e = e || {};
-			if (!e.noSelect) require('feedList').select(this, e);
+			if (!e.noSelect) require('views/feedList').select(this, e);
 			
 			if (this.model.get('name') == 'all-feeds') {
 				bg.sources.forEach(function(source) {
