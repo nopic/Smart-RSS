@@ -90,7 +90,6 @@ define(['backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escap
 				var fr = sandbox.el;
 
 				if (sandbox.loaded) {
-					/****fr.contentDocument.documentElement.innerHTML != content****/
 					fr.contentWindow.scrollTo(0, 0);
 					fr.contentDocument.documentElement.style.fontSize = bg.settings.get('articleFontSize') + '%';
 					fr.contentDocument.querySelector('base').href = source.get('url');
@@ -110,6 +109,7 @@ define(['backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escap
 			return this;
 		},
 		handleNewSelected: function(model) {
+			if (model == this.model) return;
 			this.model = model;
 			if (!this.model) {
 				// should not happen but happens

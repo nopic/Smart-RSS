@@ -147,8 +147,9 @@ define(['chai', 'preps/extendNative'], function(chai) {
 
 		describe('Destroying feed', function() {
 
-			before(function() {
+			before(function(done) {
 				source.destroy();
+				setTimeout(done, 50);
 			});
 
 			it('should decrease all feeds unread counter', function() {
@@ -194,8 +195,9 @@ define(['chai', 'preps/extendNative'], function(chai) {
 				expect(bg.info.get('allCountUnread')).to.equal(allUnread + 2);
 			});
 			
-			after(function() {
+			after(function(done) {
 				source.destroy();
+				setTimeout(done, 50);
 			});
 			
 		});
@@ -233,8 +235,9 @@ define(['chai', 'preps/extendNative'], function(chai) {
 				expect(bg.info.get('allCountTotal')).to.equal(allTotal + 2);
 			});
 			
-			after(function() {
+			after(function(done) {
 				source.destroy();
+				setTimeout(done, 50);
 			});
 			
 		});
@@ -269,8 +272,9 @@ define(['chai', 'preps/extendNative'], function(chai) {
 				expect(bg.info.get('allCountTotal')).to.equal(allTotal + 2);
 			});
 			
-			after(function() {
+			after(function(done) {
 				source.destroy();
+				setTimeout(done, 50);
 			});
 			
 		});

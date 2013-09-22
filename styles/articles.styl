@@ -1,3 +1,9 @@
+@import nib
+
+vendor-prefixes = webkit official
+flex-version = flex
+support-for-ie = false
+
 #toolbar {
 	flex: 0 0 auto;
 }
@@ -106,8 +112,7 @@
 	text-align: right;
 }
 
-.date-group {
-	/*border-top: 1px solid #dcdcdc;*/
+.date-group
 	border-bottom: 1px solid #a6a6a6;
 	background: linear-gradient(to bottom, white 3px, #ececec);
 	height: 22px;
@@ -116,7 +121,7 @@
 	font-size: 0.75rem;
 	text-align: center;
 	font-weight: bold;
-}
+	user-select: none;
 
 .unpluged {
 	display: none !important;

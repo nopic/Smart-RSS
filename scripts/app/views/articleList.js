@@ -72,17 +72,10 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 
 			groups.on('add', this.addGroup, this);
 
-			/****window.addEventListener('load', function() {
-				window.focus();
-			});****/
-
 			this.on('attach', this.handleAttached, this);
 			this.on('pick', this.handlePick, this);
 
 
-			
-
-			/****Why this.el.addEventListener doesn't work? ****/
 			this.$el.on('scroll', this.handleScroll.bind(this));
 
 		},
