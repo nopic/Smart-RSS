@@ -47,7 +47,9 @@ chrome.runtime.getBackgroundPage(function(bg) {
 	});
 	chrome.runtime.connect();
 	
-	requirejs(['app'], function(app) {		
-		app.start();
+	requirejs(['app'], function(app) {	
+		bg.appStarted.always(function() {	
+			app.start();
+		});
 	});
 });
