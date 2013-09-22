@@ -43,7 +43,11 @@ function ($, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties, r
 				$(this).addClass('focused');
 			});
 
-			this.$el.on('blur', function() {
+			this.$el.on('blur', function(e) {
+				if (!e.relatedTarget) {
+					this.focus();
+					return
+				}
 				$(this).removeClass('focused');
 			});
 

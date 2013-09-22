@@ -353,7 +353,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 
 		},
 		clearOnSelect: function() {
-			$('#input-search').val('');
+			$('input[type=search]').val('');
 
 			if (this.currentSource) {
 				this.currentSource.off('destroy', this.handleDestroyedSource, this);
@@ -416,7 +416,8 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 
 			var feeds = _.pluck(bg.sources.where({ folderID: folderID }), 'id');
 
-			if (!feeds.length) return;
+			// By not returning, content of empty folder can be showed
+			// if (!feeds.length) return;
 
 			this.addItems( bg.items.filter(function(item) {
 				if (this.unreadOnly && item.get('unread') == true) {

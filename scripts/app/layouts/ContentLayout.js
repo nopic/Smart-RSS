@@ -45,7 +45,11 @@ function ($, Layout, ToolbarView, Toolbar, contentView, SandboxView, OverlayView
 				$(this).addClass('focused');
 			});
 
-			this.$el.on('blur', function() {
+			this.$el.on('blur', function(e) {
+				if (!e.relatedTarget) {
+					this.focus();
+					return
+				}
 				$(this).removeClass('focused');
 			});
 			

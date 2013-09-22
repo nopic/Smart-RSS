@@ -64,7 +64,7 @@ define([
 			var ca = this.model.changedAttributes();
 			if (ca) {
 				var caKeys =  Object.keys(ca);
-				if ( ('unread' in ca && caKeys.length == 1) || ('unread' in ca && 'visited' in ca && caKeys.length == 2) ) {
+				if ( ( ('unread' in ca || 'visited' in ca) && caKeys.length == 1) || ('unread' in ca && 'visited' in ca && caKeys.length == 2) ) {
 					return this;
 				}
 			}
