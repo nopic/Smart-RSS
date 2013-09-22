@@ -32,7 +32,10 @@ define(['backbone', 'models/Action', 'staticdb/actions'], function (BB, Action, 
 		 */
 		execute: function(action) {
 			if (typeof action == 'string') action = this.get(action);
-			if (!action) return false;
+			if (!action) {
+				console.log('Action "' + action + '" does not exists');
+				return false;
+			}
 			var args = [].slice.call(arguments);
 			args.shift();
 			action.get('fn').apply(app, args);

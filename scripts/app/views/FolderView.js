@@ -7,8 +7,8 @@ define([
 		list: null,
 		events: {
 			'dblclick': 'handleDoubleClick',
-			'mouseup': 'handleMouseUp',
-			'click': 'handleMouseDown',
+			/*'mouseup': 'handleMouseUp',
+			'click': 'handleMouseDown',*/
 			'click .folder-arrow': 'handleClickArrow'
 		},
 		handleDoubleClick: function(e) {
@@ -71,16 +71,11 @@ define([
 
 			return this;
 		},
-		showSourceItems: function(e) {
-			e = e || {};
-			if (!e.noSelect) this.list.select(this, e);
-		},
 		getSelectData: function(e) {
 			return {
 				action: 'new-folder-select',
 				value: this.model.id,
-				unreadOnly: !!e.shiftKey,
-				noFocus: !!e.noFocus
+				unreadOnly: !!e.shiftKey
 			};
 		}
 	});

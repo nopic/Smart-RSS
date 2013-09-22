@@ -267,9 +267,9 @@ input[type=search]:not(:focus):not(:valid) {
 .selected {
   background: #94c6f8;
 }
-.list-item:active {
-  background: #39f;
-}
+/*.list-item:active {
+	background: rgb(51, 153, 255);	
+}*/
 .list-item:hover .source-title {
   color: #285078;
   text-decoration: underline;
@@ -410,7 +410,7 @@ input[type=search]:not(:focus):not(:valid) {
   -webkit-flex-flow: row wrap;
   flex-flow: row wrap;
 }
-.item:active,
+/*.item:active,*/
 .selected {
   color: #f1f1f1 !important;
   background: #39f;
@@ -420,7 +420,7 @@ input[type=search]:not(:focus):not(:valid) {
   background: #94c6f7;
   border-bottom-color: #ccc;
 }
-.item:active .item-pin:not(.pinned),
+/*.item:active .item-pin:not(.pinned),*/
 .selected  .item-pin:not(.pinned) {
   border-color: #39f;
   background: -webkit-radial-gradient(circle at center, #39f 30%, #c6c6c6 30%);

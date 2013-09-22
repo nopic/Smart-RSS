@@ -109,7 +109,6 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 			this.attach('articles', new ArticlesLayout);
 			this.attach('content', new ContentLayout);
 
-			this.setFocus('articles');
 
 			this.handleToggleChange();
 
@@ -118,7 +117,9 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 
 			setTimeout(function(that) {
 				$('body').removeClass('loading');
+				that.setFocus('articles');
 				that.handleLayoutChange();
+				
 			}, 0, this);
 		}
 	}));

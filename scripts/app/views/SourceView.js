@@ -1,9 +1,9 @@
 define(['backbone', 'views/TopView', 'instances/contextMenus'], function(BB, TopView, contextMenus) {
 	var SourceView = TopView.extend({
-		events: {
+		/*events: {
 			'mouseup': 'handleMouseUp',
 			'click': 'handleMouseDown',
-		},
+		},*/
 		className: 'list-item source',
 		list: null,
 		initialize: function(opt, list) {

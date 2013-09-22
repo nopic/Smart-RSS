@@ -72,38 +72,43 @@ define([
 			this.$el.css('height','');
 			var data = this.model.toJSON();
 
-			var dateFormats = { normal: 'DD.MM.YYYY', iso: 'YYYY-MM-DD', us: 'MM/DD/YYYY' };
-			var pickedFormat = dateFormats[bg.settings.get('dateType') || 'normal'] || dateFormats['normal'];
+			data.date = this.getItemDate(data.date);
 
-			var timeFormat = bg.settings.get('hoursFormat') == '12h' ? 'H:mm a' : 'hh:mm';
-			var timeFormatTitle = bg.settings.get('hoursFormat') == '12h' ? 'H:mm a' : 'hh:mm:ss';
-
-			if (data.date) {
-				if (bg.settings.get('fullDate')) {
-					data.date = formatDate(new Date(data.date), pickedFormat + ' ' + timeFormat);
-				} else if (parseInt(formatDate(data.date, 'T') / 86400000, 10) >= parseInt(formatDate(Date.now(), 'T') / 86400000, 10)) {
-					data.date = formatDate(new Date(data.date), timeFormat);
-				} else if ((new Date(data.date)).getFullYear() == (new Date()).getFullYear() ) {
-					data.date = formatDate(new Date(data.date), pickedFormat.replace(/\/?YYYY(?!-)/, ''));
-				} else {
-					data.date = formatDate(new Date(data.date), pickedFormat);
-				}
-			}
-
-			this.el.title = data.title + '\n' + formatDate(this.model.get('date'), pickedFormat + ' ' + timeFormatTitle);
+			//this.el.title = data.title + '\n' + formatDate(this.model.get('date'), pickedFormat + ' ' + timeFormatTitle);
 			
 			this.$el.html(this.template(data));
 
 			return this;
 		},
+
+		getItemDate: function(date) {
+			var dateFormats = { normal: 'DD.MM.YYYY', iso: 'YYYY-MM-DD', us: 'MM/DD/YYYY' };
+			var pickedFormat = dateFormats[bg.settings.get('dateType') || 'normal'] || dateFormats['normal'];
+
+			var timeFormat = bg.settings.get('hoursFormat') == '12h' ? 'H:mm a' : 'hh:mm';
+			//var timeFormatTitle = bg.settings.get('hoursFormat') == '12h' ? 'H:mm a' : 'hh:mm:ss';
+
+			if (date) {
+				if (bg.settings.get('fullDate')) {
+					date = formatDate(new Date(date), pickedFormat + ' ' + timeFormat);
+				} else if (parseInt(formatDate(date, 'T') / 86400000, 10) >= parseInt(formatDate(Date.now(), 'T') / 86400000, 10)) {
+					date = formatDate(new Date(date), timeFormat);
+				} else if ((new Date(date)).getFullYear() == (new Date()).getFullYear() ) {
+					date = formatDate(new Date(date), pickedFormat.replace(/\/?YYYY(?!-)/, ''));
+				} else {
+					date = formatDate(new Date(date), pickedFormat);
+				}
+			}
+
+			return date;
+		},
+
 		handleMouseUp: function(e) {
 			if (e.which == 3) {
 				this.showContextMenu(e);
-			} else if (this.list.selectedItems.length > 1 && this.list.selectFlag) {
-				this.list.select(this, { shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });
-				this.list.selectFlag = false;
-			}
+			} 
 		},
+
 		showContextMenu: function(e) {
 			if (!this.$el.hasClass('selected')) {
 				this.list.select(this, e);
@@ -111,13 +116,7 @@ define([
 			contextMenus.get('items').currentSource = this.model;
 			contextMenus.get('items').show(e.clientX, e.clientY);
 		},
-		handleMouseDown: function(e) {
-			if (this.list.selectedItems.length > 1 && this.$el.hasClass('selected') && !e.ctrlKey && !e.shiftKey) {
-				this.list.selectFlag = true;
-				return;
-			}
-			this.list.select(this, { shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });
-		},
+		
 		handleModelChange: function() {
 			if (this.model.get('deleted') || (this.list.specialName != 'trash' && this.model.get('trashed')) ) {
 				this.list.destroyItem(this);

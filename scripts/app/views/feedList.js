@@ -16,7 +16,9 @@ function (BB, $, SourceView, FolderView, SpecialView, Special, contextMenus, sel
 			'drop .folder':          'handleDrop',
 			'dragover':              'handleDragOver',
 			'dragover .folder,[data-in-folder]':  'handleDragOver',
-			'dragleave .folder,[data-in-folder]': 'handleDragLeave'
+			'dragleave .folder,[data-in-folder]': 'handleDragLeave',
+			'mousedown .list-item': 'handleMouseDown',
+			'mouseup .list-item': 'handleMouseUp'
 		},
 		initialize: function() {
 
@@ -30,7 +32,7 @@ function (BB, $, SourceView, FolderView, SpecialView, Special, contextMenus, sel
 			bg.folders.on('add', this.addFolder, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 
-			//window.addEventListener('message', this.handleMessage);
+			this.on('pick', this.handlePick);
 			
 		},
 		handleAttach: function() {
@@ -52,14 +54,32 @@ function (BB, $, SourceView, FolderView, SpecialView, Special, contextMenus, sel
 			this.addFolders(bg.folders);
 
 			this.addSpecial(specials.allFeeds);
-
 			this.addSpecial(specials.pinned);
-
 			this.addSpecial(specials.trash);
 
 			this.addSources(bg.sources);
 
 			return this;
+		},
+		/**
+		 * If one list-item was selected by left mouse button, show its articles.
+		 * Triggered by selectable mixin.
+		 * @method handlePick
+		 * @param view {TopView} Picked source, folder or special
+		 * @param event {Event} Mouse or key event
+		 */
+		handlePick: function(view, e) {
+			if (e.type == 'mousedown' && e.which == 1) {
+				view.showSourceItems(e);
+			}
+		},
+		handleMouseDown: function(e) {
+			//e.currentTarget.view.handleMouseDown(e);
+			this.handleSelectableMouseDown(e);
+		},
+		handleMouseUp: function(e) {
+			e.currentTarget.view.handleMouseUp(e);
+			this.handleSelectableMouseUp(e);
 		},
 		handleDragOver: function(e) {
 			var f = e.currentTarget.dataset.inFolder;

@@ -112,27 +112,30 @@ return {
 		toggleFolder: {
 			title: 'Toggle folder',
 			fn: function(e) {
-				var cs = $('.selected:first');
-				if (cs.length && cs.hasClass('folder')) {
-					cs.get(0).view.handleClickArrow(e);
+				e = e || {};
+				var cs = require('views/feedList').selectedItems;
+				if (cs.length && cs[0].$el.hasClass('folder')) {
+					cs[0].handleClickArrow(e);
 				}
 			}
 		},
 		showArticles: {
 			title: 'Show articles',
 			fn: function(e) {
-				var cs = $('.selected:first');
+				e = e || {};
+				var cs = require('views/feedList').selectedItems;
 				if (cs.length) {
-					cs.get(0).view.showSourceItems({ noSelect: true, shiftKey: e.shiftKey, noFocus: true });
+					cs[0].showSourceItems({ noSelect: true, shiftKey: e.shiftKey });
 				}
 			}
 		},
 		showAndFocusArticles: {
 			title: 'Show and focus articles',
 			fn: function(e) {
-				var cs = $('.selected:first');
+				var cs = require('views/feedList').selectedItems;
 				if (cs.length) {
-					cs.get(0).view.showSourceItems({ noSelect: true, shiftKey: e.shiftKey });
+					app.actions.execute('feeds:showArticles', e);
+					app.actions.execute('articles:focus');
 				}
 			}
 		}

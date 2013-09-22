@@ -90,26 +90,15 @@ return {
 			this.selectPivot = view;
 			this.$el.find('.selected').removeClass('selected');
 
-			if (!e.preventLoading) {
-				if (!window || !window.frames) {
-					bg.logs.add({ message: 'Event duplication bug! Clearing events now...' });
-					bg.console.log('Event duplication bug! Clearing events now...');
-					bg.sources.trigger('clear-events', -1);
-					return;
-				}
-
-
-				if ('getSelectData' in view) {
-					app.trigger('select:' + this.el.id, view.getSelectData(e));
-				} else {
-					app.trigger('select:' + this.el.id, { action: 'new-select', value: view.model.id });
-				}
-				
-				/****topWindow.frames[2].postMessage({ action: 'new-select', value: view.model.id }, '*');****/
+			
+			if (!window || !window.frames) {
+				bg.logs.add({ message: 'Event duplication bug! Clearing events now...' });
+				bg.console.log('Event duplication bug! Clearing events now...');
+				bg.sources.trigger('clear-events', -1);
+				return;
 			}
 
-			
-			this.trigger('pick', view);
+			this.trigger('pick', view, e);
 			
 		} else if (e.shiftKey && this.selectPivot) {
 			this.$el.find('.selected').removeClass('selected');
@@ -153,6 +142,23 @@ return {
 			return false;
 		}
 		return true;
+	},
+	handleSelectableMouseDown: function(e) {
+		//e.currentTarget.view.handleMouseDown(e);
+		var item = e.currentTarget.view;
+		if (this.selectedItems.length > 1 && item.$el.hasClass('selected') && !e.ctrlKey && !e.shiftKey) {
+			this.selectFlag = true;
+			return;
+		}
+		// used to be just { shiftKey: e.shiftKey, ctrlKey: e.ctrlKey } instead of 'e'
+		this.select(item, e);
+	},
+	handleSelectableMouseUp: function(e) {
+		var item = e.currentTarget.view;
+		if (e.which == 1 && this.selectedItems.length > 1 && this.selectFlag) {
+			this.select(item, e);
+			this.selectFlag = false;
+		}
 	}
 
 };

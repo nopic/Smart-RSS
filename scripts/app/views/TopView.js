@@ -1,13 +1,8 @@
-define(['backbone', 'jquery', 'underscore'], function(BB, $, _) {
+define(['backbone', 'jquery', 'underscore', 'views/feedList'], function(BB, $, _) {
 	var TopView = BB.View.extend({
 		tagName: 'div',
 		className: 'list-item',
 		template: _.template($('#template-source').html()),
-		handleMouseDown: function(e) {
-			if (e.which == 1) {
-				this.showSourceItems(e);
-			}
-		},
 		handleMouseUp: function(e) {
 			if (e.which == 3) {
 				this.showContextMenu(e);
@@ -15,8 +10,8 @@ define(['backbone', 'jquery', 'underscore'], function(BB, $, _) {
 		},
 		showSourceItems: function(e) {
 			e = e || {};
-			if (!e.noSelect) require('views/feedList').select(this, e);
 			
+			/****hasNew state is not changed when folder is selected****/
 			if (this.model.get('name') == 'all-feeds') {
 				bg.sources.forEach(function(source) {
 					if (source.get('hasNew')) {
@@ -27,6 +22,8 @@ define(['backbone', 'jquery', 'underscore'], function(BB, $, _) {
 			} else if (this.model instanceof bg.Source && this.model.get('hasNew')) {
 				this.model.save({ hasNew: false });
 			}
+
+			app.trigger('select:' + require('views/feedList').el.id, this.getSelectData(e));
 			
 		},
 		getSelectData: function(e) {
@@ -34,8 +31,7 @@ define(['backbone', 'jquery', 'underscore'], function(BB, $, _) {
 				action: 'new-select',
 				value: this.model.id || this.model.get('filter'),
 				name: this.model.get('name'),
-				unreadOnly: !!e.shiftKey,
-				noFocus: !!e.noFocus
+				unreadOnly: !!e.shiftKey
 			};
 		},
 		setTitle: function(unread, total) {

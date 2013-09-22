@@ -2,10 +2,10 @@ define(['jquery', 'underscore', 'views/TopView'], function($, _, TopView) {
 	var SpecialView = TopView.extend({
 		className: 'list-item special',
 		template: _.template($('#template-special').html()),
-		events: {
+		/*events: {
 			'mouseup': 'handleMouseUp',
 			'click': 'handleMouseDown'
-		},
+		},*/
 		showContextMenu: function(e) {
 			if (!this.contextMenu) return;
 			app.feeds.feedList.select(this, e);

@@ -42,21 +42,22 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 		events: {
 			'dragstart .item': 'handleDragStart',
 			'mousedown .item': 'handleMouseDown',
-			'dblclick .item': 'handleItemDblClick',
 			'mouseup .item': 'handleMouseUp',
+			'dblclick .item': 'handleItemDblClick',
 			'mousedown .item-pin,.item-pinned': 'handleClickPin',
 		},
 		handleItemDblClick: function() {
 			app.actions.execute('articles:oneFullArticle');
 		},
+		handleMouseDown: function(e) {
+			this.handleSelectableMouseDown(e);
+		},
 		handleClickPin: function(e) {
 			e.currentTarget.parentNode.view.handleClickPin(e);
 		},
-		handleMouseDown: function(e) {
-			e.currentTarget.view.handleMouseDown(e);
-		},
 		handleMouseUp: function(e) {
 			e.currentTarget.view.handleMouseUp(e);
+			this.handleSelectableMouseUp(e);
 		},
 		initialize: function() {
 
@@ -81,8 +82,13 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 		},
 		handlePick: function(view) {
 			if (!view.model.collection) {
+				// This shouldn't usually happened 
+				// It might happen when source is deleted and created in same tick
 				debugger;
+				return;
 			}
+
+			app.trigger('select:' + this.el.id, { action: 'new-select', value: view.model.id });
 
 			if (view.model.get('unread') && bg.settings.get('readOnVisit')) {
 				view.model.save({
@@ -97,7 +103,6 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 
 			app.on('select:feed-list', function(data) {
 				if (data.action == 'new-select' || data.action == 'new-folder-select') {
-					if (!data.noFocus) window.focus();
 					this.el.scrollTop = 0;
 					this.unreadOnly = data.unreadOnly;
 				}
