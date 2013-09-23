@@ -50,6 +50,9 @@ module.exports = function(grunt) {
 				options: {
 					name: '../main',
 					baseUrl: 'scripts/app',
+					/*generateSourceMaps: true,
+					preserveLicenseComments: false,
+					optimize: 'uglify2',*/
 					paths: {
 						jquery: '../libs/jquery.min',
 						underscore: '../libs/underscore.min',
