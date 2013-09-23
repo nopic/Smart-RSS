@@ -705,15 +705,30 @@ function openRSS(closeIfActive) {
  * Downlaoding
  */
 
-function downloadOne(source) {
-	if (loader.sourceLoading == source || loader.sourcesToLoad.indexOf(source) >= 0) {
+function download(sourcesToDownload) {
+	if (!sourcesToDownload) return;
+	if (!Array.isArray(sourcesToDownload)) {
+		sourcesToDownload = [sourcesToDownload];
+	}
+
+	sourcesToDownload.forEach(downloadOne);
+}
+
+function downloadOne(model) {
+	if (loader.sourceLoading == model || loader.sourcesToLoad.indexOf(model) >= 0) {
 		return false;
 	}
 
-	loader.addSources(source);
-	if (loader.get('loading') == false) downloadURL();
+	if (model instanceof Folder) {
+		download( sources.where({ folderID: model.id }) );
+		return true;
+	} else if (model instanceof Source) {
+		loader.addSources(model);
+		if (loader.get('loading') == false) downloadURL();
+		return true;
+	}
 
-	return true;
+	return false;
 }
 
 function downloadAll(force) {

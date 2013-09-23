@@ -29,6 +29,16 @@ return {
 				bg.downloadAll(true);
 			}
 		},
+		update: {
+			icon: 'reload.png',
+			title: bg.lang.c.UPDATE,
+			fn: function() {
+				var s = require('views/feedList').selectedItems;
+				if (s.length) {
+					bg.download(_.pluck(s, 'model'));
+				}
+			}
+		},
 		addSource: {
 			icon: 'add.png',
 			title: bg.lang.c.ADD_RSS_SOURCE,

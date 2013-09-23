@@ -8,7 +8,10 @@ define(['jquery', 'underscore', 'views/TopView'], function($, _, TopView) {
 		},*/
 		showContextMenu: function(e) {
 			if (!this.contextMenu) return;
-			app.feeds.feedList.select(this, e);
+			
+			if (!this.$el.hasClass('selected')) {
+				app.feeds.feedList.select(this, e);
+			}
 			this.contextMenu.currentSource = this.model;
 			this.contextMenu.show(e.clientX, e.clientY);
 		},

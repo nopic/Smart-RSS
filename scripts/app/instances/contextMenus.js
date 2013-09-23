@@ -7,7 +7,8 @@ function(BB, ContextMenu) {
 			title: bg.lang.c.UPDATE,
 			icon: 'reload.png',
 			action: function() {
-				bg.downloadOne(sourceContextMenu.currentSource);
+				app.actions.execute('feeds:update');
+				//bg.downloadOne(sourceContextMenu.currentSource);
 			}
 		},
 		{
@@ -116,14 +117,17 @@ function(BB, ContextMenu) {
 			icon: 'reload.png',
 			action: function() {
 				var folder = require('views/feedList').selectedItems[0].model;
-				if (!folder || !(folder instanceof bg.Folder)) return;
+				/*if (!folder || !(folder instanceof bg.Folder)) return;
 
 				bg.sources.forEach(function(source) {
 					if (source.get('folderID') == folder.id) {
 						bg.downloadOne(source);
 					}
-				});
-				bg.downloadOne(sourceContextMenu.currentSource);
+				});*/
+
+				app.actions.execute('feeds:update');
+				
+				//bg.downloadOne(sourceContextMenu.currentSource);
 			}
 		},
 		{

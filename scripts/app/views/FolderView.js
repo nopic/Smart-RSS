@@ -15,7 +15,9 @@ define([
 			this.handleClickArrow(e);
 		},
 		showContextMenu: function(e) {
-			this.list.select(this, e);
+			if (!this.$el.hasClass('selected')) {
+				this.list.select(this, e);
+			}
 			contextMenus.get('folder').currentSource = this.model;
 			contextMenus.get('folder').show(e.clientX, e.clientY);
 		},

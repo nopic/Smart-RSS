@@ -105,6 +105,7 @@ function (BB, $, SourceView, FolderView, SpecialView, Special, contextMenus, sel
 			}
 		},
 		handleDrop: function(e) {
+
 			var oe = e.originalEvent;
 			e.preventDefault();
 

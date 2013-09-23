@@ -28,7 +28,9 @@ define(['backbone', 'views/TopView', 'instances/contextMenus'], function(BB, Top
 			bg.sources.off('clear-events', this.handleClearEvents, this);
 		},
 		showContextMenu: function(e) {
-			app.feeds.feedList.select(this, e);
+			if (!this.$el.hasClass('selected')) {
+				app.feeds.feedList.select(this, e);
+			}
 			contextMenus.get('source').currentSource = this.model;
 			contextMenus.get('source').show(e.clientX, e.clientY);
 		},
