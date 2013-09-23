@@ -37,7 +37,7 @@ function ($, Layout, ToolbarView, Toolbar, articleList, resizable) {
 			this.$el.on('blur', function(e) {
 				if (!e.relatedTarget) {
 					this.focus();
-					return
+					return;
 				}
 				$(this).removeClass('focused');
 			});

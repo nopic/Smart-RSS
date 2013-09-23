@@ -82,9 +82,8 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 		},
 		handlePick: function(view) {
 			if (!view.model.collection) {
-				// This shouldn't usually happened 
-				// It might happen when source is deleted and created in same tick
-				debugger;
+				// This shouldn't usually happen
+				// It might happen when source is deleted and created in the same tick
 				return;
 			}
 
@@ -214,7 +213,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 		},
 		selectAfterDelete: function(view) {
 			if (view == this.selectedItems[0]) {
-				var last = $('.item:not(.invisible):last').get(0);
+				var last = this.$el.find('.item:not(.invisible):last').get(0);
 				if (last && view == last.view) {
 					this.selectPrev({ currentIsRemoved: true });
 				} else {
@@ -310,12 +309,12 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 			view.render().$el.insertBefore(before);
 		},
 		setItemHeight: function() {
-			var firstItem = $('.item:not(.invisible):first');
+			var firstItem = this.$el.find('.item:not(.invisible):first');
 			if (firstItem.length) {
 				this._itemHeight = firstItem.get(0).getBoundingClientRect().height;
 			}
 		},
-		addItems: function(items) {			
+		addItems: function(items) {
 
 			groups.reset();
 			
@@ -325,8 +324,8 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 			 */
 			this.selectedItems = [];
 			this.viewsToRender = [];
-			$('.selected').removeClass('.selected');
-			$('.last-selected').removeClass('.last-selected');
+			this.$el.find('.selected').removeClass('.selected');
+			this.$el.find('.last-selected').removeClass('.last-selected');
 			this.selectPivot = null;
 			/* --- */
 

@@ -71,6 +71,12 @@ function (BB, $, SourceView, FolderView, SpecialView, Special, contextMenus, sel
 		handlePick: function(view, e) {
 			if (e.type == 'mousedown' && e.which == 1) {
 				view.showSourceItems(e);
+				
+				// to prevent setting focus back to feedList
+				setTimeout(function(e) {
+					app.actions.execute('articles:focus');
+				}), 0;
+
 			}
 		},
 		handleMouseDown: function(e) {

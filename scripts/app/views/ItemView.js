@@ -106,7 +106,7 @@ define([
 		handleMouseUp: function(e) {
 			if (e.which == 3) {
 				this.showContextMenu(e);
-			} 
+			}
 		},
 
 		showContextMenu: function(e) {

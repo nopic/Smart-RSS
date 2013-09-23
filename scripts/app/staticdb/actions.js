@@ -336,15 +336,16 @@ return {
 			title: 'Select All',
 			fn: function() {
 				var articleList = require('views/articleList');
-				$('.selected').removeClass('selected');
+				articleList.$el.find('.selected').removeClass('selected');
 				articleList.selectedItems = [];
-				$('.item:not(.invisible)').each(function(i, item) {
+				
+				articleList.$el.find('.item:not(.invisible)').each(function(i, item) {
 					item.view.$el.addClass('selected');
 					articleList.selectedItems.push(item.view);
 				});
 
-				$('.last-selected').removeClass('last-selected');
-				$('.item:not(.invisible):last').addClass('last-selected');
+				articleList.$el.find('.last-selected').removeClass('last-selected');
+				articleList.$el.find('.item:not(.invisible):last').addClass('last-selected');
 			}
 		},
 		pin: {
