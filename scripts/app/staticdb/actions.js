@@ -39,6 +39,30 @@ return {
 				}
 			}
 		},
+		mark: {
+			icon: 'read.png',
+			title: bg.lang.c.MARK_ALL_AS_READ,
+			fn: function() {
+				var s = require('views/feedList').getSelectedFeeds();
+				if (!s.length) return;
+
+				bg.items.forEach(function(item) {
+					if (item.get('unread') == true && s.indexOf(item.getSource()) >= 0) {
+						item.save({
+							unread: false,
+							visited: true
+						});
+					}
+				});
+
+				s.forEach(function(source) {
+					if (source.get('hasNew')) {
+						source.save({ hasNew: false });
+					}
+				});
+				
+			}
+		},
 		addSource: {
 			icon: 'add.png',
 			title: bg.lang.c.ADD_RSS_SOURCE,

@@ -15,18 +15,7 @@ function(BB, ContextMenu) {
 			title: bg.lang.c.MARK_ALL_AS_READ,
 			icon: 'read.png',
 			action: function() {
-				if (!sourceContextMenu.currentSource) return;
-				var id = sourceContextMenu.currentSource.get('id');
-				bg.items.forEach(function(item) {
-					if (item.get('unread') == true && item.getSource().id == id) {
-						item.save({
-							unread: false,
-							visited: true
-						});
-					}
-				});
-
-				sourceContextMenu.currentSource.save({ hasNew: false });
+				app.actions.execute('feeds:mark');
 			}
 		},
 		{
@@ -116,44 +105,14 @@ function(BB, ContextMenu) {
 			title: bg.lang.c.UPDATE,
 			icon: 'reload.png',
 			action: function() {
-				var folder = require('views/feedList').selectedItems[0].model;
-				/*if (!folder || !(folder instanceof bg.Folder)) return;
-
-				bg.sources.forEach(function(source) {
-					if (source.get('folderID') == folder.id) {
-						bg.downloadOne(source);
-					}
-				});*/
-
 				app.actions.execute('feeds:update');
-				
-				//bg.downloadOne(sourceContextMenu.currentSource);
 			}
 		},
 		{
 			title: bg.lang.c.MARK_ALL_AS_READ,
 			icon: 'read.png',
 			action: function() {
-				var folder = require('views/feedList').selectedItems[0].model;
-				if (!folder || !(folder instanceof bg.Folder)) return;
-
-				var sources = bg.sources.where({ folderID: folder.get('id') });
-				if (!sources.length) return;
-
-				var i;
-				var markItemAsRead = function(item) {
-					if (item.get('unread') == true && item.getSource() == sources[i]) {
-						item.save({
-							unread: false,
-							visited: true
-						});
-					}
-				};
-
-				for (i=0; i<sources.length; i++) {
-					bg.items.forEach(markItemAsRead);
-					sources[i].save({ hasNew: false });
-				}
+				app.actions.execute('feeds:mark');
 			}
 		},
 		{

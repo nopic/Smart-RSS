@@ -270,6 +270,20 @@ function (BB, $, SourceView, FolderView, SpecialView, Special, contextMenus, sel
 			if (io >= 0) {
 				this.selectedItems.splice(io, 1);
 			}
+		},
+		getSelectedFeeds: function(arr) {
+			var si = arr || _.pluck(this.selectedItems, 'model');
+			var rt = [];
+			for (var i=0; i<si.length; i++) {
+				if (si[i] instanceof bg.Source) {
+					rt.push(si[i]);
+				} else if (si[i] instanceof bg.Folder) {
+					var folderFeeds = bg.sources.where({ folderID: si[i].id });
+					rt.push.apply(rt, this.getSelectedFeeds(folderFeeds));
+				}
+			}
+
+			return _.unique(rt);
 		}
 	});
 
