@@ -394,8 +394,11 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 				$('[data-action="articles:undelete"]').css('display', 'block');
 				$('#context-undelete').css('display', 'block');
 			}
+
+
 			var completeFilter = filter;
 			if (this.unreadOnly) completeFilter.unread = true;
+
 			this.addItems( bg.items.where(completeFilter) );
 		},
 		handleNewFolderSelected: function(folderID) {

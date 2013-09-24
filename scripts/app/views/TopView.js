@@ -23,15 +23,17 @@ define(['backbone', 'jquery', 'underscore', 'views/feedList'], function(BB, $, _
 				this.model.save({ hasNew: false });
 			}
 
+
 			app.trigger('select:' + require('views/feedList').el.id, this.getSelectData(e));
 			
 		},
 		getSelectData: function(e) {
 			return {
 				action: 'new-select',
-				value: this.model.id || this.model.get('filter'),
+				// _.extend is important, because otherwise it would be sent by reference
+				value: this.model.id || _.extend({}, this.model.get('filter')),
 				name: this.model.get('name'),
-				unreadOnly: !!e.shiftKey
+				unreadOnly: !!e.altKey
 			};
 		},
 		setTitle: function(unread, total) {

@@ -124,8 +124,12 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 		}
 	}));
 
-
-
+	// Prevent context-menu when alt is pressed
+	document.addEventListener('keyup', function(e) {
+		if (e.keyCode == 18) {
+			e.preventDefault();
+		}
+	});
 
 
 	document.addEventListener('keydown', function(e) {

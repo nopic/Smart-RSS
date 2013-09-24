@@ -77,7 +77,7 @@ define([
 			return {
 				action: 'new-folder-select',
 				value: this.model.id,
-				unreadOnly: !!e.shiftKey
+				unreadOnly: !!e.altKey
 			};
 		}
 	});
