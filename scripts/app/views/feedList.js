@@ -284,6 +284,19 @@ function (BB, $, SourceView, FolderView, SpecialView, Special, contextMenus, sel
 			}
 
 			return _.unique(rt);
+		},
+		getSelectedFolders: function(arr) {
+			var si = arr || _.pluck(this.selectedItems, 'model');
+			var rt = [];
+			for (var i=0; i<si.length; i++) {
+				if (si[i] instanceof bg.Folder) {
+					rt.push(si[i]);
+					/*var folderFeeds = bg.sources.where({ folderID: si[i].id });
+					rt.push.apply(rt, this.getSelectedFeeds(folderFeeds));*/
+				}
+			}
+
+			return rt;
 		}
 	});
 

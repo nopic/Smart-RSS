@@ -22,10 +22,7 @@ function(BB, ContextMenu) {
 			title: bg.lang.c.DELETE,
 			icon: 'delete.png',
 			action: function() {
-				if (confirm(bg.lang.c.REALLY_DELETE)) {
-					sourceContextMenu.currentSource.destroy();
-				}
-				
+				app.actions.execute('feeds:delete');
 			}
 		},
 		{
@@ -119,13 +116,7 @@ function(BB, ContextMenu) {
 			title: bg.lang.c.DELETE,
 			icon: 'delete.png',
 			action: function() {
-				if (!confirm(bg.lang.c.REALLY_DELETE)) return;
-
-				var folder = require('views/feedList').selectedItems[0].model;
-				bg.sources.where({ folderID: folder.get('id') }).forEach(function(item) {
-					item.destroy();
-				});
-				folder.destroy();
+				app.actions.execute('feeds:delete');
 			}
 		},
 		{

@@ -63,6 +63,24 @@ return {
 				
 			}
 		},
+		delete: {
+			icon: 'delete.png',
+			title: bg.lang.c.DELETE,
+			fn: function() {
+				if (!confirm(bg.lang.c.REALLY_DELETE)) return;
+
+				var feeds = require('views/feedList').getSelectedFeeds();
+				var folders = require('views/feedList').getSelectedFolders();
+
+				feeds.forEach(function(feed) {
+					feed.destroy();
+				});
+
+				folders.forEach(function(folder) {
+					folder.destroy();
+				});
+			}
+		},
 		addSource: {
 			icon: 'add.png',
 			title: bg.lang.c.ADD_RSS_SOURCE,
