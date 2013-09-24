@@ -111,27 +111,39 @@ function (BB, $, SourceView, FolderView, SpecialView, Special, contextMenus, sel
 
 			$('.drag-over').removeClass('drag-over');
 
-			var id = oe.dataTransfer.getData('dnd-sources');
-			if (!id) return;
+			var ids = JSON.parse( oe.dataTransfer.getData('dnd-sources') ) ;
+			if (!ids || !ids.length) return;
 
-			var item = bg.sources.findWhere({ id: id });
-			if (!item) return;
 
-			var folderID;
-			if ($(e.currentTarget).hasClass('folder')) {
-				folderID = e.currentTarget.dataset.id;
-			} else {
-				folderID = e.currentTarget.dataset.inFolder;
+			for (var i=0; i<ids.length; i++) {
+				var id = ids[i];
+				var item = bg.sources.findWhere({ id: id });
+				if (!item) continue;
+
+				var folderID;
+				if ($(e.currentTarget).hasClass('folder')) {
+					folderID = e.currentTarget.dataset.id;
+				} else {
+					folderID = e.currentTarget.dataset.inFolder;
+				}
+
+				item.save({ folderID: folderID });
+
 			}
-
-			item.save({ folderID: folderID });
 
 			e.stopPropagation();
 		},
 		handleDragStart: function(e) {
-			var id = e.currentTarget.view.model.get('id');
+			//var id = e.currentTarget.view.model.get('id');
+			var models = _.pluck(this.selectedItems, 'model');
+			var ids = [];
+			models.forEach(function(model) {
+				if (model instanceof bg.Source) {
+					ids.push(model.id);
+				}
+			});
 
-			e.originalEvent.dataTransfer.setData('dnd-sources', id);
+			e.originalEvent.dataTransfer.setData('dnd-sources', JSON.stringify(ids));
 		},
 		handleChangeFolder: function(source) {
 			source = $('.source[data-id=' + source.get('id') + ']').get(0);

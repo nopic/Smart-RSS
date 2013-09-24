@@ -81,6 +81,27 @@ return {
 				});
 			}
 		},
+		showProperties: {
+			icon: 'properties.png',
+			title: bg.lang.c.PROPERTIES,
+			fn: function() {
+				var properties = app.feeds.properties;
+
+				var feedList = require('views/feedList');
+
+				var feeds = feedList.getSelectedFeeds();
+				var folders = feedList.getSelectedFolders();
+
+				if (feedList.selectedItems.length == 1 && folders.length == 1) {
+					properties.show(folders[0]);
+				} else if (!folders.length && feeds.length == 1) {
+					properties.show(feeds[0]);
+				} else if (feeds.length > 0) {
+					properties.show(feeds);
+				}
+				
+			}
+		},
 		addSource: {
 			icon: 'add.png',
 			title: bg.lang.c.ADD_RSS_SOURCE,

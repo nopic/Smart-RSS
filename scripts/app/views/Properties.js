@@ -2,7 +2,7 @@ define(['backbone', 'jquery', 'underscore'], function(BB, $, _) {
 
 	var Properties = BB.View.extend({
 		id: 'properties',
-		currentSource: null,
+		current: null,
 		events: {
 			'click button' : 'handleClick',
 			'keydown button' : 'handleKeyDown',
@@ -20,18 +20,38 @@ define(['backbone', 'jquery', 'underscore'], function(BB, $, _) {
 			}
 		},
 		saveData: function() {
-			if (!this.currentSource) {
+			if (!this.current) {
 				this.hide();
 				return;
 			}
 
-			this.currentSource.save({
-				title: $('#prop-title').val(),
-				url: app.fixURL($('#prop-url').val()),
-				username: $('#prop-username').val(),
-				password: $('#prop-password').val(),
-				updateEvery: parseFloat($('#prop-update-every').val())
-			});
+			if (this.current instanceof bg.Source) {
+				this.current.save({
+					title: $('#prop-title').val(),
+					url: app.fixURL($('#prop-url').val()),
+					username: $('#prop-username').val(),
+					password: $('#prop-password').val(),
+					updateEvery: parseFloat($('#prop-update-every').val())
+				});
+			} else if (this.current instanceof bg.Folder) {
+				this.current.save({
+					title: $('#prop-title').val()
+				});
+
+				var updateEvery = parseFloat($('#prop-update-every').val());
+				if (updateEvery >= 0) {
+					bg.sources.where({ folderID: this.current.id }).forEach(function(source) {
+						source.save({ updateEvery: updateEvery });
+					});
+				}
+			} else if (Array.isArray(this.current)) {
+				var updateEvery = parseFloat($('#prop-update-every').val());
+				if (updateEvery >= 0) {
+					this.current.forEach(function(source) {
+						source.save({ updateEvery: updateEvery });
+					});
+				}
+			}
 
 			this.hide();
 
@@ -41,19 +61,37 @@ define(['backbone', 'jquery', 'underscore'], function(BB, $, _) {
 				this.handleClick(e);
 			}
 		},
-		render: function(source) {
-			if (!source) return;
+		render: function() {
+			if (!this.current) return;
 
-			this.$el.html(this.template(source.attributes));
+			if (this.current instanceof bg.Source) {
+				this.$el.html(this.template(this.current.attributes));
 
-			if (source.get('updateEvery')) {
-				$('#prop-update-every').val(source.get('updateEvery'));
+				if (this.current.get('updateEvery')) {
+					$('#prop-update-every').val(this.current.get('updateEvery'));
+				}
+			} else {
+				var isFolder = this.current instanceof bg.Folder;
+				var arr = isFolder ? bg.sources.where({ folderID: this.current.id }) : this.current;
+
+				var firstUpdate = arr[0].get('updateEvery');
+				var someDiffer = arr.some(function(c) {
+					if (firstUpdate != c.get('updateEvery')) return true;
+				});
+
+				if (someDiffer) {
+					this.$el.html(this.template( isFolder ? _.extend({ mixed: 1 }, this.current.attributes) : { mixed: 1 } ));
+				} else {
+					this.$el.html(this.template( isFolder ? this.current.attributes : {} ));
+					$('#prop-update-every').val(firstUpdate);
+				}
 			}
 
 			return this;
 		},
 		show: function(source) {
-			this.render(source);
+			this.current = source;
+			this.render();
 			
 			this.$el.css('display', 'block');
 		},

@@ -29,9 +29,7 @@ function(BB, ContextMenu) {
 			title: bg.lang.c.PROPERTIES,
 			icon: 'properties.png',
 			action: function() {
-				var properties = app.feeds.properties;
-				properties.show(sourceContextMenu.currentSource);
-				properties.currentSource = sourceContextMenu.currentSource;
+				app.actions.execute('feeds:showProperties');
 			}
 		}
 	]);
@@ -120,6 +118,13 @@ function(BB, ContextMenu) {
 			}
 		},
 		{
+			title: bg.lang.c.PROPERTIES,
+			icon: 'properties.png',
+			action: function() {
+				app.actions.execute('feeds:showProperties');
+			}
+		}
+		/*{
 			title: bg.lang.c.RENAME,
 			action: function() {
 				var feedList = require('views/feedList');
@@ -128,7 +133,7 @@ function(BB, ContextMenu) {
 
 				feedList.selectedItems[0].model.save({ title: newTitle });
 			}
-		}
+		}*/
 	]);
 
 	var itemsContextMenu = new ContextMenu([

@@ -20,12 +20,21 @@
 
 	<!-- PROPERTIES -->
 	<script id="template-properties" type="text/template">
+		<% if (typeof title != 'undefined') { %>
 		<label>
 			{{NAME}}: 
 			<input type="text" id="prop-title" placeholder="{{FETCH_TITLE_TIP}}" title="{{FETCH_TITLE_TIP}}" value="<%- title %>"/>
 		</label>
+		<% } %>
+
+		<% if (typeof url != 'undefined') { %> 
 		<label>{{ADDRESS}}: <input type="url" id="prop-url" value="<%= url %>" /></label>
+		<% } %>
+
 		<label>{{UPDATE}}: <select id="prop-update-every">
+			<% if (typeof mixed != 'undefined') { %> 
+				<option value="-1">&lt;mixed&gt;</option>
+			<% } %> 
 			<option value="0">{{NEVER}}</option>
 			<option value="5">{{EVERY_5_MINUTES}}</option>
 			<option value="15">{{EVERY_15_MINUTES}}</option>
@@ -38,11 +47,15 @@
 			<option value="1440">{{EVERY_24_HOURS}}</option>
 			<option value="10080">{{EVERY_WEEK}}</option>
 		</select></label>
+
+		<% if (typeof url != 'undefined') { %> 
 		<div id="advanced-switch">{{MORE}}</div>
 		<div id="properties-advanced">
 			<label>{{USERNAME}}: <input type="text" id="prop-username" value="<%= username %>" /></label>
 			<label>{{PASSWORD}}: <input type="password" id="prop-password" value="<%= password %>" /></label>
 		</div>
+		<% } %>
+
 		<button id="prop-ok">{{OK}}</button><button id="prop-cancel">{{CANCEL}}</button>
 	</script>
 
