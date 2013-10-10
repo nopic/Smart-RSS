@@ -25,6 +25,8 @@ define(['backbone', 'jquery', 'underscore'], function(BB, $, _) {
 				return;
 			}
 
+			var updateEvery;
+
 			if (this.current instanceof bg.Source) {
 				this.current.save({
 					title: $('#prop-title').val(),
@@ -38,14 +40,14 @@ define(['backbone', 'jquery', 'underscore'], function(BB, $, _) {
 					title: $('#prop-title').val()
 				});
 
-				var updateEvery = parseFloat($('#prop-update-every').val());
+				updateEvery = parseFloat($('#prop-update-every').val());
 				if (updateEvery >= 0) {
 					bg.sources.where({ folderID: this.current.id }).forEach(function(source) {
 						source.save({ updateEvery: updateEvery });
 					});
 				}
 			} else if (Array.isArray(this.current)) {
-				var updateEvery = parseFloat($('#prop-update-every').val());
+				updateEvery = parseFloat($('#prop-update-every').val());
 				if (updateEvery >= 0) {
 					this.current.forEach(function(source) {
 						source.save({ updateEvery: updateEvery });

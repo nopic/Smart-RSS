@@ -39,7 +39,7 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 				this.hideContextMenus();
 				//$('.focused').removeClass('focused');
 
-				if (e.target instanceof Window) {
+				if (e.target instanceof window.Window) {
 					comm.trigger('stop-blur');
 				}
 

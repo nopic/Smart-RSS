@@ -222,17 +222,7 @@ return {
 					app.actions.execute('articles:focus');
 				}
 			}
-		},
-		selectNext: {
-			fn: function(e) {
-				require('views/feedList').selectNext(e);
-			}
-		},
-		selectPrevious: {
-			fn: function(e) {
-				require('views/feedList').selectPrev(e);
-			}
-		},
+		}
 	},
 	articles: {
 		mark: {

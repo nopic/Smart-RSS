@@ -1,8 +1,8 @@
 define([
-	'backbone', 'jquery', 'views/SourceView', 'views/FolderView', 'views/SpecialView', 'models/Special',
+	'backbone', 'jquery', 'underscore', 'views/SourceView', 'views/FolderView', 'views/SpecialView', 'models/Special',
 	'instances/contextMenus', 'mixins/selectable', 'instances/specials'
 ],
-function (BB, $, SourceView, FolderView, SpecialView, Special, contextMenus, selectable, specials) {
+function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, selectable, specials) {
 
 	var FeedListView = BB.View.extend({
 		//el: '#list',
