@@ -255,11 +255,11 @@ chrome.runtime.getBackgroundPage(function(bg) {
 				return;
 			}
 
-			var feeds = doc.querySelectorAll('body > outline[text]');
+			var feeds = doc.querySelectorAll('body > outline[text], body > outline[title]');
 
 			for (var i=0; i<feeds.length; i++) {
-				if (feeds[i].getAttribute('type') != 'rss' ) {
-					var subfeeds = feeds[i].querySelectorAll('outline[type=rss]');
+				if ( !feeds[i].hasAttribute('xmlUrl') ) {
+					var subfeeds = feeds[i].querySelectorAll('outline[xmlUrl]');
 
 					var folder = bg.folders.create({
 						title: decodeHTML(feeds[i].getAttribute('title') || feeds[i].getAttribute('text'))
@@ -267,7 +267,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 
 					for (var n=0; n<subfeeds.length; n++) {
 						bg.sources.create({
-							title: decodeHTML(subfeeds[n].getAttribute('title')),
+							title: decodeHTML(subfeeds[n].getAttribute('title') || subfeeds[n].getAttribute('text')),
 							url: subfeeds[n].getAttribute('xmlUrl'),
 							updateEvery: 180,
 							folderID: folder.get('id')
@@ -275,7 +275,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 					}
 				} else {
 					bg.sources.create({
-						title: decodeHTML(feeds[i].getAttribute('title')),
+						title: decodeHTML(feeds[i].getAttribute('title') || feeds[i].getAttribute('text')),
 						url: feeds[i].getAttribute('xmlUrl'),
 						updateEvery: 180
 					}, { wait: true });
