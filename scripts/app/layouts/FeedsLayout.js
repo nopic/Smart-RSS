@@ -42,9 +42,11 @@ function ($, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties, r
 
 			this.$el.on('focus', function() {
 				$(this).addClass('focused');
+				clearTimeout(blurTimeout);
 			});
 
 			var focus = true;
+			var blurTimeout;
 
 			comm.on('stop-blur', function() {
 				focus = false;

@@ -9,11 +9,19 @@ define({
 	feeds: {
 		'up': 'feeds:selectPrevious',
 		'down': 'feeds:selectNext',
+		'u': 'feeds:selectPrevious',
+		'j': 'feeds:selectNext',
+		
 		'ctrl+left': 'feeds:closeFolders',
 		'ctrl+right': 'feeds:openFolders',
 		'left': 'feeds:toggleFolder',
 		'right': 'feeds:showArticles',
-		'enter': 'feeds:showAndFocusArticles'
+		'enter': 'feeds:showAndFocusArticles',
+
+		'shift+j': 'feeds:selectNext',
+		'shift+down': 'feeds:selectNext',
+		'shift+u': 'feeds:selectPrevious',
+		'shift+up': 'feeds:selectPrevious',
 	},
 	articles: {
 		'd': 'articles:delete',

@@ -32,9 +32,11 @@ function ($, Layout, ToolbarView, Toolbar, articleList, resizable, comm) {
 
 			this.$el.on('focus', function() {
 				$(this).addClass('focused');
+				clearTimeout(blurTimeout);
 			});
 
 			var focus = true;
+			var blurTimeout;
 
 			comm.on('stop-blur', function() {
 				focus = false;
