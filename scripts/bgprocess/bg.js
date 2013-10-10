@@ -208,6 +208,14 @@ var Item = Backbone.Model.extend({
 			this._source = sources.findWhere({ id: this.get('sourceID')	}) || sourceJoker;
 		}
 		return this._source;
+	},
+	query: function(o) {
+		if (!o) return true;
+		for (i in o) {
+			if (!o.hasOwnProperty(i)) continue;
+			if (this.get(i) != o[i]) return false;
+		}
+		return true;
 	}
 });
 

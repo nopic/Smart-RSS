@@ -237,13 +237,9 @@ return {
 			title: bg.lang.c.UPDATE,
 			fn: function() {
 				var list = require('views/articleList');
-				if (list.currentSource) {
-					bg.downloadOne(list.currentSource);
-				} else if (list.currentFolder) {
-					bg.sources.forEach(function(source) {
-						if (source.get('folderID') == list.currentFolder.id) {
-							bg.downloadOne(source);
-						}
+				if (list.currentData.feeds.length) {
+					list.currentData.feeds.forEach(function(id) {
+						bg.downloadOne(bg.sources.get(id));
 					});
 				} else {
 					bg.downloadAll(true); // true = force
@@ -393,15 +389,15 @@ return {
 			icon: 'read.png',
 			fn: function() {
 				var articleList = require('views/articleList');
-				if (articleList.currentSource) {
-					var id = articleList.currentSource.get('id');
-					if (!id) return;
-					bg.items.forEach(function(item) {
-						if (item.get('unread') == true && item.getSource().id == id) {
+				var f = articleList.currentData.feeds;
+				var filter = articleList.currentData.filter;
+				if (f.length) {
+					(filter ? bg.items.where(articleList.currentData.filter) : bg.items).forEach(function(item) {
+						if (item.get('unread') == true && f.indexOf(item.get('sourceID')) >= 0) {
 							item.save({ unread: false, visited: true });
 						}
 					});
-				} else if (articleList.specialName == 'all-feeds') {
+				} else if (articleList.currentData.name == 'all-feeds') {
 					if (confirm(bg.lang.c.MARK_ALL_QUESTION)) {
 						bg.items.forEach(function(item) {
 							if (item.get('unread') == true) {
@@ -409,7 +405,7 @@ return {
 							}
 						});
 					}
-				} else if (articleList.specialName) {
+				} else if (articleList.currentData.filter) {
 					bg.items.where(articleList.specialFilter).forEach(function(item) {
 						item.save({ unread: false, visited: true });
 					});

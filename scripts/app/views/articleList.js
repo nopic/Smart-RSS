@@ -110,7 +110,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 
 				if (data.action == 'new-select') {
 					this.handleNewSelected(data);
-				} 
+				}
 			}, this);
 
 			app.on('give-me-next', function() {
@@ -221,21 +221,25 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 		 * @method inCurrentData
 		 * @return Boolean
 		 */
-		inCurrentData: function() {
-			/****if (this.currentSource && this.currentSource.id != item.get('sourceID')) {
-				return;
-			} else if (this.specialName && this.specialName != 'all-feeds') {
-				return;
-			} else if (this.currentFolder && this.currentFolder.id != item.getSource().get('folderID')) {
-				return;
-			}****/
-			return true;
+		inCurrentData: function(item) {
+			var f = this.currentData.feeds;
+			if (!f.length) {
+				if (!this.currentData.filter) {
+					return true;
+				} else if (item.query(this.currentData.filter)) {
+					return true;
+				}
+			} else if (f.indexOf(item.get('sourceID')) >= 0) {
+				return true;
+			}
+
+			return false;
 		},
 		addItem: function(item, noManualSort) {
 	
 			//Don't add newly fetched items to middle column, when they shouldn't be
-			if (noManualSort !== true && !this.inCurrentData(item)) {				
-					return false;
+			if (noManualSort !== true && !this.inCurrentData(item)) {
+				return false;
 			}
 
 		
