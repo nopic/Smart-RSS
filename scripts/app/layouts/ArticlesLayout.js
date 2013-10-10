@@ -4,9 +4,9 @@
  */
 define([
 	'jquery', 'layouts/Layout', 'views/ToolbarView', 'models/Toolbar', 'views/articleList',
-	'mixins/resizable', 'domReady!'
+	'mixins/resizable', 'controllers/comm', 'domReady!'
 ],
-function ($, Layout, ToolbarView, Toolbar, articleList, resizable) {
+function ($, Layout, ToolbarView, Toolbar, articleList, resizable, comm) {
 
 	var toolbar = new Toolbar({ id: 'articles' });
 
@@ -34,12 +34,21 @@ function ($, Layout, ToolbarView, Toolbar, articleList, resizable) {
 				$(this).addClass('focused');
 			});
 
+			var focus = true;
+
+			comm.on('stop-blur', function() {
+				focus = false;
+			});
+
 			this.$el.on('blur', function(e) {
-				if (!e.relatedTarget) {
-					this.focus();
-					return;
-				}
-				$(this).removeClass('focused');
+				blurTimeout = setTimeout(function() {
+					if (focus && !e.relatedTarget) {
+						this.focus();
+						return;
+					}
+					$(this).removeClass('focused');
+					focus = true;
+				}.bind(this), 0);
 			});
 
 

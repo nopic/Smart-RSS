@@ -4,9 +4,10 @@
  */
 define([
 	'jquery', 'layouts/Layout', 'views/ToolbarView', 'models/Toolbar', 'views/feedList',
-	'instances/contextMenus', 'views/properties', 'mixins/resizable', 'views/IndicatorView', 'domReady!'
+	'instances/contextMenus', 'views/properties', 'mixins/resizable', 'views/IndicatorView',
+	'controllers/comm', 'domReady!'
 ],
-function ($, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties, resizable, IndicatorView) {
+function ($, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties, resizable, IndicatorView, comm) {
 
 	var toolbar = new Toolbar({ id: 'feeds' });
 
@@ -43,12 +44,21 @@ function ($, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties, r
 				$(this).addClass('focused');
 			});
 
+			var focus = true;
+
+			comm.on('stop-blur', function() {
+				focus = false;
+			});
+
 			this.$el.on('blur', function(e) {
-				if (!e.relatedTarget) {
-					this.focus();
-					return;
-				}
-				$(this).removeClass('focused');
+				blurTimeout = setTimeout(function() {
+					if (focus && !e.relatedTarget) {
+						this.focus();
+						return;
+					}
+					$(this).removeClass('focused');
+					focus = true;
+				}.bind(this), 0);
 			});
 
 			this.on('resize:after', this.handleResize);

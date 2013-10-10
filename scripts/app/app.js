@@ -34,7 +34,16 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 		},
 		initialize: function() {
 			this.actions = new Actions();
-			window.addEventListener('blur', this.hideContextMenus.bind(this));
+
+			window.addEventListener('blur', function(e) {
+				this.hideContextMenus();
+				//$('.focused').removeClass('focused');
+
+				if (e.target instanceof Window) {
+					comm.trigger('stop-blur');
+				}
+
+			}.bind(this));
 
 			bg.settings.on('change:layout', this.handleLayoutChange, this);
 			bg.settings.on('change:panelToggled', this.handleToggleChange, this);
