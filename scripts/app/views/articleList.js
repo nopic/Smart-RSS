@@ -32,11 +32,15 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 		itemClass: 'item',
 		views: [],
 		viewsToRender: [],
-		currentSource: null,
-		currentFolder: null,
-		specialName: 'all-feeds',
-		specialFilter: { trashed: false },
-		unreadOnly: false,
+
+		/**** clearonSelect sets the same thing ... call it in init? ****/
+		currentData: {
+			feeds: [],
+			name: 'all-feeds',
+			filter: { trashed: false },
+			unreadOnly: false
+		},
+
 		noFocus: false,
 		reuseIndex: 0,
 		events: {
@@ -105,14 +109,8 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 				this.unreadOnly = data.unreadOnly;
 
 				if (data.action == 'new-select') {
-					/****if (!Array.isArray(data.value)) {
-						this.handleNewSpecialSelected(data.value, data.name);
-					} else {****/
-						this.handleNewSelected(data);
-					//}
-				} else if (data.action == 'new-folder-select') {
-					this.handleNewFolderSelected(data.value);
-				}
+					this.handleNewSelected(data);
+				} 
 			}, this);
 
 			app.on('give-me-next', function() {
@@ -127,6 +125,8 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 		loadAllFeeds: function() {
 			var that = this;
 			setTimeout(function() {
+				app.trigger('select-all-feeds');
+
 				var unread = bg.items.where({ trashed: false, unread: true });
 				if (unread.length) {
 					that.addItems(unread);
@@ -166,13 +166,9 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 				bg.items.off('render-screen', this.handleRenderScreen, this);
 				bg.settings.off('change:lines', this.handleChangeLines, this);
 				bg.settings.off('change:layout', this.handleChangeLayout, this);
+
 				bg.sources.off('destroy', this.handleSourcesDestroy, this);
-				if (this.currentSource) {
-					this.currentSource.off('destroy', this.handleDestroyedSource, this);
-				}
-				if (this.currentFolder) {
-					this.currentFolder.off('destroy', this.handleDestroyedSource, this);
-				}
+				
 				bg.sources.off('clear-events', this.handleClearEvents, this);
 			}
 		},
@@ -185,15 +181,9 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 		},
 		handleSort: function() {
 			$('#input-search').val('');
-			if (this.specialName) {
-				this.handleNewSpecialSelected(this.specialFilter, this.specialName);
-			} else if (this.currentSource) {
-				this.handleNewSelected(this.currentSource);
-			} else if (this.currentFolder) {
-				this.handleNewFolderSelected(this.currentFolder);
-			} else {
-				alert('E1: This should not happen. Please report it!');
-			}
+			
+			this.handleNewSelected(this.currentData);
+			
 		},
 		handleChangeLines: function(settings) {
 			this.$el.removeClass('lines-auto');
@@ -224,80 +214,86 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 				}.bind(this));
 			}
 		},
+
+		/**
+		 * Tests whether newly fetched item should be added to current list.
+		 * (If the item's feed is selected)
+		 * @method inCurrentData
+		 * @return Boolean
+		 */
+		inCurrentData: function() {
+			/****if (this.currentSource && this.currentSource.id != item.get('sourceID')) {
+				return;
+			} else if (this.specialName && this.specialName != 'all-feeds') {
+				return;
+			} else if (this.currentFolder && this.currentFolder.id != item.getSource().get('folderID')) {
+				return;
+			}****/
+			return true;
+		},
 		addItem: function(item, noManualSort) {
-			/**
-			 * Don't add newly fetched items to middle column, when they shouldn't be
-			 */
+	
+			//Don't add newly fetched items to middle column, when they shouldn't be
+			if (noManualSort !== true && !this.inCurrentData(item)) {				
+					return false;
+			}
+
+		
+
+			var after = null;
 			if (noManualSort !== true) {
-				if (this.currentSource && this.currentSource.id != item.get('sourceID')) {
-					return;
-				} else if (this.specialName && this.specialName != 'all-feeds') {
-					return;
-				} else if (this.currentFolder && this.currentFolder.id != item.getSource().get('folderID')) {
-					return;
+				$.makeArray($('#article-list .item, #article-list .date-group')).some(function(itemEl) {
+					if (bg.items.comparator(itemEl.view.model, item) === 1) {
+						after = itemEl;
+						return true;
+					}
+				});
+			}
+
+			var view;
+
+			if (!after) {
+				if (this.reuseIndex >= this.views.length) {
+					view = new ItemView({ model: item }, this);
+					if (!this._itemHeight) {
+						view.render();
+					} else {
+						view.$el.css('height', this._itemHeight + 'px');
+						view.prerender();
+					}
+					this.$el.append(view.$el);
+					this.views.push(view);
+				} else {
+					view = this.views[this.reuseIndex];
+					view.swapModel(item);
+				}
+				
+				if (!this.selectedItems.length) this.select(view);
+			} else {
+				view = new ItemView({ model: item }, this);
+				view.render().$el.insertBefore($(after));
+				
+				// weee, this is definitelly not working 100% right :D or is it?
+				var indexElement = after.view instanceof ItemView ? after : after.nextElementSibling;
+				var index = indexElement ? this.views.indexOf(indexElement.view) : -1;
+				if (index == -1) index = this.reuseIndex;
+
+				this.views.splice(index, 0, view);
+			}
+
+			if (!this._itemHeight) {
+				this._itemHeight = view.el.getBoundingClientRect().height;
+			}
+
+
+			if (!bg.settings.get('disableDateGroups')) {
+				var group = Group.getGroup(item.get('date'));
+				if (!groups.findWhere({ title: group.title })) {
+					groups.add(new Group(group), { before: view.el });
 				}
 			}
 
-			//if (!item.get('deleted') && (!item.get('trashed') || this.specialName == 'trash') ) {
-
-				var after = null;
-				if (noManualSort !== true) {
-					$.makeArray($('#article-list .item, #article-list .date-group')).some(function(itemEl) {
-						if (bg.items.comparator(itemEl.view.model, item) === 1) {
-							after = itemEl;
-							return true;
-						}
-					});
-				}
-
-				var view;
-
-				if (!after) {
-					if (this.reuseIndex >= this.views.length) {
-						view = new ItemView({ model: item }, this);
-						if (!this._itemHeight) {
-							view.render();
-						} else {
-							view.$el.css('height', this._itemHeight + 'px');
-							view.prerender();
-						}
-						this.$el.append(view.$el);
-						this.views.push(view);
-					} else {
-						view = this.views[this.reuseIndex];
-						view.swapModel(item);
-					}
-					
-					if (!this.selectedItems.length) this.select(view);
-				} else {
-					view = new ItemView({ model: item }, this);
-					view.render().$el.insertBefore($(after));
-					
-					// weee, this is definitelly not working 100% right :D or is it?
-					var indexElement = after.view instanceof ItemView ? after : after.nextElementSibling;
-					var index = indexElement ? this.views.indexOf(indexElement.view) : -1;
-					if (index == -1) index = this.reuseIndex;
-
-					this.views.splice(index, 0, view);
-				}
-
-				if (!this._itemHeight) {
-					this._itemHeight = view.el.getBoundingClientRect().height;
-				}
-
-
-				if (!bg.settings.get('disableDateGroups')) {
-					var group = Group.getGroup(item.get('date'));
-					if (!groups.findWhere({ title: group.title })) {
-						groups.add(new Group(group), { before: view.el });
-					}
-				}
-
-				this.reuseIndex++;
-				
-
-				
-			//}
+			this.reuseIndex++;
 		},
 		addGroup: function(model, col, opt) {
 			var before = opt.before;
@@ -352,30 +348,23 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 		clearOnSelect: function() {
 			$('input[type=search]').val('');
 
-			if (this.currentSource) {
-				this.currentSource.off('destroy', this.handleDestroyedSource, this);
-			}
-
-			if (this.specialName == 'trash') {
+			if (this.currentData.name == 'trash') {
 				$('[data-action="articles:update"]').css('display', 'block');
 				$('[data-action="articles:undelete"]').css('display', 'none');
 				$('#context-undelete').css('display', 'none');
 			}
 
-			if (this.currentFolder) {
-				this.currentFolder.off('destroy', this.handleDestroyedSource, this);
-			}
+			this.currentData = {
+				feeds: [],
+				name: 'all-feeds',
+				filter: { trashed: false },
+				unreadOnly: false
+			};
 
-			this.specialName = null;
-			this.specialFilter = null;
-			this.currentSource = null;
-			this.currentFolder = null;
 		},
 		handleNewSelected: function(data) {
 			this.clearOnSelect();
-			/****this.currentSource = source;
-			
-			source.on('destroy', this.handleDestroyedSource, this);****/
+			this.currentData = data;
 
 			var searchIn = null;
 			if (data.filter) {
@@ -391,87 +380,27 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 
 			this.addItems( items );
 		},
-		handleNewSpecialSelected: function(filter, name) {
-			this.clearOnSelect();
-
-			this.specialName = name;
-			this.specialFilter = filter;
-
-			if (this.specialName == 'trash') {
-				$('[data-action="articles:update"]').css('display', 'none');
-				$('[data-action="articles:undelete"]').css('display', 'block');
-				$('#context-undelete').css('display', 'block');
-			}
-
-
-			var completeFilter = filter;
-			if (this.unreadOnly) completeFilter.unread = true;
-
-			this.addItems( bg.items.where(completeFilter) );
-		},
-		handleNewFolderSelected: function(folderID) {
-			this.clearOnSelect();
-
-			if (folderID instanceof bg.Folder) {
-				this.currentFolder = folderID;
-				folderID = this.currentFolder.get('id');
-			} else {
-				this.currentFolder = bg.folders.findWhere({ id: folderID });
-			}
-
-			
-			this.currentFolder.on('destroy', this.handleDestroyedSource, this);
-
-
-
-			var feeds = _.pluck(bg.sources.where({ folderID: folderID }), 'id');
-
-			// By not returning, content of empty folder can be showed
-			// if (!feeds.length) return;
-
-			this.addItems( bg.items.filter(function(item) {
-				if (this.unreadOnly && item.get('unread') == true) {
-					if (feeds.indexOf(item.get('sourceID')) >= 0) {
-						return true;
-					}
-				} else if (!this.unreadOnly && feeds.indexOf(item.get('sourceID')) >= 0) {
-					return true;
-				}
-				
-			}, this) );
-		},
+		
 		/**
-		 * @Triggered: when any source is destroyed
-		 * @Description: if source in current folder is deleted select current folder
+		 * If current feed is removed, select all feeds
+		 * @triggered when any source is destroyed
+		 * @method handleSourcesDestroy
+		 * @param {Source} Destroyed source
 		 */
 		handleSourcesDestroy: function(source) {
-			if (!this.currentFolder) return;
-			var folderID = source.get('folderID');
-			if (folderID && this.currentFolder.id == folderID) {
-				app.trigger('select-folder', this.currentFolder.id);
-			}
-		},
-		/**
-		 * Triggered: when currently selected feed or folder is destroyed
-		 */
-		handleDestroyedSource: function(model) {
-			var that = this;
-			if (this.currentFolder && !(model instanceof bg.Folder)) {
-				alert('U01: This should never happen. If it did, please note what you just did it and contact me :)');
-				/*setTimeout(function() {
-					topWindow.frames[0].postMessage({ action: 'select-folder', value: this.currentFolder.id }, '*');
-					that.handleNewFolderSelected(that.currentFolder);
-				}, 0);*/
-			} else {
-				// select all feeds in left column
-				if (model == this.currentSource) {
-					app.trigger('select-all-feeds');
-					//topWindow.frames[0].postMessage({ action: 'select-all-feeds' }, '*');
-				}
 
-				// load all feeds in middle column
+			var that = this;
+			var d = this.currentData;
+			var index = d.feeds.indexOf(source.id);
+
+			if (index >= 0) {
+				d.feeds.splice(index, 1);
+			}
+
+			if (!d.feeds.length && !d.filter) {
+
 				this.clearOnSelect();
-				this.specialName = 'all-feeds';
+
 				if (document.querySelector('.item')) {
 					this.once('items-destroyed', function() {
 						that.loadAllFeeds();
@@ -479,8 +408,8 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 				} else {
 					this.loadAllFeeds();
 				}
-				
 			}
+
 		},
 		undeleteItem: function(view) {
 			view.model.save({

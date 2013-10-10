@@ -157,7 +157,7 @@ define(['chai', 'preps/extendNative'], function(chai) {
 			});
 
 			it('should decrease all feeds total counter', function() {
-				expect(bg.info.get('allCountUnread')).to.equal(allTotal);
+				expect(bg.info.get('allCountTotal')).to.equal(allTotal);
 			});
 		});
 	});
