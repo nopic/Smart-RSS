@@ -13,16 +13,7 @@ define(['backbone', 'jquery', 'underscore', 'views/feedList'], function(BB, $, _
 			
 			/****hasNew state is not changed when folder is selected****/
 			/****this is never called, thus hasNew is never changed****/
-			if (this.model.get('name') == 'all-feeds') {
-				bg.sources.forEach(function(source) {
-					if (source.get('hasNew')) {
-						source.save({ hasNew: false });
-					}
-				});
-				
-			} else if (this.model instanceof bg.Source && this.model.get('hasNew')) {
-				this.model.save({ hasNew: false });
-			}
+			alert('never');
 
 
 			app.trigger('select:' + require('views/feedList').el.id, this.getSelectData(e));

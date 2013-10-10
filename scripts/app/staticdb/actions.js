@@ -210,7 +210,22 @@ return {
 					name: special ? special.get('name') : null,
 					unreadOnly: !!e.altKey
 				});
-				//cs[0].showSourceItems({ shiftKey: e.shiftKey });
+				
+
+				if (special && special.get('name') == 'all-feeds') {
+					bg.sources.forEach(function(source) {
+						if (source.get('hasNew')) {
+							source.save({ hasNew: false });
+						}
+					});
+					
+				} else if (ids.length) {
+					bg.sources.forEach(function(source) {
+						if (source.get('hasNew') && ids.indexOf(source.id) >= 0) {
+							source.save({ hasNew: false });
+						}
+					});
+				}
 			}
 		},
 		showAndFocusArticles: {
