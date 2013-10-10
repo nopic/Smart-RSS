@@ -98,7 +98,9 @@ return {
 				return;
 			}
 
-			this.trigger('pick', view, e);
+			setTimeout(function() {
+				this.trigger('pick', view, e);
+			}.bind(this), 0);
 			
 		} else if (e.shiftKey && this.selectPivot) {
 			this.$el.find('.selected').removeClass('selected');

@@ -196,10 +196,21 @@ return {
 			title: 'Show articles',
 			fn: function(e) {
 				e = e || {};
-				var cs = require('views/feedList').selectedItems;
-				if (cs.length) {
-					cs[0].showSourceItems({ noSelect: true, shiftKey: e.shiftKey });
-				}
+				var feedList = require('views/feedList');
+				var feeds = feedList.getSelectedFeeds();
+				var ids = _.pluck(feeds, 'id');
+				var special = $('.special.selected').get(0);
+				if (special) special = special.view.model;
+
+				app.trigger('select:' + feedList.el.id, {
+					action: 'new-select',
+					feeds: ids,
+					// _.extend is important, because otherwise it would be sent by reference
+					filter: special ? _.extend({}, special.get('filter')) : null,
+					name: special ? special.get('name') : null,
+					unreadOnly: !!e.altKey
+				});
+				//cs[0].showSourceItems({ shiftKey: e.shiftKey });
 			}
 		},
 		showAndFocusArticles: {

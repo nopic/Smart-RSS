@@ -101,17 +101,15 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 		handleAttached: function() {
 
 			app.on('select:feed-list', function(data) {
-				if (data.action == 'new-select' || data.action == 'new-folder-select') {
-					this.el.scrollTop = 0;
-					this.unreadOnly = data.unreadOnly;
-				}
+				this.el.scrollTop = 0;
+				this.unreadOnly = data.unreadOnly;
 
 				if (data.action == 'new-select') {
-					if (typeof data.value == 'object') {
+					/****if (!Array.isArray(data.value)) {
 						this.handleNewSpecialSelected(data.value, data.name);
-					} else {
-						this.handleNewSelected(bg.sources.findWhere({ id: data.value }));
-					}
+					} else {****/
+						this.handleNewSelected(data);
+					//}
 				} else if (data.action == 'new-folder-select') {
 					this.handleNewFolderSelected(data.value);
 				}
@@ -240,7 +238,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 				}
 			}
 
-			if (!item.get('deleted') && (!item.get('trashed') || this.specialName == 'trash') ) {
+			//if (!item.get('deleted') && (!item.get('trashed') || this.specialName == 'trash') ) {
 
 				var after = null;
 				if (noManualSort !== true) {
@@ -299,7 +297,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 				
 
 				
-			}
+			//}
 		},
 		addGroup: function(model, col, opt) {
 			var before = opt.before;
@@ -373,15 +371,25 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 			this.currentSource = null;
 			this.currentFolder = null;
 		},
-		handleNewSelected: function(source) {
+		handleNewSelected: function(data) {
 			this.clearOnSelect();
-			this.currentSource = source;
+			/****this.currentSource = source;
 			
-			source.on('destroy', this.handleDestroyedSource, this);
+			source.on('destroy', this.handleDestroyedSource, this);****/
 
-			var completeFilter = { sourceID: source.id };
-			if (this.unreadOnly) completeFilter.unread = true;
-			this.addItems( bg.items.where(completeFilter) );
+			var searchIn = null;
+			if (data.filter) {
+				searchIn = bg.items.where(data.filter);
+			} else {
+				searchIn = bg.items.where({ trashed: false });
+			}
+
+			var items = searchIn.filter(function(item) {
+				if (!item.get('unread') && this.unreadOnly) return false;
+				return !data.feeds.length || data.feeds.indexOf(item.get('sourceID')) >= 0;
+			}, this);
+
+			this.addItems( items );
 		},
 		handleNewSpecialSelected: function(filter, name) {
 			this.clearOnSelect();
