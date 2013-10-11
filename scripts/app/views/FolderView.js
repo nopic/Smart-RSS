@@ -1,6 +1,7 @@
 define([
 	'backbone', 'jquery', 'underscore', 'views/TopView', 'instances/contextMenus'
-], function(BB, $, _, TopView, contextMenus) {
+], 
+function(BB, $, _, TopView, contextMenus) {
 	var FolderView = TopView.extend({
 		className: 'list-item folder',
 		template: _.template($('#template-folder').html()),

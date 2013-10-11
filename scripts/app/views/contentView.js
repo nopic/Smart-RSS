@@ -1,24 +1,72 @@
-define(['backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escapeHtml'], function(BB, $, _, formatDate, escapeHtml) {
+/**
+ * @module App
+ * @submodule views/contentView
+ */
+define([
+	'backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escapeHtml'
+],
+function(BB, $, _, formatDate, escapeHtml) {
+
+	/**
+	 * Full view of one article (right column)
+	 * @class ContentView
+	 * @constructor
+	 * @extends Backbone.View
+	 */
 	var ContentView = BB.View.extend({
+
+		/**
+		 * Tag name of content view element
+		 * @property tagName
+		 * @default 'header'
+		 * @type String
+		 */
 		tagName: 'header',
+
+		/**
+		 * Content view template
+		 * @property template
+		 * @default #template-header
+		 * @type Function
+		 */
 		template:  _.template($('#template-header').html()),
+
+
 		events: {
 			'mousedown': 'handleMouseDown',
 			'click .pin-button': 'handlePinClick',
 			'keydown': 'handleKeyDown'
 		},
+
+		/**
+		 * Changes pin state
+		 * @method handlePinClick
+		 * @triggered on click on pin button
+		 * @param event {MouseEvent}
+		 */
 		handlePinClick: function(e) {
 			$(e.currentTarget).toggleClass('pinned');
 			this.model.save({
 				pinned: $(e.currentTarget).hasClass('pinned')
 			});
 		},
+
+		/**
+		 * Called when new instance is created
+		 * @method initialize
+		 */
 		initialize: function() {
 			this.on('attach', this.handleAttached);
 
 			bg.items.on('change:pinned', this.handleItemsPin, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 		},
+
+		/**
+		 * Sets comm event listeners
+		 * @method handleAttached
+		 * @triggered when content view is attached to DOM
+		 */
 		handleAttached: function() {
 			//window.addEventListener('message', function(e) {
 			app.on('select:article-list', function(data) {
@@ -38,6 +86,12 @@ define(['backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escap
 			}, this);
 
 		},
+
+		/**
+		 * Next page in article or next unread article
+		 * @method handleSpace
+		 * @triggered when space is pressed in middle column
+		 */
 		handleSpace: function() {
 			var cw = $('iframe').get(0).contentWindow;
 			var d = $('iframe').get(0).contentWindow.document;
@@ -47,17 +101,37 @@ define(['backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escap
 				cw.scrollBy(0, d.documentElement.clientHeight * 0.85);
 			}
 		},
+
+		/**
+		 * Unbinds all listeners to bg process
+		 * @method handleClearEvents
+		 * @triggered when tab is closed/refershed
+		 * @param id {Integer} id of the closed tab
+		 */
 		handleClearEvents: function(id) {
 			if (window == null || id == tabID) {
 				bg.items.off('change:pinned', this.handleItemsPin, this);
 				bg.sources.off('clear-events', this.handleClearEvents, this);
 			}
 		},
+
+		/**
+		 * Sets the pin button state
+		 * @method handleItemsPin
+		 * @triggered when the pin state of the article is changed
+		 * @param model {Item} article that had its pin state changed
+		 */
 		handleItemsPin: function(model) {
 			if (model == this.model) {
 				this.$el.find('.pin-button').toggleClass('pinned', this.model.get('pinned'));
 			}
 		},
+
+		/**
+		 * Gets formated date (according to settings) from given unix time
+		 * @method getFormatedDate
+		 * @param unixtime {Number}
+		 */
 		getFormatedDate: function(unixtime) {
 			var dateFormats = { normal: 'DD.MM.YYYY', iso: 'YYYY-MM-DD', us: 'MM/DD/YYYY' };
 			var pickedFormat = dateFormats[bg.settings.get('dateType') || 'normal'] || dateFormats['normal'];
@@ -66,7 +140,21 @@ define(['backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escap
 
 			return formatDate(new Date(unixtime), pickedFormat + ' ' + timeFormat);
 		},
+
+		/**
+		 * Rendering of article is delayed with timeout for 50ms to spped up quick select changed in article list.
+		 * This property contains descriptor for that timeout.
+		 * @property renderTimeout
+		 * @default null
+		 * @type Integer
+		 */
 		renderTimeout: null,
+
+		/**
+		 * Renders articles content asynchronously
+		 * @method render
+		 * @chainable
+		 */
 		render: function() {
 			clearTimeout(this.renderTimeout);
 
@@ -108,6 +196,12 @@ define(['backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escap
 
 			return this;
 		},
+
+		/**
+		 * Replaces old article model with newly selected one
+		 * @method handleNewSelected
+		 * @param model {Item} The new article model
+		 */
 		handleNewSelected: function(model) {
 			if (model == this.model) return;
 			this.model = model;
@@ -118,9 +212,19 @@ define(['backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escap
 				this.render();
 			}
 		},
+
+		/**
+		 * Hides contents (header, iframe)
+		 * @method hide
+		 */
 		hide: function() {
 			$('header,iframe').css('display', 'none');
 		},
+
+		/**
+		 * Show contents (header, iframe)
+		 * @method hide
+		 */
 		show: function() {
 			$('header,iframe').css('display', 'block');
 		},

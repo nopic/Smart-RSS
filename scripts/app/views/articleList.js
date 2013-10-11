@@ -1,3 +1,7 @@
+/**
+ * @module App
+ * @submodule views/articleList
+ */
 define([
 	'backbone', 'underscore', 'jquery', 'collections/Groups', 'models/Group', 'views/GroupView',
 	'views/ItemView', 'mixins/selectable'
@@ -21,19 +25,71 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 		/*  && (elemBottom <= docViewBottom) &&  (elemTop >= docViewTop) ;*/
 	}
 
-	
-
 	var groups = new Groups();
 
+
+	/**
+	 * List of articles
+	 * @class ArticleListView
+	 * @constructor
+	 * @extends Backbone.View
+	 */
 	var ArticleListView = BB.View.extend({
+		/**
+		 * Height of one article item (changes with layout and rems)
+		 * @property _itemHeight
+		 * @default 0
+		 * @type Number
+		 */
 		_itemHeight: 0,
+
+		/**
+		 * Tag name of article list element
+		 * @property tagName
+		 * @default 'div'
+		 * @type String
+		 */
 		tagName: 'div',
+
+		/**
+		 * ID of article list
+		 * @property id
+		 * @default 'article-list'
+		 * @type String
+		 */
 		id: 'article-list',
+
+		/**
+		 * Class of article views
+		 * @property itemClass
+		 * @default 'item'
+		 * @type string
+		 */
 		itemClass: 'item',
+
+		/**
+		 * Unordered list of all article views
+		 * @property views
+		 * @default []
+		 * @type Array
+		 */
 		views: [],
+
+		/**
+		 * Order list of yet rendered article views
+		 * @property viewsToRender
+		 * @default []
+		 * @type Array
+		 */
 		viewsToRender: [],
 
 		/**** clearonSelect sets the same thing ... call it in init? ****/
+		/**
+		 * Data received from feedList about current selection (feed ids, name of special, filter, unradOnly)
+		 * @property currentData
+		 * @default { feeds: [], name: 'all-feeds', filter: { trashed: false}, unreadOnly: false }
+		 * @type Object
+		 */
 		currentData: {
 			feeds: [],
 			name: 'all-feeds',
@@ -41,8 +97,22 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 			unreadOnly: false
 		},
 
+		/**
+		 * Flag to prevent focusing more items in one tick
+		 * @property noFocus
+		 * @default false
+		 * @type Boolean
+		 */
 		noFocus: false,
+
+		/**
+		 * All article views - unattached views
+		 * @property reuseIndex
+		 * @default 0
+		 * @type Integer
+		 */
 		reuseIndex: 0,
+
 		events: {
 			'dragstart .item': 'handleDragStart',
 			'mousedown .item': 'handleMouseDown',
@@ -50,19 +120,51 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 			'dblclick .item': 'handleItemDblClick',
 			'mousedown .item-pin,.item-pinned': 'handleClickPin',
 		},
+
+		/**
+		 * Opens articles url in new tab
+		 * @method handleItemDblClick
+		 * @triggered on double click on article
+		 */
 		handleItemDblClick: function() {
 			app.actions.execute('articles:oneFullArticle');
 		},
+
+		/**
+		 * Selects article
+		 * @method handleMouseDown
+		 * @triggered on mouse down on article
+		 * @param event {MouseEvent}
+		 */
 		handleMouseDown: function(e) {
 			this.handleSelectableMouseDown(e);
 		},
+
+		/**
+		 * Changes pin state
+		 * @method handleClickPin
+		 * @triggered on click on pin button
+		 * @param event {MouseEvent}
+		 */
 		handleClickPin: function(e) {
 			e.currentTarget.parentNode.view.handleClickPin(e);
 		},
+
+		/**
+		 * Calls neccesary slect methods
+		 * @method handleMouseUp
+		 * @triggered on mouse up on article
+		 * @param event {MouseEvent}
+		 */
 		handleMouseUp: function(e) {
 			e.currentTarget.view.handleMouseUp(e);
 			this.handleSelectableMouseUp(e);
 		},
+
+		/**
+		 * Called when new instance is created
+		 * @method initialize
+		 */
 		initialize: function() {
 
 			this.$el.addClass('lines-' + bg.settings.get('lines'));
@@ -84,6 +186,13 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 			this.$el.on('scroll', this.handleScroll.bind(this));
 
 		},
+
+		/**
+		 * Sends msg to show selected article
+		 * @method handlePick
+		 * @triggered when one article is selected
+		 * @param view {views/ItemView}
+		 */
 		handlePick: function(view) {
 			if (!view.model.collection) {
 				// This shouldn't usually happen
@@ -102,6 +211,12 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 				view.model.save('visited', true);
 			}
 		},
+
+		/**
+		 * Sets comm event listeners
+		 * @method handleAttached
+		 * @triggered when article list is attached to DOM
+		 */
 		handleAttached: function() {
 
 			app.on('select:feed-list', function(data) {
@@ -122,6 +237,12 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 
 			this.loadAllFeeds();
 		},
+
+		/**
+		 * Loads all untrashed feeds
+		 * @method loadAllFeeds
+		 * @chainable
+		 */
 		loadAllFeeds: function() {
 			var that = this;
 			setTimeout(function() {
@@ -137,9 +258,21 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 
 			return this;
 		},
+
+		/**
+		 * Renders unrendered articles in view by calling handleScroll
+		 * @method handleRenderScreen
+		 * @triggered when new items arr added or when source is destroyed
+		 */
 		handleRenderScreen: function() {
 			this.handleScroll();
 		},
+
+		/**
+		 * Renders unrendered articles in view
+		 * @method handleScroll
+		 * @triggered when list is scrolled (and is called from many other places)
+		 */
 		handleScroll: function() {
 			var start = -1;
 			var count = 0;
@@ -158,6 +291,13 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 				this.viewsToRender.splice(start, count);
 			}
 		},
+
+		/**
+		 * Unbinds all listeners to bg process
+		 * @method handleClearEvents
+		 * @triggered when tab is closed/refershed
+		 * @param id {Integer} id of the closed tab
+		 */
 		handleClearEvents: function(id) {
 			if (window == null || id == tabID) {
 				bg.items.off('reset', this.addItems, this);
@@ -172,6 +312,12 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 				bg.sources.off('clear-events', this.handleClearEvents, this);
 			}
 		},
+
+		/**
+		 * Sets new article item height and rerenders list
+		 * @method handleChangeLayout
+		 * @triggered when layout setting is changed
+		 */
 		handleChangeLayout: function() {
 			var that = this;
 			requestAnimationFrame(function() {
@@ -179,12 +325,25 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 				that.handleScroll();
 			});
 		},
+
+		/**
+		 * Clears searchbox and sorts the list
+		 * @method handleSort
+		 * @triggered when sort setting is changed
+		 */
 		handleSort: function() {
 			$('#input-search').val('');
 			
 			this.handleNewSelected(this.currentData);
 			
 		},
+
+		/**
+		 * Adds or removes neccesary one-line/twoline classes for given lines settings
+		 * @method handleChangeLines
+		 * @triggered when lines setting is changed
+		 * @param settings {Settings} bg.Settings
+		 */
 		handleChangeLines: function(settings) {
 			this.$el.removeClass('lines-auto');
 			this.$el.removeClass('lines-one-line');
@@ -192,6 +351,13 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 			// this.$el.removeClass('lines-' + settings.previous('lines')); // does not work for some reason
 			this.$el.addClass('lines-' + settings.get('lines'));
 		},
+
+		/**
+		 * Stores ids of dragged items
+		 * @method handleDragStart
+		 * @triggered on drag start
+		 * @param event {DragEvent}
+		 */
 		handleDragStart: function(e) {
 			var ids = this.selectedItems.map(function(view) {
 				return view.model.id;
@@ -199,6 +365,12 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 
 			e.originalEvent.dataTransfer.setData('text/plain', JSON.stringify(ids));
 		},
+
+		/**
+		 * Selects new item when the last selected is deleted
+		 * @method selectAfterDelete
+		 * @param view {views/ItemView}
+		 */
 		selectAfterDelete: function(view) {
 			if (view == this.selectedItems[0]) {
 				var last = this.$el.find('.item:not(.invisible):last').get(0);
@@ -220,6 +392,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 		 * (If the item's feed is selected)
 		 * @method inCurrentData
 		 * @return Boolean
+		 * @param item {Item} bg.Item
 		 */
 		inCurrentData: function(item) {
 			var f = this.currentData.feeds;
@@ -235,6 +408,13 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 
 			return false;
 		},
+
+		/**
+		 * Adds new article item to the list
+		 * @method addItem
+		 * @param item {Item} bg.Item
+		 * @param noManualSort {Boolean} true when adding items in a batch in right order
+		 */
 		addItem: function(item, noManualSort) {
 	
 			//Don't add newly fetched items to middle column, when they shouldn't be
@@ -299,6 +479,14 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 
 			this.reuseIndex++;
 		},
+
+		/**
+		 * Adds new date group to the list
+		 * @method addGroup
+		 * @param model {models/Group} group create by groups.create
+		 * @param col {collections/Groups}
+		 * @param opt {Object} options { before: insertBeforeItem }
+		 */
 		addGroup: function(model, col, opt) {
 			var before = opt.before;
 			var view = new GroupView({ model: model }, groups);
@@ -306,12 +494,23 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 		
 			view.render().$el.insertBefore(before);
 		},
+
+		/**
+		 * Gets the height of one article items and stores it.
+		 * @method setItemHeight
+		 */
 		setItemHeight: function() {
 			var firstItem = this.$el.find('.item:not(.invisible):first');
 			if (firstItem.length) {
 				this._itemHeight = firstItem.get(0).getBoundingClientRect().height;
 			}
 		},
+
+		/**
+		 * Removes everything from lists and adds new collectino of articles
+		 * @method setItemHeight
+		 * @param items {Backbone.Collection} bg.Items
+		 */
 		addItems: function(items) {
 
 			groups.reset();
@@ -349,6 +548,11 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 			//alert(Date.now() - st);
 
 		},
+
+		/**
+		 * Called every time when new feed is selected and before it is rendered
+		 * @method clearOnSelect
+		 */
 		clearOnSelect: function() {
 			$('input[type=search]').val('');
 
@@ -366,6 +570,12 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 			};
 
 		},
+
+		/**
+		 * Called every time when new feed is selected. Gets the right data from store.
+		 * @method handleNewSelected
+		 * @param data {Object} data object received from feed list
+		 */
 		handleNewSelected: function(data) {
 			this.clearOnSelect();
 			this.currentData = data;
@@ -389,7 +599,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 		 * If current feed is removed, select all feeds
 		 * @triggered when any source is destroyed
 		 * @method handleSourcesDestroy
-		 * @param {Source} Destroyed source
+		 * @param source {Source} Destroyed source
 		 */
 		handleSourcesDestroy: function(source) {
 
@@ -415,16 +625,34 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 			}
 
 		},
+
+		/**
+		 * Moves item from trash back to its original source
+		 * @method undeleteItem
+		 * @param view {views/ItemView} Undeleted article view
+		 */
 		undeleteItem: function(view) {
 			view.model.save({
 				'trashed': false
 			});
 			this.destroyItem(view);
 		},
+
+		/**
+		 * Moves item to trash
+		 * @method removeItem
+		 * @param view {views/ItemView} Removed article view
+		 */
 		removeItem: function(view) {
 			view.model.save({ trashed: true, visited: true });
 			//this.destroyItem(view);
 		},
+
+		/**
+		 * Removes item from both source and trash leaving only info it has been already fetched and deleted
+		 * @method removeItemCompletely
+		 * @param view {views/ItemView} Removed article view
+		 */
 		removeItemCompletely: function(view) {
 			if (view.model.get('pinned')) {
 				var conf = confirm(bg.lang.c.PIN_QUESTION_A + view.model.escape('title') + bg.lang.c.PIN_QUESTION_B);
@@ -435,13 +663,40 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 			view.model.markAsDeleted();
 			//this.destroyItem(view);
 		},
+
+		/**
+		 * Calls undeleteItem/removeItem/removeItemCompletely in a batch for several items
+		 * @method destroyBatch
+		 * @param arr {Array} List of views
+		 * @param fn {Function} Function to be called on each view
+		 */
 		destroyBatch: function(arr, fn) {
 			for (var i=0, j=arr.length; i<j; i++) {
 				fn.call(this, arr[i]);
 			}
 		},
+
+		/**
+		 * List of views to be closed when nextFrame animation frame is called
+		 * @property nextFrame
+		 * @default null
+		 * @type Object
+		 */
 		nextFrameStore: [],
+
+		/**
+		 * RequestAnimationFrame return value for next destroy item call.
+		 * @property nextFrame
+		 * @default null
+		 * @type Object
+		 */
 		nextFrame: null,
+
+		/**
+		 * Removes article view (clearing events and all)
+		 * @method destroyItem
+		 * @param view {views/ItemView} Destroyed article view
+		 */
 		destroyItem: function(view) {
 			this.nextFrameStore.push(view);
 			if (!this.nextFrame) {
@@ -462,6 +717,12 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 				}.bind(this));
 			}
 		},
+
+		/**
+		 * Called asynchronously from destroyItem. It does the real removing job.
+		 * @method destroyItemFrame
+		 * @param view {views/ItemView} Destroyed article view
+		 */
 		destroyItemFrame: function(view) {
 			// START: REMOVE DATE GROUP
 			/*var prev = view.el.previousElementSibling;
@@ -488,14 +749,19 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 			if (io >= 0) this.views.splice(io, 1);
 			io = this.viewsToRender.indexOf(view);
 			if (io >= 0) this.viewsToRender.splice(io, 1);
-
-			// not really sure what would happen if this wouldn't be here :P (too tired to think about it)
+			
 			this.reuseIndex--;
 			if (this.reuseIndex < 0) {
 				this.reuseIndex = 0;
 				console.log('reuse index under zero');
 			}
 		},
+
+		/**
+		 * Toggles unread state of selected items (with onlyToRead option)
+		 * @method changeUnreadState
+		 * @param opt {Object} Options { onlyToRead: bool }
+		 */
 		changeUnreadState: function(opt) {
 			opt = opt || {};
 			var val = this.selectedItems.length && !opt.onlyToRead ? !this.selectedItems[0].model.get('unread') : false;

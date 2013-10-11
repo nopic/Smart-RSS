@@ -1,14 +1,45 @@
+/**
+ * @module App
+ * @submodule views/feedList
+ */
 define([
 	'backbone', 'jquery', 'underscore', 'views/SourceView', 'views/FolderView', 'views/SpecialView', 'models/Special',
 	'instances/contextMenus', 'mixins/selectable', 'instances/specials'
 ],
 function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, selectable, specials) {
 
+	/**
+	 * List of feeds (in left column)
+	 * @class FeedListView
+	 * @constructor
+	 * @extends Backbone.View
+	 */
 	var FeedListView = BB.View.extend({
-		//el: '#list',
+
+		/**
+		 * Tag name of the list
+		 * @property tagName
+		 * @default 'div'
+		 * @type String
+		 */
 		tagName: 'div',
+
+		/**
+		 * Class of feed list views
+		 * @property itemClass
+		 * @default 'list-item'
+		 * @type String
+		 */
 		itemClass: 'list-item',
+
+		/**
+		 * ID of feed list
+		 * @property id
+		 * @default 'feed-list'
+		 * @type String
+		 */
 		id: 'feed-list',
+
 		events: {
 			'dragstart .source':     'handleDragStart',
 			'drop':                  'handleDrop',
@@ -20,6 +51,11 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 			'mousedown .list-item': 'handleMouseDown',
 			'mouseup .list-item': 'handleMouseUp'
 		},
+
+		/**
+		 * Called when new instance is created
+		 * @method initialize
+		 */
 		initialize: function() {
 
 			this.el.view = this;
@@ -35,6 +71,12 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 			this.on('pick', this.handlePick);
 			
 		},
+
+		/**
+		 * Sets comm event listeners and inserts feeds
+		 * @method handleAttached
+		 * @triggered when feed list is attached to DOM
+		 */
 		handleAttach: function() {
 			app.on('select-all-feeds', function() {
 				var allFeeds = $('.special:first').get(0);
@@ -50,6 +92,12 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 
 			this.insertFeeds();
 		},
+
+		/**
+		 * Adds folders specials and sources
+		 * @method insertFeeds
+		 * @@chainable
+		 */
 		insertFeeds: function() {
 			this.addFolders(bg.folders);
 
@@ -61,9 +109,10 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 
 			return this;
 		},
+
 		/**
 		 * If one list-item was selected by left mouse button, show its articles.
-		 * Triggered by selectable mixin.
+		 * @triggered by selectable mixin.
 		 * @method handlePick
 		 * @param view {TopView} Picked source, folder or special
 		 * @param event {Event} Mouse or key event
@@ -74,14 +123,35 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 				app.actions.execute('feeds:showAndFocusArticles', e);
 			}
 		},
+
+		/**
+		 * Selectable mixin bindings
+		 * @method handleMouseDown
+		 * @triggered on mouse down
+		 * @param event {Event} Mouse event
+		 */
 		handleMouseDown: function(e) {
 			//e.currentTarget.view.handleMouseDown(e);
 			this.handleSelectableMouseDown(e);
 		},
+
+		/**
+		 * Selectable mixin bindings, item bindings
+		 * @method handleMouseUp
+		 * @triggered on mouse up
+		 * @param event {Event} Mouse event
+		 */
 		handleMouseUp: function(e) {
 			e.currentTarget.view.handleMouseUp(e);
 			this.handleSelectableMouseUp(e);
 		},
+
+		/**
+		 * Add class to drop region elements
+		 * @method handleMouseDown
+		 * @triggered on drag over
+		 * @param event {DragEvent} Drag event
+		 */
 		handleDragOver: function(e) {
 			var f = e.currentTarget.dataset.inFolder;
 			if (f) {
@@ -91,6 +161,13 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 			}
 			e.preventDefault();
 		},
+
+		/**
+		 * Remove class from drop region elements
+		 * @method handleDragLeave
+		 * @triggered on drag leave
+		 * @param event {DragEvent} Drag event
+		 */
 		handleDragLeave: function(e) {
 			var f = e.currentTarget.dataset.inFolder;
 			if (f) {
@@ -99,6 +176,13 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 				$(e.currentTarget).removeClass('drag-over');
 			}
 		},
+
+		/**
+		 * Handle drop event (move feeds between folders)
+		 * @method handleDrop
+		 * @triggered on drop
+		 * @param event {DragEvent} Drag event
+		 */
 		handleDrop: function(e) {
 
 			var oe = e.originalEvent;
@@ -128,6 +212,13 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 
 			e.stopPropagation();
 		},
+
+		/**
+		 * Add feeds ids to drag data
+		 * @method handleDragStart
+		 * @triggered on drag start
+		 * @param event {DragEvent} Drag event
+		 */
 		handleDragStart: function(e) {
 			//var id = e.currentTarget.view.model.get('id');
 			var models = _.pluck(this.selectedItems, 'model');
@@ -140,12 +231,26 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 
 			e.originalEvent.dataTransfer.setData('dnd-sources', JSON.stringify(ids));
 		},
+
+		/**
+		 * Place feed ti right place
+		 * @method handleDragStart
+		 * @triggered when folderID of feed is changed
+		 * @param source {Source} Source tha has its folderID changed
+		 */
 		handleChangeFolder: function(source) {
 			source = $('.source[data-id=' + source.get('id') + ']').get(0);
 			if (!source) return;
 
 			this.placeSource(source.view);
 		},
+
+		/**
+		 * Unbinds all listeners to bg process
+		 * @method handleClearEvents
+		 * @triggered when tab is closed/refershed
+		 * @param id {Integer} id of the closed tab
+		 */
 		handleClearEvents: function(id) {
 			if (window == null || id == tabID) {
 				bg.sources.off('reset', this.addSources, this);
@@ -155,6 +260,12 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 				bg.sources.off('clear-events', this.handleClearEvents, this);
 			}
 		},
+
+		/**
+		 * Adds one special (all feeds, pinned, trash)
+		 * @method addSpecial
+		 * @param special {models/Special} Special model to add
+		 */
 		addSpecial: function(special) {
 
 			var view = new SpecialView({ model: special });
@@ -165,6 +276,12 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 			}
 			
 		},
+
+		/**
+		 * Adds one folder
+		 * @method addFolder
+		 * @param folder {models/Folder} Folder model to add
+		 */
 		addFolder: function(folder) {
 			var view = new FolderView({ model: folder }, this);
 			var folderViews = $('.folder').toArray();
@@ -177,6 +294,12 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 				this.$el.append(view.render().$el);
 			}
 		},
+
+		/**
+		 * Adds more folders ta once
+		 * @method addFolders
+		 * @param folders {Array} Array of folder models to add
+		 */
 		addFolders: function(folders) {
 			var that = this;
 			$('.folder').each(function(i, folder) {
@@ -187,10 +310,24 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 				this.addFolder(folder);
 			}, this);
 		},
+
+		/**
+		 * Adds one source
+		 * @method addSource
+		 * @param source {models/Source} Source model to add
+		 * @param noManualSort {Boolean} When false, the rigt place is computed
+		 */
 		addSource: function(source, noManualSort) {
 			var view = new SourceView({ model: source }, this);
 			this.placeSource(view, noManualSort === true ? true : false);
 		},
+
+		/**
+		 * Places source to its right place
+		 * @method placeSource
+		 * @param view {views/TopView} Feed/Folder/Special to add
+		 * @param noManualSort {Boolean} When false, the rigt place is computed
+		 */
 		placeSource: function(view, noManualSort) {
 			var folder = null;
 			var source = view.model;
@@ -235,6 +372,13 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 				this.$el.append(view.render().$el);
 			}
 		},
+
+		/**
+		 * Insert element after another element
+		 * @method placeSource
+		 * @param what {HTMLElement} Element to add
+		 * @param where {HTMLElement} Element to add after
+		 */
 		insertBefore: function(what, where){
 			var before = null;
 			where.some(function(el) {
@@ -254,6 +398,12 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 				what.$el.insertAfter(where.last());
 			}
 		},
+
+		/**
+		 * Add more sources at once
+		 * @method addSources
+		 * @param sources {Array} Array of source models to add
+		 */
 		addSources: function(sources) {
 			var that = this;
 			$('.source').each(function(i, source) {
@@ -264,9 +414,22 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 				this.addSource(source, true);
 			}, this);
 		},
+
+		/**
+		 * Destroy feed
+		 * @method removeSource
+		 * @param view {views/SourceView} View containg the model to be destroyed
+		 */
 		removeSource: function(view) {
 			view.model.destroy();
 		},
+
+
+		/**
+		 * Closes item view
+		 * @method destroySource
+		 * @param view {views/TopView} View to be closed
+		 */
 		destroySource: function(view) {
 			view.clearEvents();
 			view.undelegateEvents();
@@ -278,6 +441,12 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 				this.selectedItems.splice(io, 1);
 			}
 		},
+
+		/**
+		 * Get array of selected feeds (including feeds in selected folders)
+		 * @method getSelectedFeeds
+		 * @param arr {Array} List of selected items
+		 */
 		getSelectedFeeds: function(arr) {
 			var si = arr || _.pluck(this.selectedItems, 'model');
 			var rt = [];
@@ -292,6 +461,12 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 
 			return _.unique(rt);
 		},
+
+		/**
+		 * Get array of selected folders
+		 * @method getSelectedFolders
+		 * @param arr {Array} List of selected items
+		 */
 		getSelectedFolders: function(arr) {
 			var si = arr || _.pluck(this.selectedItems, 'model');
 			var rt = [];

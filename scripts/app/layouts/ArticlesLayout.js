@@ -59,6 +59,11 @@ function ($, Layout, ToolbarView, Toolbar, articleList, resizable, comm) {
 			this.on('resize:enabled', this.handleResize);
 
 		},
+		/**
+		 * Saves the new layout size
+		 * @triggered after resize
+		 * @method handleResizeAfter
+		 */
 		handleResizeAfter: function() {
 			if (bg.settings.get('layout') == 'horizontal') {
 				var wid = this.el.offsetWidth;
@@ -68,6 +73,11 @@ function ($, Layout, ToolbarView, Toolbar, articleList, resizable, comm) {
 				bg.settings.save({ posC:hei });
 			}
 		},
+		/**
+		 * Changes layout to one/two line according to width
+		 * @triggered while resizing
+		 * @method handleResize
+		 */
 		handleResize: function() {
 			if (bg.settings.get('lines') == 'auto') {
 				var oneRem = parseFloat(getComputedStyle(document.documentElement).fontSize);
