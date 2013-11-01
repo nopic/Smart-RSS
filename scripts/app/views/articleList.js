@@ -556,6 +556,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 		clearOnSelect: function() {
 			$('input[type=search]').val('');
 
+			// if prev selected was trash, hide undelete buttons
 			if (this.currentData.name == 'trash') {
 				$('[data-action="articles:update"]').css('display', 'block');
 				$('[data-action="articles:undelete"]').css('display', 'none');
@@ -585,6 +586,12 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 				searchIn = bg.items.where(data.filter);
 			} else {
 				searchIn = bg.items.where({ trashed: false });
+			}
+
+			if (this.currentData.name == 'trash') {
+				$('[data-action="articles:update"]').css('display', 'none');
+				$('[data-action="articles:undelete"]').css('display', 'block');
+				$('#context-undelete').css('display', 'block');
 			}
 
 			var items = searchIn.filter(function(item) {
