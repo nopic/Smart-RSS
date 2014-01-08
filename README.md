@@ -1,3 +1,7 @@
+# Smart RSS 中文版
+
+添加中文并去掉了除英文外的其他语言
+
 # Smart RSS extension
 
 Translations are in scripts/local.js
