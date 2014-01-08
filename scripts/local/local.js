@@ -1,6 +1,6 @@
 var lang = {
 	get c() {
-		return this[settings.get('lang')] || this.en;
+		return this[settings.get('lang')] || this.zh;
 	},
 	en: {
 		MARK_AS_READ: 'Mark As (Un)Read',
