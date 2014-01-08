@@ -2,11 +2,11 @@
 <html lang="zh-cn" dir="ltr">
 <head>
 	<meta charset="utf-8">
-	<title>Smart RSS - Options</title>
+	<title>Smart RSS - 选项</title>
 	<link rel="stylesheet" href="styles/option.css">
 	
-	<script src="scripts/libs/jquery.min.js"></script>
-	<script src="scripts/options/options.js"></script>
+	<script src="libs/jquery.min.js"></script>
+	<script src="scripts/options.js"></script>
 </head>
 <body>
 	<div id="wallpaper">
@@ -20,19 +20,20 @@
 
 
 				<section>
-					<h3 class="section-header">Localization</h3>
+					<h3 class="section-header">本地化</h3>
 					<div class="settings-row learn-more" title="Contact me if you want to make translation for your lang.">
 						<label class="web-content-select-label">
-							<span class="selectLabel">Language:</span>
+							<span class="selectLabel">语言:</span>
 							<select id="lang">
-								<option value="en">English</option>
 								<option value="zh">简体中文</option>
+								<option value="en">English</option>
+							</select>
 						</label>
 					</div>
 
 					<div class="settings-row learn-more" title="Normal = DD.MM.YYYY, ISO = YYYY-MM-DD, US = MM/DD/YYYY">
 						<label class="web-content-select-label">
-							<span class="selectLabel">Date format:</span>
+							<span class="selectLabel">日期格式:</span>
 							<select id="dateType">
 								<option value="normal">Normal</option>
 								<option value="iso">ISO</option>
@@ -43,7 +44,7 @@
 
 					<div class="settings-row learn-more" title="Time format">
 						<label class="web-content-select-label">
-							<span class="selectLabel">Time format:</span>
+							<span class="selectLabel">时间格式:</span>
 							<select id="hoursFormat">
 								<option value="24h">24h</option>
 								<option value="12h">12h (AM/PM)</option>
@@ -53,122 +54,116 @@
 				</section>
 
 				<section>
-					<h3 class="section-header">Appearance</h3>
-					<div class="settings-row learn-more" title="Color of icon that shows up in extension button when new articles are downloaded.">
+					<h3 class="section-header">外观</h3>
+					<div class="settings-row learn-more" title="有新文章时浏览器上按钮的颜色.">
 						<label class="web-content-select-label">
-							<span class="selectLabel">New articles notification icon:</span>
+							<span class="selectLabel">新文章提示图标:</span>
 							<select id="icon">
-								<option value="orange">Orange</option>
-								<option value="blue">Blue</option>
-								<option value="green">Green</option>
-								<option value="purple">Purple</option>
-								<option value="red">Red</option>
-								<option value="royalblue">Royal Blue</option>
+								<option value="orange">橙</option>
+								<option value="blue">蓝</option>
+								<option value="green">绿</option>
+								<option value="purple">紫</option>
+								<option value="red">红</option>
+								<option value="royalblue">品蓝</option>
 							</select>
 						</label>
 					</div>
 
-					<div class="settings-row learn-more" title="">
+					<div class="settings-row learn-more" title="文章列表分组">
 						<label class="web-content-select-label">
-							<span class="selectLabel">Disable date groups:</span>
+							<span class="selectLabel">禁用按时间分组:</span>
 							<input type="checkbox" id="disableDateGroups" />
 						</label>
 					</div>
 
-					<div class="settings-row learn-more" title="Makes the line betweens the three columns thicker.">
+					<div class="settings-row learn-more" title="就是间隔网源、文章列表、文章的那个线">
 						<label class="web-content-select-label">
-							<span class="selectLabel">Thick frame borders:</span>
+							<span class="selectLabel">加粗框架边框:</span>
 							<input type="checkbox" id="thickFrameBorders" />
 						</label>
 					</div>
 
 					<div class="settings-row learn-more" title="">
 						<label class="web-content-select-label">
-							<span class="selectLabel">Article font size:</span>
+							<span class="selectLabel">文章文字大小:</span>
 							<input type="number" id="articleFontSize" min="50" max="150" step="10" />%
 						</label>
 					</div>
 
 					<div class="settings-row learn-more" title="">
 						<label class="web-content-select-label">
-							<span class="selectLabel">UI font size:</span>
+							<span class="selectLabel">界面文字大小:</span>
 							<input type="number" id="uiFontSize" min="50" max="150" step="10" />%
 						</label>
 					</div>
 				</section>
 
 				<section>
-					<h3 class="section-header">Behaviour</h3>
-					<div class="settings-row learn-more" title="This option will immidiately mark as read every article you visit in the right column.">
+					<h3 class="section-header">行为</h3>
+					<div class="settings-row learn-more" title="当浏览了文章就会自动标记为已读.">
 						<label class="web-content-select-label">
-							<span class="selectLabel">Automatically mark articles as read:</span>
+							<span class="selectLabel">自动标记文章为已读:</span>
 							<input type="checkbox" id="readOnVisit" />
 						</label>
 					</div>
-					<div class="settings-row learn-more" title="When you select more than 10 feeds in article list and choose 'Open article link' options from context menu.">
+					<div class="settings-row learn-more" title="选中10篇以上的文章并选择'阅读全文'时提示.">
 						<label class="web-content-select-label">
-							<span class="selectLabel">Ask when opening 10+ tabs:</span>
+							<span class="selectLabel">打开多篇文章时提示:</span>
 							<input type="checkbox" id="askOnOpening" />
-						</label>
-					</div>
-					<div class="settings-row learn-more" title="When you select more than 10 feeds in article list and choose 'Open article link' options from context menu.">
-						<label class="web-content-select-label">
-							<span class="selectLabel">Enable pannel toggle:</span>
-							<input type="checkbox" id="enablePanelToggle" />
-						</label>
-					</div>
-					<div class="settings-row learn-more" title="Effects date in article list.">
-						<label class="web-content-select-label">
-							<span class="selectLabel">Always show full date:</span>
-							<input type="checkbox" id="fullDate" />
-						</label>
-					</div>
-					<div class="settings-row learn-more" title="If enabled, pressing arrow up in a list when the first item is selected will select the last item and visa-versa.">
-						<label class="web-content-select-label">
-							<span class="selectLabel">Circular navigation:</span>
-							<input type="checkbox" id="circularNavigation" />
 						</label>
 					</div>
 					<div class="settings-row learn-more" title="">
 						<label class="web-content-select-label">
-							<span class="selectLabel">Icon badge:</span>
+							<span class="selectLabel">启用标签拖拽:</span>
+							<input type="checkbox" id="enablePanelToggle" /> ( Blink 有 bug,还是别用了)
+						</label>
+					</div>
+					<div class="settings-row learn-more" title="文章列表日期显示.">
+						<label class="web-content-select-label">
+							<span class="selectLabel">总是显示完整日期:</span>
+							<input type="checkbox" id="fullDate" />
+						</label>
+					</div>
+					<div class="settings-row learn-more" title="因为已读和未读可以自己设置，所以多了一个未访问">
+						<label class="web-content-select-label">
+							<span class="selectLabel" title="">徽章提示:</span>
 							<select id="badgeMode">
-								<option value="disabled">disabled</option>
-								<option value="unread"># of unread</option>
-								<option value="unvisited"># of unvisited</option>
+								<option value="disabled">禁用</option>
+								<option value="unread">未读</option>
+								<option value="unvisited">未访问</option>
 							</select>
 						</label>
 					</div>
 				</section>
 
 				<section>
-					<h3 class="section-header">Export</h3>
-					<div class="settings-row learn-more" title="SMART is special format of Smart RSS extension. It exports/imports both, feeds and feeds's articles.">
+					<h3 class="section-header">导出</h3>
+					<div class="settings-row learn-more" title="SMART 是本扩展的专有格式,支持导入/导出网源,包括文件夹和文章">
 						<label class="web-content-select-label">
 							<span class="selectLabel">SMART:</span>
-							<button id="export-smart">Export</button>
+							<button id="export-smart">导出</button>
 							<a href="" id="smart-exported"></a>
 						</label>
 					</div>
-					<div class="settings-row learn-more" title="You can use OPML format to export feeds from Smart RSS to Opera 12.">
+					<div class="settings-row learn-more" title="导出网源为旧版 Opera 支持的格式.">
 						<label class="web-content-select-label">
 							<span class="selectLabel">OPML:</span>
-							<button id="export-opml">Export</button>
+							<button id="export-opml">导出</button>
 							<a href="" id="opml-exported"></a>
 						</label>
 					</div>
 				</section>
 
 				<section>
-					<h3 class="section-header">Import</h3>
-					<div class="settings-row learn-more" title="SMART is special format of Smart RSS extension. It exports/imports all feeds, folders and articles.">
+					<h3 class="section-header">导入</h3>
+					<div class="settings-row learn-more" title="SMART 是本扩展的专有格式,支持导入/导出网源,包括文件夹和文章.">
 						<label class="web-content-select-label">
 							<span class="selectLabel">SMART:</span>
 							<input type="file" id="import-smart">
 							<span id="smart-imported"></span>
 						</label>
 					</div>
-					<div class="settings-row learn-more" title="You can use OPML format to import feeds and folders from Opera 12 to Smart RSS.">
+					<div class="settings-row learn-more" title="导入旧版 Opera 导出的网源.">
 						<label class="web-content-select-label">
 							<span class="selectLabel">OPML:</span>
 							<input type="file" id="import-opml">
@@ -178,25 +173,27 @@
 				</section>
 
 				<section>
-					<h3 class="section-header">Clear data</h3>
-					<div class="settings-row learn-more" title="This will remove all yours feeds and articles and settings.">
+					<h3 class="section-header">清除数据</h3>
+					<div class="settings-row learn-more" title="移除所有网源和设置.">
 						<label class="web-content-select-label">
-							<span class="selectLabel">Remove ALL extension data:</span>
-							<button id="clear-data">!!Clear!!</button>
+							<span class="selectLabel">清除扩展数据:</span>
+							<button id="clear-data">!!清除!!</button>
 							<span id="data-cleared"></span>
 						</label>
 					</div>
 				</section>
 				
 				<section>
-					<h3 class="section-header">Version</h3>
+					<h3 class="section-header">版本</h3>
 					<p id="version"></p>
 				</section>
 
 				<section>
-					<h3 class="section-header">Bug reports and feedback</h3>
-					<p>If you found some bug or have some nice suggestion or you want to follow up on development, head over to following link :</p>
+					<h3 class="section-header">Bug 报告及使用反馈</h3>
+					<p>扩展 Bug 和建议找原作者 :</p>
 					<a href="http://my.opera.com/BS-Harou/blog/">BS-Harou</a> MyOpera Blog.
+					<p>胡乱翻译，批评找我 :</p>
+					<a href="http://sxlf.org/smart-rss">伤心凉粉</a>
 				</section>
 			</div>
 			<!-- content -->
